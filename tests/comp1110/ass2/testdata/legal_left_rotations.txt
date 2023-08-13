@@ -1,0 +1,7 @@
+A33N@270@A33W@This test checks a case where Assam is legally rotated left with input: A33N
+A02E@270@A02N@This test checks a case where Assam is legally rotated left with input: A02E
+A33N@270@A33W@This test checks a case where Assam is legally rotated left with input: A33N
+A43E@270@A43N@This test checks a case where Assam is legally rotated left with input: A43E
+A41N@270@A41W@This test checks a case where Assam is legally rotated left with input: A41N
+A30E@270@A30N@This test checks a case where Assam is legally rotated left with input: A30E
+A63E@270@A63N@This test checks a case where Assam is legally rotated left with input: A63E

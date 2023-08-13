@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Timeout;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -18,32 +19,24 @@ public class RotateAssamTest {
     @Test
     public void checkLegalLeftRotations() {
         BufferedReader fr;
-        try {
-            fr = new BufferedReader(new FileReader("assets/testcases/legal_left_rotations.txt"));
-            Stream<String> testLines = fr.lines();
-            for (String line : testLines.toList()) {
-                String[] splitLine = line.split("@");
-                // For this test, there's two arguments needed to the function
-                Assertions.assertEquals(splitLine[2], Marrakech.rotateAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
-            }
-        } catch (IOException ex) {
-            System.out.println("Test case file couldn't be read with error " + ex.getMessage());
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/legal_left_rotations.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's two arguments needed to the function
+            Assertions.assertEquals(splitLine[2], Marrakech.rotateAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
         }
     }
 
     @Test
     public void checkLegalRightRotations() {
         BufferedReader fr;
-        try {
-            fr = new BufferedReader(new FileReader("assets/testcases/legal_right_rotations.txt"));
-            Stream<String> testLines = fr.lines();
-            for (String line : testLines.toList()) {
-                String[] splitLine = line.split("@");
-                // For this test, there's two arguments needed to the function
-                Assertions.assertEquals(splitLine[2], Marrakech.rotateAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
-            }
-        } catch (IOException ex) {
-            System.out.println("Test case file couldn't be read with error " + ex.getMessage());
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/legal_right_rotations.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's two arguments needed to the function
+            Assertions.assertEquals(splitLine[2], Marrakech.rotateAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
         }
     }
 
@@ -52,8 +45,13 @@ public class RotateAssamTest {
      */
     @Test
     public void checkIllegalRotations() {
-        Assertions.assertEquals("A22N", Marrakech.rotateAssam("A22N", 180));
-        Assertions.assertEquals("A01W", Marrakech.rotateAssam("A01W", 55));
-        // more to come..
+        BufferedReader fr;
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/illegal_rotations.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's two arguments needed to the function
+            Assertions.assertEquals(splitLine[2], Marrakech.rotateAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
+        }
     }
 }

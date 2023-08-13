@@ -5,26 +5,33 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
 public class GetWinnerTest {
     @Test
-    public void checkSmallPayments() {
+    public void getWinnerSimple() {
         BufferedReader fr;
-        try {
-            fr = new BufferedReader(new FileReader("assets/testcases/get_payment_small.txt"));
-            Stream<String> testLines = fr.lines();
-            for (String line : testLines.toList()) {
-                String[] splitLine = line.split("@");
-                // For this test, there's one argument needed to the function
-                Assertions.assertEquals(splitLine[1], String.valueOf(Marrakech.getPaymentAmount(splitLine[0])), splitLine[2]);
-            }
-        } catch (IOException ex) {
-            System.out.println("Test case file couldn't be read with error " + ex.getMessage());
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/get_winner_simple.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's one argument needed to the function
+            Assertions.assertEquals(splitLine[1], String.valueOf(Marrakech.getWinner(splitLine[0])), splitLine[2]);
+        }
+    }
+
+    @Test
+    public void getWinnerOutOfGame() {
+        BufferedReader fr;
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/get_winner_out_of_game.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's one argument needed to the function
+            Assertions.assertEquals(splitLine[1], String.valueOf(Marrakech.getWinner(splitLine[0])), splitLine[2]);
         }
     }
 }

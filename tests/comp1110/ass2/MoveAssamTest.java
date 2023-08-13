@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -18,16 +17,12 @@ public class MoveAssamTest {
     @Test
     public void checkSimpleMovements() {
         BufferedReader fr;
-        try {
-            fr = new BufferedReader(new FileReader("assets/testcases/assam_movement_simple.txt"));
-            Stream<String> testLines = fr.lines();
-            for (String line : testLines.toList()) {
-                String[] splitLine = line.split("@");
-                // For this test, there's two arguments needed to the function
-                Assertions.assertEquals(splitLine[2], Marrakech.moveAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
-            }
-        } catch (IOException ex) {
-            System.out.println("Test case file couldn't be read with error " + ex.getMessage());
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/assam_movement_simple.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's two arguments needed to the function
+            Assertions.assertEquals(splitLine[2], Marrakech.moveAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
         }
     }
 
@@ -37,16 +32,12 @@ public class MoveAssamTest {
     @Test
     public void checkComplexMovements() {
         BufferedReader fr;
-        try {
-            fr = new BufferedReader(new FileReader("assets/testcases/assam_movement_complex.txt"));
-            Stream<String> testLines = fr.lines();
-            for (String line : testLines.toList()) {
-                String[] splitLine = line.split("@");
-                // For this test, there's two arguments needed to the function
-                Assertions.assertEquals(splitLine[2], Marrakech.moveAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
-            }
-        } catch (IOException ex) {
-            System.out.println("Test case file couldn't be read with error " + ex.getMessage());
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/assam_movement_complex.txt")));
+        Stream<String> testLines = fr.lines();
+        for (String line : testLines.toList()) {
+            String[] splitLine = line.split("@");
+            // For this test, there's two arguments needed to the function
+            Assertions.assertEquals(splitLine[2], Marrakech.moveAssam(splitLine[0], Integer.parseInt(splitLine[1])), splitLine[3]);
         }
     }
 }

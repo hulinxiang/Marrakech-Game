@@ -1,0 +1,9 @@
+A03W@1@A02E@This test checks a case where part of Assam's movement takes him off the board with input A03W, and die result 1
+A02N@3@A10S@This test checks a case where part of Assam's movement takes him off the board with input A02N, and die result 3
+A23N@4@A30S@This test checks a case where part of Assam's movement takes him off the board with input A23N, and die result 4
+A21W@3@A00E@This test checks a case where part of Assam's movement takes him off the board with input A21W, and die result 3
+A30N@3@A22S@This test checks a case where part of Assam's movement takes him off the board with input A30N, and die result 3
+A66S@2@A55N@This test checks a case where part of Assam's movement takes him off the board with input A66S, and die result 2
+A00N@2@A11S@This test checks a case where part of Assam's movement takes him off the board with input A00N, and die result 2
+A11W@2@A00E@This test checks a case where part of Assam's movement takes him off the board with input A11W, and die result 2
+A63N@4@A60W@This test checks a case where part of Assam's movement takes him off the board with input A63N, and die result 4

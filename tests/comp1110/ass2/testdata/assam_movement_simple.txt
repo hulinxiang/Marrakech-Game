@@ -1,0 +1,8 @@
+A33W@3@A03W@This test checks a case where Assam's movement is wholly on the board with input: A33W and die result: 3
+A33W@1@A23W@This test checks a case where Assam's movement is wholly on the board with input: A33W and die result: 1
+A30S@3@A33S@This test checks a case where Assam's movement is wholly on the board with input: A30S and die result: 3
+A33E@1@A43E@This test checks a case where Assam's movement is wholly on the board with input: A33E and die result: 1
+A43N@2@A41N@This test checks a case where Assam's movement is wholly on the board with input: A43N and die result: 2
+A41W@2@A21W@This test checks a case where Assam's movement is wholly on the board with input: A41W and die result: 2
+A00E@3@A30E@This test checks a case where Assam's movement is wholly on the board with input: A00E and die result: 3
+A33E@3@A63E@This test checks a case where Assam's movement is wholly on the board with input: A33E and die result: 3
