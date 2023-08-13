@@ -46,7 +46,84 @@ build:
       - src/
       - src-dev/
 
-MoveAssamTest:
+task04:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.IsRugValidTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task06:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.RollDieTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task08:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.IsGameOverTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task09:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.RotateAssamTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task10:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.IsPlacementValidTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task11:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.GetPaymentAmountTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task12:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.GetWinnerTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+task13:
   tags:
     - comp1110
   stage: test
@@ -57,6 +134,16 @@ MoveAssamTest:
     reports:
       junit: junit-reports/TEST-junit-jupiter.xml
 
+task14:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.MakePlacementTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
 
 
 ## Local Variables:
