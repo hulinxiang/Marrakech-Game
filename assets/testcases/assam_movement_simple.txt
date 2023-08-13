@@ -1,0 +1,1 @@
+A64W@2@A44W@This test checks a case where Assam's movement is wholly on the board with input: A64W and die result: 2

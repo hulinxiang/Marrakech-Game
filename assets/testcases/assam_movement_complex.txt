@@ -1,0 +1,1 @@
+A33E@4@A64W@This test checks a case where part of Assam's movement takes him off the board with input A33E, and die result 4

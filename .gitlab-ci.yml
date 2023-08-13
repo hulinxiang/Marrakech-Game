@@ -1,0 +1,64 @@
+image: cfourteen/comp1110-2023-s2-gitlab-ci:0.1.0
+
+stages:
+  - checksum
+  - compliance
+  - build
+  - test
+
+before_script:
+  - export PATH_TO_FX=/usr/share/openjfx/lib
+  - export JAVAFX_OPTIONS="--module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml,javafx.media"
+  - export CP=src:src-dev:/ass2/*:/shared/junit-platform-console-standalone-1.7.0.jar:$PATH_TO_FX/*
+  - export JUNIT="java $JAVAFX_OPTIONS -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path src:src-dev:/ass2/comp1110-ass2.jar --disable-banner --reports-dir=junit-reports"
+  - export SRC_FILES=$(find src/ -type f -name '*.java')
+  - export SRC_DEV_FILES=$(if [ -d "src-dev/" ]; then find src-dev/ -type f -name '*.java'; fi)
+
+checksum:
+  tags:
+    - comp1110
+  stage: checksum
+  script:
+    - python3 /validate.py --integrity comp1110-ass2
+  except:
+    variables:
+      - $CI_PROJECT_NAME =~ /.*-dev$/
+
+compliance:
+  tags:
+    - comp1110
+  stage: compliance
+  script:
+    - python3 /validate.py --gitlablogin ${GITLAB_USER_LOGIN} --gitlabuser "${GITLAB_USER_NAME}" --gitlabprojectname "${CI_PROJECT_NAME}" --assignment /ass2/compliance-ass2.yml
+  except:
+    variables:
+      - $CI_PROJECT_NAME =~ /.*-dev$/
+  allow_failure: true
+
+build:
+  tags:
+    - comp1110
+  stage: build
+  script:
+    - javac -encoding utf-8 $JAVAFX_OPTIONS -cp $CP $SRC_FILES $SRC_DEV_FILES
+  artifacts:
+    paths:
+      - src/
+      - src-dev/
+
+MoveAssamTest:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.MoveAssamTest
+  allow_failure: true
+  artifacts:
+    reports:
+      junit: junit-reports/TEST-junit-jupiter.xml
+
+
+
+## Local Variables:
+## mode: yaml
+## End:

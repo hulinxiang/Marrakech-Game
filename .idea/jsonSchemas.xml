@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="Best">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Best" />
+              <option name="relativePathToSchema" value="https://cs.anu.edu.au/courses/comp1110/schemas/best.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="admin/*-best-*.yml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="Contribution">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Contribution" />
+              <option name="relativePathToSchema" value="https://cs.anu.edu.au/courses/comp1110/schemas/contribution.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="admin/*-contribution.yml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="Group Members">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Group Members" />
+              <option name="relativePathToSchema" value="https://cs.anu.edu.au/courses/comp1110/schemas/members.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="admin/members.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="Originality">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Originality" />
+              <option name="relativePathToSchema" value="https://cs.anu.edu.au/courses/comp1110/schemas/originality-group.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="admin/*-originality.yml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="Presentation">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Presentation" />
+              <option name="relativePathToSchema" value="https://cs.anu.edu.au/courses/comp1110/schemas/presentation.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="admin/*-presentation.yml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
