@@ -5,7 +5,7 @@ public class Marrakech {
     /**
      * Determine whether a rug String is valid.
      * For this method, you need to determine whether the rug String is valid, but do not need to determine whether it
-     * can be placed on the board (you will determine that in Task N ). A rug is valid if and only if all the following (TODO: fix this so it says which task, not just "N")
+     * can be placed on the board (you will determine that in Task 10 ). A rug is valid if and only if all the following
      * conditions apply:
      *  - The String is 7 characters long
      *  - The first character in the String corresponds to the colour character of a player present in the game
