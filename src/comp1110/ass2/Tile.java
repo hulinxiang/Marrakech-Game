@@ -31,7 +31,7 @@ public class Tile {
     }
 
     /**
-     * Checks the current owner of the tile.
+     *Checks the current owner of the tile.
      */
     public Player checkOccupation() {
         return null;
