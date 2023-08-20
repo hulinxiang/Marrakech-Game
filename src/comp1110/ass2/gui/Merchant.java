@@ -13,6 +13,13 @@ public class Merchant {
     }
 
     /*
+    State of the player, IN_GAME = player still in the game, OUT_GAME = player has run out of money,
+    OUT_RUGS = player has run out of rugs.
+     */
+    public enum PlayerState{
+        IN_GAME, OUT_GAME, OUT_RUGS;
+    }
+    /*
     Sets the initial direction of the merchant at the start of the game.
      */
     public void firstDirection(Direction d){
@@ -36,10 +43,12 @@ public class Merchant {
 
     }
 
-    /*
+   /*
     Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
      */
     public static boolean checkRotation(Direction d){
         return true;
     }
+
+
 }

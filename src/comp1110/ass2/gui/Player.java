@@ -9,6 +9,8 @@ public class Player {
     int coins; //Number of coins
     int rugs; //Number of rugs
 
+    int[][] rugCords; //The coordinates of the player's rugs on the board.
+
     Player(int coins, int rugs){
         this.coins = START_COINS;
         this.rugs = START_RUGS;
@@ -58,7 +60,7 @@ public class Player {
     /*
     Counts how many rugs of the player are connected.
      */
-    public int Connected(int[][] rugCoords){
+    public int Connected(int[][] rugCords){
         return 0;
     }
 
