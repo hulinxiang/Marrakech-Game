@@ -27,5 +27,12 @@ public class Rug {
         return true;
     }
 
+    /*
+    Checks that the rug does not fully overlap another player's rug.
+     */
+    public boolean overlapCheck(){
+        return true;
+    }
+
 
 }
