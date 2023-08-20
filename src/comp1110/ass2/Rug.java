@@ -3,7 +3,7 @@ package comp1110.ass2;
 /**
  * Behaviour of the rug on the board
  */
-public class Rug {
+public class Rug { //Maybe useful... which rug has occupied tile?
     //Denote the position of rug
     private final IntPair[] rugPosition;
 
@@ -43,7 +43,7 @@ public class Rug {
      */
     public boolean ifOverlap() {
         return true;
-    }
+    } //Which rug is at the topmost level?
 
 
 }

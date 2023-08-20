@@ -5,9 +5,9 @@ package comp1110.ass2;
  */
 public class Player {
     // Starting number of coins
-    final int START_COINS = 30;
+    static int START_COINS = 30;
     // Starting number of rugs;
-    final int START_RUGS = 15;
+    static int START_RUGS = 15;
     //Number of coins
     int coins;
     //Number of rugs

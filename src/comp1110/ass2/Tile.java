@@ -9,7 +9,7 @@ public class Tile {
     //Denote the owner of the tile
     Player owner;
     //Denote the state of the tile. 0 means empty and 1 means occupied
-    int tileState;
+
 
     /**
      * Constructor of tile
@@ -18,7 +18,6 @@ public class Tile {
     public Tile(IntPair tilePosition) {
         this.tilePosition = tilePosition;
         this.owner = null;
-        this.tileState = 0;
     }
 
     /**
