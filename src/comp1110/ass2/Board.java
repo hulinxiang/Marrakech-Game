@@ -1,4 +1,4 @@
-package comp1110.ass2.gui;
+package comp1110.ass2;
 /*
 This class defines the shape (width and height) of the game board.
  */

@@ -4,8 +4,11 @@ For each task or sub-task, record who is responsible, the deadline, and any depe
 Use the entries below as an example.
 
 ## Week 4
+Linxinag Hu: Part1 in B-design.pdf
+Shuo Tan:Part 2 in B-design.pdf
+Lize van der Walt: Part 3 in B-design.pdf - meeting 11:00 17/08/2023
 
-Everyone: create application skeleton - meeting 14:00 19 Mar
+Everyone: discuss and create application skeleton together - video meeting 19:00 20/08/2023
 
 ## Week 5
 

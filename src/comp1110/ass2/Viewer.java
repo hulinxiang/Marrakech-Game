@@ -1,4 +1,4 @@
-package comp1110.ass2.gui;
+package comp1110.ass2;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

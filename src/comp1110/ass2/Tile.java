@@ -1,4 +1,4 @@
-package comp1110.ass2.gui;
+package comp1110.ass2;
 /*
 Tile coordinates and their state on the board.
  */
