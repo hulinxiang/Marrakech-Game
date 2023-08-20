@@ -1,31 +1,39 @@
 package comp1110.ass2;
-/*
-Tile coordinates and their state on the board.
+
+/**
+ * Tile coordinates and their state on the board.
  */
 public class Tile {
-    int x; //x coordinate of the tile
-    int y; //y coordinate of the tile
+    //Denote the position of each tile
+    private final IntPair tilePosition;
+    //Denote the owner of the tile
     Player owner;
+    //Denote the state of the tile. 0 means empty and 1 means occupied
+    int tileState;
 
-    Tile(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-    public enum TileState{
-        EMPTY, OCCUPIED;
-    }
-
-    /*
-    Sets the owner whose rug is on top of the tile.
+    /**
+     * Constructor of tile
+     * Generate initial tile
      */
-    public void occupiedBy(Player player){
+    public Tile(IntPair tilePosition) {
+        this.tilePosition = tilePosition;
+        this.owner = null;
+        this.tileState = 0;
+    }
+
+    /**
+     * Sets the owner whose rug is on top of the tile.
+     *
+     * @param player who is the owner of this tile
+     */
+    public void occupiedBy(Player player) {
         this.owner = player;
     }
 
-    /*
-    Checks the current owner of the tile.
+    /**
+     * Checks the current owner of the tile.
      */
-    public Player checkOccupation(){
+    public Player checkOccupation() {
         return null;
     }
 }

@@ -51,11 +51,12 @@ public class IntPair {
 
     /**
      * Override the equals method to check if two Intpairs are equal
+     *
      * @param o
      * @return boolean
      */
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         return true;
     }
 }

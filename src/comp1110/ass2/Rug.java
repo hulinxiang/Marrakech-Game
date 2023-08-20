@@ -1,36 +1,47 @@
 package comp1110.ass2;
-/*
-Behaviour of the rug on the board
+
+/**
+ * Behaviour of the rug on the board
  */
 public class Rug {
+    //Denote the position of rug
+    private final IntPair[] rugPosition;
 
-    int[][] rugPosition; //Denotes rug position. HORIZONTAL (X1, Y), (X2, Y) VERTICAL (X, Y1), (X, Y2).
+    public Rug(IntPair[] rugPosition) {
+        this.rugPosition = rugPosition;
+    }
 
-    /*
-    Stores the coordinates of where the rug is placed.
+    /**
+     * Stores the coordinates of where the rug is placed.
      */
-    public void rugPlacement(){
+    public void rugPlacement() {
 
     }
 
-    /*
-    Checks that the rug shares a border with the merchant
+    /**
+     * Checks that the rug shares a border with the merchant
+     *
+     * @return boolean
      */
-    public boolean checkShareBoarder(){
+    public boolean checkShareBoarder() {
         return true;
     }
 
-    /*
-    Checks that the rug is not placed outside the bounds of the board.
+    /**
+     * Checks that the rug is not placed outside the bounds of the board.
+     *
+     * @return boolean
      */
-    public boolean correctPlacement(){
+    public boolean ifPlaceCorrectly() {
         return true;
     }
 
-    /*
-    Checks that the rug does not fully overlap another player's rug.
+    /**
+     * Checks that the rug does not fully overlap another player's rug.
+     *
+     * @return boolean
      */
-    public boolean overlapCheck(){
+    public boolean ifOverlap() {
         return true;
     }
 
