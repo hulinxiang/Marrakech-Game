@@ -64,4 +64,11 @@ public class Player {
         return 0;
     }
 
+    /*
+    Calculates the player's score
+     */
+    public int Score(){
+        return 0;
+    }
+
 }
