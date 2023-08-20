@@ -1,5 +1,5 @@
 package comp1110.ass2;
-/*
+/**
 Tile coordinates and their state on the board.
  */
 public class Tile {
@@ -15,14 +15,14 @@ public class Tile {
         EMPTY, OCCUPIED;
     }
 
-    /*
+    /**
     Sets the owner whose rug is on top of the tile.
      */
     public void occupiedBy(Player player){
         this.owner = player;
     }
 
-    /*
+    /**
     Checks the current owner of the tile.
      */
     public Player checkOccupation(){
