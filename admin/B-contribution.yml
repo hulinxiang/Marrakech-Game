@@ -6,21 +6,24 @@ declaration: >-
 
 # State your contributions as integers out of 100. The total contribution should
 # be 100 or 99 (33/33/33 is fine).  (Remove entries if you have fewer than three
-# members).  
+# members).
+#Each finished one-third (our own part) of the diagram and checked each other's work.
+#Zoomed together to discuss and create skeleton.
+#May do some small individual final edits.
 contributions:
-  - uid: 
-    contribution: 
-  - uid:
-    contribution:
-  - uid:
-    contribution:
+  - uid: u7679626
+    contribution: 33
+  - uid: u7704291
+    contribution: 33
+  - uid: u7633783
+    contribution: 33
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members)
 signatures:
-  - name:
-    uid:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Lize van der Walt
+    uid: u7679626
+  - name: Shuo Tan
+    uid: u7704291
+  - name: Linxiang Hu
+    uid: u7633783
