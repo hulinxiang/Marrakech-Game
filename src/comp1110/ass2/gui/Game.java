@@ -11,6 +11,13 @@ public class Game extends Application {
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 700;
 
+    /*
+    Calculates the winner
+     */
+    public void calcWin(){
+
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         // FIXME Task 7 and 15
