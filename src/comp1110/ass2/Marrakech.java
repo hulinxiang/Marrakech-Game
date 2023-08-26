@@ -1,8 +1,5 @@
 package comp1110.ass2;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Marrakech {
 
     /**
@@ -26,49 +23,8 @@ public class Marrakech {
      * @return true if the rug is valid, and false otherwise.
      */
     public static boolean isRugValid(String gameString, String rug) {
-        if (rug.length() != 7) {
-            return false;
-        }
-
-        // Extract different parts of the rug string
-        char color = rug.charAt(0);
-        String id = rug.substring(1, 3);
-        String coords = rug.substring(3, 7);
-
-        // Check if color is one of 'c, y, r, p'
-        if ("cyrp".indexOf(color) == -1) {
-            return false;
-        }
-
-        // Create a set to store unique rug identifiers (color + ID)
-        Set<String> uniqueRugs = new HashSet<>();
-
-        // Parse existing rugs from gameString
-        // Assuming that each rug in gameString is 7 characters long, without any delimiters
-        for (int i = 0; i <= gameString.length() - 7; i += 7) {
-            String existingRug = gameString.substring(i, i + 7);
-            String existingRugId = existingRug.substring(0, 3); // Color + ID
-            uniqueRugs.add(existingRugId);
-        }
-
-        // Check for uniqueness of the new rug's color + ID combination
-        String newRugId = color + id;
-        if (uniqueRugs.contains(newRugId)) {
-            return false;
-        }
-
-        // Assuming you will check if coords are valid in a different function (e.g., on-board checks)
-
-        return true;
-    }
-
-    public static void main(String[] args) {
-        // Test the isRugValid function
-        System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
-        System.out.println(isRugValid("c013343y023343", "y013343"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "c013444"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "y023444"));  // Should return true
         // FIXME: Task 4
+        return false;
     }
 
     /**
