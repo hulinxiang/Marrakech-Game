@@ -1,10 +1,10 @@
 package comp1110.ass2;
 
 /**
- * Defines the behaviour of the dice.
+ * Defines the behaviour of the dice. REDUNDANT CLASS.
  */
 public class Dice {
-    int[] diceValues = {1, 2, 2, 3, 3, 4};
+    static int[] diceValues = {1, 2, 2, 3, 3, 4};
     //Array of integers denoting dice set-up (six sided with 1 one and four, and 2 twos and threes).
 
     /**
@@ -12,7 +12,8 @@ public class Dice {
      * @return rolledInt is the result of the rotation
      */
     public static int Roll() {
-        int rolledInt = 0; //Number rolled between 1-4
-        return rolledInt;
+        int randomNum = (int) Math.floor(Math.random() *6)+1; //Index between 1 and 6 inclusive.
+        int rolledNum = diceValues[randomNum];
+        return rolledNum;
     }
 }

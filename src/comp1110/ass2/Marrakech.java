@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Random;
 
 public class Marrakech {
 
@@ -58,18 +59,10 @@ public class Marrakech {
         }
 
         // Assuming you will check if coords are valid in a different function (e.g., on-board checks)
-
+        // FIXME: Task 4
         return true;
     }
 
-    public static void main(String[] args) {
-        // Test the isRugValid function
-        System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
-        System.out.println(isRugValid("c013343y023343", "y013343"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "c013444"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "y023444"));  // Should return true
-        // FIXME: Task 4
-    }
 
     /**
      * Roll the special Marrakech die and return the result.
@@ -85,9 +78,20 @@ public class Marrakech {
      * being twice as likely to be returned as a 1 or 4.
      * @return The result of the roll of the die meeting the criteria above
      */
+
+
     public static int rollDie() {
-        // FIXME: Task 6
-        return -1;
+        //Originally had dice class (now redundant).
+        // To simplify code, it is easier to implement all parts of the die's behaviour in this method....
+        // instead of creating a separate class.
+
+        int[] diceValues = {1, 2, 2, 3, 3, 4};
+        //Array of integers denoting dice set-up (six sided with 1 one and four, and 2 twos and threes).
+
+        Random random = new Random();
+        int randomNum = random.nextInt(6); //Index between 0 and 5 inclusive.
+        int rolledNum = diceValues[randomNum];
+        return rolledNum;
     }
 
     /**
@@ -202,5 +206,27 @@ public class Marrakech {
         // FIXME: Task 14
         return "";
     }
+
+    public static void main(String[] args) {
+        // Test the isRugValid method
+        System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
+        System.out.println(isRugValid("c013343y023343", "y013343"));  // Should return false (same ID and color)
+        System.out.println(isRugValid("c013343y023343", "c013444"));  // Should return false (same ID and color)
+        System.out.println(isRugValid("c013343y023343", "y023444"));  // Should return true
+
+        //Test the rollDie method
+        int[] counter = {0, 0, 0, 0};  //1s counter, 2s counter, 3s counter, 4s counter
+        for(int i=0; i<1000; i++){
+            int num = rollDie();
+            counter[num-1] += 1;
+        }
+        //Print statements showing distribution (need higher percentage of 2s and 3s).
+        System.out.println("% of 1s: " + counter[0]/10);
+        System.out.println("% of 2s: " + counter[1]/10);
+        System.out.println("% of 3s: " + counter[2]/10);
+        System.out.println("% of 4s: " + counter[3]/10);
+
+    }
+
 
 }
