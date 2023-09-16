@@ -6,23 +6,58 @@ import java.util.Random;
 
 public class Marrakech {
 
-    public static String[] decodeGameString(String gameString){ //SHOULD BE VOID BUT STATIC FOR TESTING
+    //Players in game.
+    public Player[] players;
+
+    /**
+     * Generates new instance of Marrakech as per the string input.
+     */
+
+    public Marrakech(String gameString){
+        this.players = decodeGameString(gameString);
+    }
+
+    public Player[] decodeGameString(String gameString){
         //Game string = Player string for each player, followed by Asam string, followed by board string
 
         //FIND INDEX WHERE ASAM STRING STARTS:
         int indexAsam = gameString.indexOf("A");
+
+
+        //CREATING OBJECT PLAYERS:
         int numberPlayers = indexAsam / 8; //Number of players in the game.
 
-        String[] Players = {};
+        players = new Player[numberPlayers];
+
+        String playString;
+        String colour;
+        int coins;
+        int rugs;
+        int state;
 
         //Create new string[] consisting just of player strings - for loop up to excluding Asam string:
         for(int i=0; i<numberPlayers; i++){
+
             //Know that player string is always eight characters long...
-            Players[i] = gameString.substring(i*7, (i*7)+7);
+            playString = gameString.substring(i*7, (i*7)+7);
+            colour = playString.substring(0,2); //2nd character is colour
+            coins = Integer.parseInt(playString.substring(3,5)); //3rd, 4th, 5th characters denote coins.
+            rugs = Integer.parseInt(playString.substring(5,7)); //6th and 7th characters denote number of rugs.
+            //Setting the player state:
+            if(playString.substring(7) == "i")
+            {
+                state = 1; //1 Means player is in the game.
+            }
+            else
+            {
+                state = -1; //1 Means player is out of the game.
+            }
+
+
+            players[i] = new Player("r", coins, rugs, state);
+
         }
-
-
-        return Players;
+        return players;
 
     }
 
@@ -286,7 +321,12 @@ public class Marrakech {
         System.out.println("% of 4s: " + counter[3] / 10);
 
         //TEST FOR STRING DECODING
-        System.out.println(decodeGameString("Pr00803iPr00803iA04N"));
+        Marrakech Game = new Marrakech("Pr00803iPr00803iA04N");
+        System.out.println(Game.players[0].colour);
+        System.out.println(Game.players[0].coins);
+        System.out.println(Game.players[0].rugs);
+        System.out.println(Game.players[0].playerState);
+
 
     }
 

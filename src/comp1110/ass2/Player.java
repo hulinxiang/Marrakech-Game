@@ -13,6 +13,8 @@ public class Player {
     //Number of rugs
     int rugs;
     //The coordinates of the player's rugs on the board.
+    String colour;
+    //String denoting the colour of the player.
     IntPair[] rugCords;
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
@@ -22,9 +24,11 @@ public class Player {
      * @param coins
      * @param rugs
      */
-    Player(int coins, int rugs) {
+    Player(String colour, int coins, int rugs, int playerState) {
+        this.colour = "";
         this.coins = START_COINS;
         this.rugs = START_RUGS;
+        this.playerState = 1;
     }
 
     /**
