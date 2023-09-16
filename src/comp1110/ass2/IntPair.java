@@ -5,9 +5,9 @@ package comp1110.ass2;
  */
 public class IntPair {
     //x int
-    private final int x;
+    int x;
     //y int
-    private final int y;
+    int y;
 
     /**
      * Constructor to create an instance of IntPair

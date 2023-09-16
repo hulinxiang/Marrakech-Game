@@ -8,56 +8,30 @@ public class Marrakech {
 
     //Players in game.
     public Player[] players;
+    public Merchant asam;
 
     /**
-     * Generates new instance of Marrakech as per the string input.
+     * Generates new instance of Marrakech as per the string input by decoding the string.
      */
 
     public Marrakech(String gameString){
-        this.players = decodeGameString(gameString);
-    }
-
-    public Player[] decodeGameString(String gameString){
-        //Game string = Player string for each player, followed by Asam string, followed by board string
-
-        //FIND INDEX WHERE ASAM STRING STARTS:
         int indexAsam = gameString.indexOf("A");
-
 
         //CREATING OBJECT PLAYERS:
         int numberPlayers = indexAsam / 8; //Number of players in the game.
-
+        //Create each player
         players = new Player[numberPlayers];
 
-        String playString;
-        String colour;
-        int coins;
-        int rugs;
-        int state;
-
-        //Create new string[] consisting just of player strings - for loop up to excluding Asam string:
         for(int i=0; i<numberPlayers; i++){
-
-            //Know that player string is always eight characters long...
-            playString = gameString.substring(i*7, (i*7)+7);
-            colour = playString.substring(0,2); //2nd character is colour
-            coins = Integer.parseInt(playString.substring(3,5)); //3rd, 4th, 5th characters denote coins.
-            rugs = Integer.parseInt(playString.substring(5,7)); //6th and 7th characters denote number of rugs.
-            //Setting the player state:
-            if(playString.substring(7) == "i")
-            {
-                state = 1; //1 Means player is in the game.
-            }
-            else
-            {
-                state = -1; //1 Means player is out of the game.
-            }
-
-
-            players[i] = new Player("r", coins, rugs, state);
-
+            players[i] = new Player();
+            players[i].decodePlayerString(gameString.substring((i*8),(i*8)+8));
         }
-        return players;
+
+        //CREATING ASAM
+        asam = new Merchant();
+        //Asam string denotes position (x, y) and direction.
+        asam.decodeAsamString(gameString.substring(indexAsam+1, indexAsam+4));
+
 
     }
 
@@ -321,13 +295,16 @@ public class Marrakech {
         System.out.println("% of 4s: " + counter[3] / 10);
 
         //TEST FOR STRING DECODING
-        Marrakech Game = new Marrakech("Pr00803iPr00803iA04N");
-        System.out.println(Game.players[0].colour);
-        System.out.println(Game.players[0].coins);
-        System.out.println(Game.players[0].rugs);
-        System.out.println(Game.players[0].playerState);
 
+        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04N");
+        System.out.println("The colour: " + Game.players[0].colour);
+        System.out.println("Number of coins: " + Game.players[0].coins);
+        System.out.println("Number of rugs: " + Game.players[0].rugs);
+        System.out.println("Player state: " + Game.players[0].playerState);
 
+        System.out.println("Merchant x: " + Game.asam.merchantPosition.x);
+        System.out.println("Merchant y: " + Game.asam.merchantPosition.y);
+        System.out.println("Merchant direction: " + Game.asam.direction);
     }
 
 
