@@ -20,6 +20,28 @@ public class Board {
      * Sets up the initial state of the board.
      */
     public static void boardSetUp() {
+        //[ROWS][COLUMNS]
+        Tile[][] tiles = new Tile[BOARD_HEIGHT][BOARD_WIDTH];
+    }
+
+    /**
+     * Decodes the board string to set the state of the board as specified by the game string.
+     */
+    public void decodeBoardString(String boardString){
+        //[ROWS][COLUMNS]
+        Tile[][] tiles = new Tile[BOARD_HEIGHT][BOARD_WIDTH];
+
+        int counter = 0;
+        //Double for loop, looping through each column and row
+        for(int j=0; j<BOARD_WIDTH; j++){ //LOOPING THROUGH EACH COLUMN
+            for(int k=0; k<BOARD_HEIGHT; k++){ //LOOPING THROUGH EACH ROW
+                IntPair tilePos = new IntPair(j,k);
+                tiles[j][k] = new Tile(tilePos);
+                tiles[j][k].owner.decodeColour(boardString.substring(counter,counter+1)); //setting the owner of the tile
+                counter +=1;
+
+            }
+        }
 
     }
 

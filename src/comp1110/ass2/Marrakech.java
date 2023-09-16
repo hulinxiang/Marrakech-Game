@@ -10,6 +10,8 @@ public class Marrakech {
     public Player[] players;
     public Merchant asam;
 
+    public Board board;
+
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
@@ -31,6 +33,12 @@ public class Marrakech {
         asam = new Merchant();
         //Asam string denotes position (x, y) and direction.
         asam.decodeAsamString(gameString.substring(indexAsam+1, indexAsam+4));
+
+        //CREATING BOARD
+        board = new Board();
+        //Board string is from the end of the asam string to the end of game string (exclude the B when passing to method).
+        board.decodeBoardString(gameString.substring(indexAsam+5));
+
 
 
     }
@@ -296,7 +304,7 @@ public class Marrakech {
 
         //TEST FOR STRING DECODING
 
-        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04N");
+        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02y03");
         System.out.println("The colour: " + Game.players[0].colour);
         System.out.println("Number of coins: " + Game.players[0].coins);
         System.out.println("Number of rugs: " + Game.players[0].rugs);
@@ -305,6 +313,12 @@ public class Marrakech {
         System.out.println("Merchant x: " + Game.asam.merchantPosition.x);
         System.out.println("Merchant y: " + Game.asam.merchantPosition.y);
         System.out.println("Merchant direction: " + Game.asam.direction);
+
+
+        String theString = "Pr00803iPy01305iPc01510oA04NBc01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01";
+        int indexAsam = theString.indexOf("A");
+        System.out.println(theString.substring(indexAsam+5));
+
     }
 
 
