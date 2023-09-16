@@ -6,6 +6,26 @@ import java.util.Random;
 
 public class Marrakech {
 
+    public static String[] decodeGameString(String gameString){ //SHOULD BE VOID BUT STATIC FOR TESTING
+        //Game string = Player string for each player, followed by Asam string, followed by board string
+
+        //FIND INDEX WHERE ASAM STRING STARTS:
+        int indexAsam = gameString.indexOf("A");
+        int numberPlayers = indexAsam / 8; //Number of players in the game.
+
+        String[] Players = {};
+
+        //Create new string[] consisting just of player strings - for loop up to excluding Asam string:
+        for(int i=0; i<numberPlayers; i++){
+            //Know that player string is always eight characters long...
+            Players[i] = gameString.substring(i*7, (i*7)+7);
+        }
+
+
+        return Players;
+
+    }
+
     /**
      * Determine whether a rug String is valid.
      * For this method, you need to determine whether the rug String is valid, but do not need to determine whether it
@@ -264,6 +284,9 @@ public class Marrakech {
         System.out.println("% of 2s: " + counter[1] / 10);
         System.out.println("% of 3s: " + counter[2] / 10);
         System.out.println("% of 4s: " + counter[3] / 10);
+
+        //TEST FOR STRING DECODING
+        System.out.println(decodeGameString("Pr00803iPr00803iA04N"));
 
     }
 
