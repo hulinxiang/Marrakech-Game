@@ -11,23 +11,29 @@ public class Marrakech {
      * For this method, you need to determine whether the rug String is valid, but do not need to determine whether it
      * can be placed on the board (you will determine that in Task 10 ). A rug is valid if and only if all the following
      * conditions apply:
-     *  - The String is 7 characters long
-     *  - The first character in the String corresponds to the colour character of a player present in the game
-     *  - The next two characters represent a 2-digit ID number
-     *  - The next 4 characters represent coordinates that are on the board
-     *  - The combination of that ID number and colour is unique
+     * - The String is 7 characters long
+     * - The first character in the String corresponds to the colour character of a player present in the game
+     * - The next two characters represent a 2-digit ID number
+     * - The next 4 characters represent coordinates that are on the board
+     * - The combination of that ID number and colour is unique
      * To clarify this last point, if a rug has the same ID as a rug on the board, but a different colour to that rug,
      * then it may still be valid. Obviously multiple rugs are allowed to have the same colour as well so long as they
      * do not share an ID. So, if we already have the rug c013343 on the board, then we can have the following rugs
-     *  - c023343 (Shares the colour but not the ID)
-     *  - y013343 (Shares the ID but not the colour)
+     * - c023343 (Shares the colour but not the ID)
+     * - y013343 (Shares the ID but not the colour)
      * But you cannot have c014445, because this has the same colour and ID as a rug on the board already.
+     *
      * @param gameString A String representing the current state of the game as per the README
-     * @param rug A String representing the rug you are checking
+     * @param rug        A String representing the rug you are checking
      * @return true if the rug is valid, and false otherwise.
      */
     public static boolean isRugValid(String gameString, String rug) {
-        if (rug.length() != 7) {
+        final int STRING_LENGTH = 7;
+        //The board is 7x7, which means it  has 7 columns and 7 rows.
+        //Because the coordination starts with 0. So max value is 6.
+        final int MAX_ROW = 6;
+        final int MAX_COLUMN = 6;
+        if (rug.length() != STRING_LENGTH) {
             return false;
         }
 
@@ -35,6 +41,30 @@ public class Marrakech {
         char color = rug.charAt(0);
         String id = rug.substring(1, 3);
         String coords = rug.substring(3, 7);
+        //Location of squares in a rug
+        //The row of first square
+        int firstSquareRow = coords.charAt(0) - '0';
+        //The column of first square
+        int firstSquareColumn = coords.charAt(1) - '0';
+        //The row of second square
+        int secondSquareRow = coords.charAt(2) - '0';
+        //The column of second square
+        int secondSquareColumn = coords.charAt(3) - '0';
+        // Check if these two square are connected. If not, it is not valid
+        if (firstSquareRow != secondSquareRow) {
+            if (firstSquareColumn != secondSquareColumn) {
+                return false;
+            }
+        }
+        //Check if they are larger than valid value
+        if (firstSquareColumn > MAX_COLUMN || secondSquareColumn > MAX_COLUMN || firstSquareRow > MAX_ROW || secondSquareRow > MAX_ROW) {
+            return false;
+        }
+
+        //Check if they are smaller than 0
+        if (firstSquareColumn < 0 || secondSquareColumn < 0 || firstSquareRow < 0 || secondSquareRow < 0) {
+            return false;
+        }
 
         // Check if color is one of 'c, y, r, p'
         if ("cyrp".indexOf(color) == -1) {
@@ -48,7 +78,8 @@ public class Marrakech {
         // Assuming that each rug in gameString is 7 characters long, without any delimiters
         for (int i = 0; i <= gameString.length() - 7; i += 7) {
             String existingRug = gameString.substring(i, i + 7);
-            String existingRugId = existingRug.substring(0, 3); // Color + ID
+            // Color + ID
+            String existingRugId = existingRug.substring(0, 3);
             uniqueRugs.add(existingRugId);
         }
 
@@ -69,13 +100,14 @@ public class Marrakech {
      * Note that the die in Marrakech is not a regular 6-sided die, since there
      * are no faces that show 5 or 6, and instead 2 faces that show 2 and 3. That
      * is, of the 6 faces
-     *  - One shows 1
-     *  - Two show 2
-     *  - Two show 3
-     *  - One shows 4
+     * - One shows 1
+     * - Two show 2
+     * - Two show 3
+     * - One shows 4
      * As such, in order to get full marks for this task, you will need to implement
      * a die where the distribution of results from 1 to 4 is not even, with a 2 or 3
      * being twice as likely to be returned as a 1 or 4.
+     *
      * @return The result of the roll of the die meeting the criteria above
      */
 
@@ -99,6 +131,7 @@ public class Marrakech {
      * Recall from the README that a game of Marrakech is over if a Player is about to enter the rotation phase of their
      * turn, but no longer has any rugs. Note that we do not encode in the game state String whose turn it is, so you
      * will have to think about how to use the information we do encode to determine whether a game is over or not.
+     *
      * @param currentGame A String representation of the current state of the game.
      * @return true if the game is over, or false otherwise.
      */
@@ -113,10 +146,11 @@ public class Marrakech {
      * For example, if he is currently facing North (towards the top of the board), then he could be rotated to face
      * East or West, but not South. Assam can also only be rotated in 90 degree increments.
      * If the requested rotation is illegal, you should return Assam's current state unchanged.
+     *
      * @param currentAssam A String representing Assam's current state
-     * @param rotation The requested rotation, in degrees. This degree reading is relative to the direction Assam
-     *                 is currently facing, so a value of 0 for this argument will keep Assam facing in his
-     *                 current orientation, 90 would be turning him to the right, etc.
+     * @param rotation     The requested rotation, in degrees. This degree reading is relative to the direction Assam
+     *                     is currently facing, so a value of 0 for this argument will keep Assam facing in his
+     *                     current orientation, 90 would be turning him to the right, etc.
      * @return A String representing Assam's state after the rotation, or the input currentAssam if the requested
      * rotation is illegal.
      */
@@ -129,11 +163,12 @@ public class Marrakech {
      * Determine whether a potential new placement is valid (i.e that it describes a legal way to place a rug).
      * There are a number of rules which apply to potential new placements, which are detailed in the README but to
      * reiterate here:
-     *   1. A new rug must have one edge adjacent to Assam (not counting diagonals)
-     *   2. A new rug must not completely cover another rug. It is legal to partially cover an already placed rug, but
-     *      the new rug must not cover the entirety of another rug that's already on the board.
+     * 1. A new rug must have one edge adjacent to Assam (not counting diagonals)
+     * 2. A new rug must not completely cover another rug. It is legal to partially cover an already placed rug, but
+     * the new rug must not cover the entirety of another rug that's already on the board.
+     *
      * @param gameState A game string representing the current state of the game
-     * @param rug A rug string representing the candidate rug which you must check the validity of.
+     * @param rug       A rug string representing the candidate rug which you must check the validity of.
      * @return true if the placement is valid, and false otherwise.
      */
     public static boolean isPlacementValid(String gameState, String rug) {
@@ -148,6 +183,7 @@ public class Marrakech {
      * square). Recall that the payment owed to the owner of the rug is equal to the number of connected squares showing
      * on the board that are of that colour. Similarly to the placement rules, two squares are only connected if they
      * share an entire edge -- diagonals do not count.
+     *
      * @param gameString A String representation of the current state of the game.
      * @return The amount of payment due, as an integer.
      */
@@ -167,6 +203,7 @@ public class Marrakech {
      * board that are of their colour, and that a player who is out of the game cannot win. If multiple players have the
      * same total score, the player with the largest number of dirhams wins. If multiple players have the same total
      * score and number of dirhams, then the game is a tie.
+     *
      * @param gameState A String representation of the current state of the game
      * @return A char representing the winner of the game as described above.
      */
@@ -182,11 +219,12 @@ public class Marrakech {
      * according to the tracks diagrammed in the assignment README, which should be studied carefully before attempting
      * this task. For this task, you are not required to do any checking that the die result is sensible, nor whether
      * the current Assam string is sensible either -- you may assume that both of these are valid.
+     *
      * @param currentAssam A string representation of Assam's current state.
-     * @param dieResult The result of the die, which determines the number of squares Assam will move.
+     * @param dieResult    The result of the die, which determines the number of squares Assam will move.
      * @return A String representing Assam's state after the movement.
      */
-    public static String moveAssam(String currentAssam, int dieResult){
+    public static String moveAssam(String currentAssam, int dieResult) {
         // FIXME: Task 13
         return "";
     }
@@ -197,8 +235,9 @@ public class Marrakech {
      * a turn. A rug may only be placed if it meets the conditions listed in the isPlacementValid task. If the rug
      * placement is valid, then you should return a new game string representing the board after the placement has
      * been completed. If the placement is invalid, then you should return the existing game unchanged.
+     *
      * @param currentGame A String representation of the current state of the game.
-     * @param rug A String representation of the rug that is to be placed.
+     * @param rug         A String representation of the rug that is to be placed.
      * @return A new game string representing the game following the successful placement of this rug if it is valid,
      * or the input currentGame unchanged otherwise.
      */
@@ -216,15 +255,15 @@ public class Marrakech {
 
         //Test the rollDie method
         int[] counter = {0, 0, 0, 0};  //1s counter, 2s counter, 3s counter, 4s counter
-        for(int i=0; i<1000; i++){
+        for (int i = 0; i < 1000; i++) {
             int num = rollDie();
-            counter[num-1] += 1;
+            counter[num - 1] += 1;
         }
         //Print statements showing distribution (need higher percentage of 2s and 3s).
-        System.out.println("% of 1s: " + counter[0]/10);
-        System.out.println("% of 2s: " + counter[1]/10);
-        System.out.println("% of 3s: " + counter[2]/10);
-        System.out.println("% of 4s: " + counter[3]/10);
+        System.out.println("% of 1s: " + counter[0] / 10);
+        System.out.println("% of 2s: " + counter[1] / 10);
+        System.out.println("% of 3s: " + counter[2] / 10);
+        System.out.println("% of 4s: " + counter[3] / 10);
 
     }
 

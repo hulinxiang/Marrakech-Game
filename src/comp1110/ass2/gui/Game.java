@@ -20,7 +20,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // FIXME Task 7 and 15
+//         FIXME Task 7 and 15
         Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
