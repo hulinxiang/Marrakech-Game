@@ -12,6 +12,9 @@ public class Marrakech {
 
     public Board board;
 
+    public int numberPlayers;
+    //How many players in the game.
+
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
@@ -20,7 +23,7 @@ public class Marrakech {
         int indexAsam = gameString.indexOf("A");
 
         //CREATING OBJECT PLAYERS:
-        int numberPlayers = indexAsam / 8; //Number of players in the game.
+        numberPlayers = indexAsam / 8; //Number of players in the game.
         //Create each player
         players = new Player[numberPlayers];
 
@@ -37,12 +40,59 @@ public class Marrakech {
         //CREATING BOARD
         board = new Board();
         //Board string is from the end of the asam string to the end of game string (exclude the B when passing to method).
-        board.decodeBoardString(gameString.substring(indexAsam+5));
+        //Assign owner to board using players[]
+        board.tiles = makeTiles(gameString.substring(indexAsam+5));
 
 
 
     }
 
+    /**
+     * Assigns the state of each tile on the board based on their ID and colour.
+     */
+    public Tile[][] makeTiles(String boardString){
+        Tile[][] tiles = new Tile[board.BOARD_HEIGHT][board.BOARD_WIDTH];
+
+        int counter = 0;
+        //Double for loop, looping through each column and row
+        for(int j=0; j<board.BOARD_WIDTH; j++){ //LOOPING THROUGH EACH COLUMN
+            for(int k=0; k<board.BOARD_HEIGHT; k++){ //LOOPING THROUGH EACH ROW
+                IntPair tilePos = new IntPair(j,k);
+                tiles[j][k] = new Tile(tilePos);
+
+                //String tileColour = boardString.substring(counter,counter+1);
+
+
+                if(boardString.substring(counter, counter+3).equals("n00")) { //EMPTY TILE
+                    tiles[j][k].state = 0; //empty
+                    tiles[j][k].owner = null; //empty therefore no owner
+                }
+                else{
+                    tiles[j][k].state = 1; //not empty
+                    tiles[j][k].owner = decodeOwner(boardString.substring(counter,counter+1));
+
+                }
+                counter +=3;
+
+            }
+        }
+        return tiles;
+    }
+
+    /**
+     * Assigns owner of the tile based on their colour.
+     */
+
+    public Player decodeOwner(String ownerColour){
+        Player theOwner;
+        for(int i=0; i<numberPlayers; i++){
+            if(ownerColour.equals(players[i].colour.substring(0,1))) { //First letter of colour compared
+                theOwner = players[i];
+                return theOwner;
+            }
+        }
+        return null;
+    }
     /**
      * Determine whether a rug String is valid.
      * For this method, you need to determine whether the rug String is valid, but do not need to determine whether it
@@ -304,7 +354,8 @@ public class Marrakech {
 
         //TEST FOR STRING DECODING
 
-        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02y03");
+        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02n00c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01c01c02y03c01c02y03c01");
+
         System.out.println("The colour: " + Game.players[0].colour);
         System.out.println("Number of coins: " + Game.players[0].coins);
         System.out.println("Number of rugs: " + Game.players[0].rugs);
@@ -319,6 +370,7 @@ public class Marrakech {
         int indexAsam = theString.indexOf("A");
         System.out.println(theString.substring(indexAsam+5));
 
+        System.out.println("Board: "+ Game.board.tiles[0][5].owner.colour);
     }
 
 

@@ -38,7 +38,7 @@ public class Player {
      */
     public void decodePlayerString(String playerString){
         //Setting player colour
-        this.decodeColour(playerString.substring(1,2));
+        this.colour = decodeColour(playerString.substring(1,2));
 
         this.coins = Integer.parseInt(playerString.substring(3,5)); //3rd, 4th, 5th characters denote coins.
         this.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
@@ -56,19 +56,22 @@ public class Player {
 
     }
 
-    public void decodeColour(String colour){
+    public String decodeColour(String colour){
         //Setting player colour
         switch (colour){ //2nd character is colour;
             case "c":
-                this.colour = "cyan";
+                colour = "cyan";
                 break;
             case "y":
-                this.colour = "yellow";
+                colour = "yellow";
+                break;
             case "r":
-                this.colour = "red";
+                colour = "red";
+                break;
             case "p":
-                this.colour = "purple";
+                colour = "purple";
         }
+        return colour;
 
     }
 
