@@ -13,6 +13,8 @@ public class Tile {
     Rug id;
     int state;
 
+    String colour;
+
 
     /**
      * Constructor of tile
@@ -21,6 +23,7 @@ public class Tile {
     public Tile(IntPair tilePosition) {
         this.tilePosition = tilePosition;
         this.owner = null;
+        this.colour = null;
     }
 
     /**

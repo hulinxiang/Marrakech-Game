@@ -14,7 +14,7 @@ public class Marrakech {
     //How many players in the game.
 
     //Record of the rugs that have been placed (according to their id).
-    ArrayList<Rug> placedRugs = new ArrayList<>(); //By making it a set ensures that the rug can only be stored once.
+    ArrayList<Rug> placedRugs = new ArrayList<>();
 
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
@@ -61,7 +61,22 @@ public class Marrakech {
                 IntPair tilePos = new IntPair(j,k);
                 tiles[j][k] = new Tile(tilePos);
 
-                //String tileColour = boardString.substring(counter,counter+1);
+                String tileColour = boardString.substring(counter,counter+1);
+                String colour = "";
+                switch (tileColour){ //2nd character is colour;
+                    case "c":
+                        colour = "CYAN";
+                        break;
+                    case "y":
+                        colour = "YELLOW";
+                        break;
+                    case "r":
+                        colour = "RED";
+                        break;
+                    case "p":
+                        colour = "PURPLE";
+                }
+                tiles[j][k].colour = colour;
 
 
                 if(boardString.substring(counter, counter+3).equals("n00")) { //EMPTY TILE
@@ -392,7 +407,7 @@ public class Marrakech {
 
         //TESTING THE RUG ID DECODER
         for (int i = 0; i < Game.placedRugs.size(); i++) {
-            System.out.println("Rug: " + Game.placedRugs.get(i).rugID);
+            System.out.println(Game.board.tiles[i][i].colour);
         }
 
     }
