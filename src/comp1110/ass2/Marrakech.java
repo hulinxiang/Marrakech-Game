@@ -14,7 +14,7 @@ public class Marrakech {
     //How many players in the game.
 
     //Record of the rugs that have been placed (according to their id).
-    Set<Rug> placedRugs = new HashSet<>(); //By making it a set ensures that the rug can only be stored once.
+    ArrayList<Rug> placedRugs = new ArrayList<>(); //By making it a set ensures that the rug can only be stored once.
 
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
@@ -75,9 +75,25 @@ public class Marrakech {
                     //SETTING ID
                     //Check if rug already recorded in array (since can cover two tiles).
                     int idFromStr = Integer.parseInt(boardString.substring(counter+1, counter+3));
-                    Rug newRug = new Rug();
-                    newRug.rugID = idFromStr;
-                    placedRugs.add(newRug);
+                    if(placedRugs.size()==0){
+                        Rug newRug = new Rug();
+                        newRug.rugID = idFromStr;
+                        placedRugs.add(newRug);
+                    }
+                    else{
+                        boolean booNew = true; //Whether rug has already been added to placedRugs.
+                        for(int i=0; i<placedRugs.size();i++){
+                            if(placedRugs.get(i).rugID == idFromStr) {
+                                booNew = false;
+                            }
+                        }
+
+                        if(booNew){ //Rug has not been added to placedRugs
+                            Rug newRug = new Rug();
+                            newRug.rugID = idFromStr;
+                            placedRugs.add(newRug);
+                        }
+                    }
 
                 }
                 counter +=3;
@@ -362,7 +378,7 @@ public class Marrakech {
 
         //TEST FOR STRING DECODING
 
-        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02n00c04c05y06p07c08c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36");
+        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02n00c03c04y05p06c07c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36");
 
         System.out.println("The colour: " + Game.players[0].colour);
         System.out.println("Number of coins: " + Game.players[0].coins);
@@ -375,9 +391,8 @@ public class Marrakech {
 
 
         //TESTING THE RUG ID DECODER
-        Iterator<Rug> rugsIterator = Game.placedRugs.iterator(); //This part of the code written with help from online (see originality statement).
         for (int i = 0; i < Game.placedRugs.size(); i++) {
-            System.out.println("Rug: " + rugsIterator.next().rugID);
+            System.out.println("Rug: " + Game.placedRugs.get(i).rugID);
         }
 
     }
