@@ -9,7 +9,11 @@ public class Tile {
     //Denote the owner of the tile
     Player owner;
     //Denote the state of the tile. 0 means empty and 1 means occupied
+
+    Rug id;
     int state;
+
+    String colour;
 
 
     /**
@@ -19,6 +23,7 @@ public class Tile {
     public Tile(IntPair tilePosition) {
         this.tilePosition = tilePosition;
         this.owner = null;
+        this.colour = null;
     }
 
     /**

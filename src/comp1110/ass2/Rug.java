@@ -4,10 +4,13 @@ package comp1110.ass2;
  * Behaviour of the rug on the board
  */
 public class Rug { //Maybe useful... which rug has occupied tile?
-    //Denote the position of rug
+    //If placed, the rug has an id (integer denoting when the rug was placed).
+    int rugID;
+    //Denote the iposition of rug
+    /*
     private final IntPair[] rugPosition;
 
-    public Rug(IntPair[] rugPosition) {
+    /*public Rug(IntPair[] rugPosition) {
         this.rugPosition = rugPosition;
     }
 
