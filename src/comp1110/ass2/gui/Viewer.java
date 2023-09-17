@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -186,8 +187,8 @@ public class Viewer extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Marrakech Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        root.getChildren().addAll(canvas,controls);
         makeControls();
-        root.getChildren().addAll(controls, canvas);
         scene.setOnKeyReleased(event -> {
             KeyCode keyCode=event.getCode();
             if(keyCode.equals(KeyCode.ENTER)){
