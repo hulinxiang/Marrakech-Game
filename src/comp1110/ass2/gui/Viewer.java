@@ -168,11 +168,9 @@ public class Viewer extends Application {
         boardTextField = new TextField();
         boardTextField.setPrefWidth(800);
         Button button = new Button("Refresh");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                displayState(boardTextField.getText());
-            }
+        button.setOnAction(e -> {
+            System.out.println("Button clicked");
+            displayState(boardTextField.getText());
         });
         HBox hb = new HBox();
         hb.getChildren().addAll(boardLabel,
@@ -188,7 +186,7 @@ public class Viewer extends Application {
         primaryStage.setTitle("Marrakech Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         makeControls();
-        displayState(new String("A33EBc14n44p33y53r65"));
+        displayState(new String("PfdasfadfaA33EBc14n44p33y53r65r01"));
         root.getChildren().addAll(controls, canvas);
         primaryStage.setScene(scene);
         primaryStage.show();
