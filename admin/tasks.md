@@ -13,7 +13,6 @@ Lize van der Walt: Part 3 in B-design.pdf - meeting 11:00 17/08/2023
 Everyone: discuss and create application skeleton together - video meeting 19:00 20/08/2023
 
 ## Week 5
-During the lab went through skeleton together with tutor. 
 
 Meeting at 11.30am on Thursday 24/08/2023:
 Aim to finish below by next Thursday (31/08/2023)

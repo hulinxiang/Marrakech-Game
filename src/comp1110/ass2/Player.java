@@ -13,19 +13,68 @@ public class Player {
     //Number of rugs
     int rugs;
     //The coordinates of the player's rugs on the board.
+    String colour;
+    //String denoting the colour of the player.
     IntPair[] rugCords;
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
 
+    /*
     /**
      * Constructor of Player
      * @param coins
      * @param rugs
-     */
-    Player(int coins, int rugs) {
+
+    Player(String colour, int coins, int rugs, int playerState) {
+        this.colour = "";
         this.coins = START_COINS;
         this.rugs = START_RUGS;
+        this.playerState = 1;
     }
+    */
+
+    /**
+     * Decodes player string
+     */
+    public void decodePlayerString(String playerString){
+        //Setting player colour
+        this.colour = decodeColour(playerString.substring(1,2));
+
+        this.coins = Integer.parseInt(playerString.substring(3,5)); //3rd, 4th, 5th characters denote coins.
+        this.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
+
+        //Setting the player state:
+        if(playerString.substring(7).equals("i"))
+        {
+            this.playerState = 1; //1 Means player is in the game.
+        }
+        else
+        {
+            this.playerState = -1; //1 Means player is out of the game.
+        }
+
+
+    }
+
+    public String decodeColour(String colour){
+        //Setting player colour
+        switch (colour){ //2nd character is colour;
+            case "c":
+                colour = "cyan";
+                break;
+            case "y":
+                colour = "yellow";
+                break;
+            case "r":
+                colour = "red";
+                break;
+            case "p":
+                colour = "purple";
+        }
+        return colour;
+
+    }
+
 
     /**
      * Player pays other player money, updates this.coins field.

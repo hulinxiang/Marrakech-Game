@@ -20,8 +20,10 @@ public class Board {
      * Sets up the initial state of the board.
      */
     public static void boardSetUp() {
-
+        //[ROWS][COLUMNS]
+        Tile[][] tiles = new Tile[BOARD_HEIGHT][BOARD_WIDTH];
     }
+
 
     /**
      * This method is to convert an Intpair to the tile on this Intpair;

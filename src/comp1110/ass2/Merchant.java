@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 
+
 public class Merchant {
     //Position of the merchant
     IntPair merchantPosition;
@@ -12,11 +13,39 @@ public class Merchant {
      *
      * @param center is the center position of the board
      */
-    Merchant(IntPair center) {
+    /*Merchant(IntPair center) {
         this.merchantPosition = center;
     }
+    */
 
-    /*
+    /**
+     * Decodes the merchant string
+     */
+    public void decodeAsamString(String asamString){
+        int x = Integer.parseInt(asamString.substring(0,1));
+        int y = Integer.parseInt(asamString.substring(1,2));
+        this.merchantPosition = new IntPair(x, y);
+
+        switch (asamString.substring(2,3)){
+            case "N":
+                this.direction = Direction.NORTH;
+                break;
+            case "E":
+                this.direction = Direction.EAST;
+                break;
+            case "S":
+                this.direction = Direction.SOUTH;
+                break;
+            case "W":
+                this.direction = Direction.WEST;
+                break;
+
+        }
+        this.merchantPosition.x = Integer.parseInt(asamString.substring(0,1));
+
+    }
+
+    /**
     Sets the initial direction of the merchant at the start of the game.
      */
     public void firstDirection(Direction d) {
