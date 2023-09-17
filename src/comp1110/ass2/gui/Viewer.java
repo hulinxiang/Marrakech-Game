@@ -1,6 +1,5 @@
 package comp1110.ass2.gui;
 
-import comp1110.ass2.Board;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -25,6 +25,7 @@ public class Viewer extends Application {
     private final Group root = new Group();
     private final Group controls = new Group();
     private TextField boardTextField;
+    private Button button;
 
 
     /**
@@ -65,8 +66,12 @@ public class Viewer extends Application {
                 boardStringPosition = i;
             }
         }
+
+        if (boardStringPosition == -1 || assamStringPosition == -1) {
+            throw new RuntimeException("Invalid String Format");
+        }
         String assamString = state.substring(assamStringPosition, boardStringPosition);
-        if (boardStringPosition == -1 || assamStringPosition == -1||assamString.length()!=4) {
+        if(assamString.length()!=4){
             throw new RuntimeException("Invalid String Format");
         }
         String boardString = state.substring(boardStringPosition);
@@ -167,11 +172,7 @@ public class Viewer extends Application {
         Label boardLabel = new Label("Game State:");
         boardTextField = new TextField();
         boardTextField.setPrefWidth(800);
-        Button button = new Button("Refresh");
-        button.setOnAction(e -> {
-            System.out.println("Button clicked");
-            displayState(boardTextField.getText());
-        });
+        button = new Button("Refresh");
         HBox hb = new HBox();
         hb.getChildren().addAll(boardLabel,
                 boardTextField, button);
@@ -186,8 +187,20 @@ public class Viewer extends Application {
         primaryStage.setTitle("Marrakech Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         makeControls();
-        displayState("PfdasfadfaA33EBc14n44p33y53r65r01");
         root.getChildren().addAll(controls, canvas);
+        scene.setOnKeyReleased(event -> {
+            KeyCode keyCode=event.getCode();
+            if(keyCode.equals(KeyCode.ENTER)){
+                displayState(boardTextField.getText());
+            }
+        });
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(111);
+                displayState(boardTextField.getText());
+            }
+        });
         primaryStage.setScene(scene);
         primaryStage.show();
     }
