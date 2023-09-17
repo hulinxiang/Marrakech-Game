@@ -186,7 +186,7 @@ public class Viewer extends Application {
         primaryStage.setTitle("Marrakech Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         makeControls();
-        displayState(new String("PfdasfadfaA33EBc14n44p33y53r65r01"));
+        displayState("PfdasfadfaA33EBc14n44p33y53r65r01");
         root.getChildren().addAll(controls, canvas);
         primaryStage.setScene(scene);
         primaryStage.show();
