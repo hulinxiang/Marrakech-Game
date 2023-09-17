@@ -9,6 +9,8 @@ public class Tile {
     //Denote the owner of the tile
     Player owner;
     //Denote the state of the tile. 0 means empty and 1 means occupied
+
+    Rug id;
     int state;
 
 
