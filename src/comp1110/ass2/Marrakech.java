@@ -181,6 +181,7 @@ public class Marrakech {
 
     /**
      * Assigns owner of the tile based on their colour.
+     * returns a Player.
      */
 
     public Player decodeOwner(String ownerColour) {
