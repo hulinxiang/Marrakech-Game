@@ -74,7 +74,7 @@ public class Player {
         //Setting player colour
         this.colour = decodeColour(playerString.substring(1,2));
 
-        this.coins = Integer.parseInt(playerString.substring(3,5)); //3rd, 4th, 5th characters denote coins.
+        this.coins = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
         this.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
 
         //Setting the player state:
@@ -113,8 +113,8 @@ public class Player {
             return Color.YELLOW;
         } else if ("RED".equalsIgnoreCase(colour)) {
             return Color.RED;
-        } else if ("GREEN".equalsIgnoreCase(colour)) {
-            return Color.GREEN;
+        } else if ("PURPLE".equalsIgnoreCase(colour)) {
+            return Color.PURPLE;
         } else if ("CYAN".equalsIgnoreCase(colour)) {
             return Color.CYAN;
         } else {
