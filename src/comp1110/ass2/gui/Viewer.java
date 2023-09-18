@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,8 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -28,6 +29,16 @@ public class Viewer extends Application {
     private TextField boardTextField;
     private Button button;
 
+    //The variable denotes where the board starts
+    final int STARTX = 30;
+    final int STARTY = 30;
+    //Variables denote the number of rows and columns
+    final int COLUMN = 7;
+    final int ROW = 7;
+    final int SQUAREWIDTH = 30;
+    final int SQUAREHEIGHT = 30;
+    final int TEXTSTARTX = 500;
+    final int TEXTSTARTY = 30;
 
     /**
      * Draw a placement in the window, removing any previously drawn placements
@@ -35,74 +46,48 @@ public class Viewer extends Application {
      * @param state an array of two strings, representing the current game state
      */
     void displayState(String state) {
-        //The variable denotes where the board starts
-        final int STARTX = 30;
-        final int STARTY = 30;
-        //Variables denote the number of rows and columns
-        final int COLUMN = 7;
-        final int ROW = 7;
-        final int SQUAREWIDTH = 30;
-        final int SQUAREHEIGHT = 30;
+        Marrakech marrakech = new Marrakech(state);
+        IntPair assamPosition = marrakech.asam.getMerchantPosition();
+        Direction assamDirection = marrakech.asam.getDirection();
+        Player[] players = marrakech.players;
         //Clear all
         graphicsContext.clearRect(0, 0, VIEWER_WIDTH, VIEWER_HEIGHT);
         canvas.setLayoutX(0);
         canvas.setLayoutY(0);
         graphicsContext.setStroke(Color.BLACK);
-
         //Draw the basic board
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
                 graphicsContext.strokeRect(STARTX + i * SQUAREHEIGHT, STARTY + j * SQUAREWIDTH, SQUAREWIDTH, SQUAREHEIGHT);
             }
         }
-        //A variable indicates where the board string is in the game state string
-        int boardStringPosition = -1;
-        int assamStringPosition = -1;
-        //Record where the assam string and board string is
-        for (int i = 0; i < state.length(); i++) {
-            if ('A' == (state.charAt(i))) {
-                assamStringPosition = i;
-            }
-            if ('B' == (state.charAt(i))) {
-                boardStringPosition = i;
-            }
+        //Draw the player information
+        for(int i=0;i<players.length;i++){
+            Text text = new Text("Player 1");
+            text.setLayoutX(TEXTSTARTX);
+            text.setLayoutY(TEXTSTARTY+i*SQUAREHEIGHT);
+            graphicsContext.setFill(Player.getColorFromString(players[i].getColour()));
+            graphicsContext.strokeRect(TEXTSTARTX+SQUAREWIDTH,TEXTSTARTY+i*SQUAREHEIGHT,SQUAREWIDTH, SQUAREHEIGHT);
+            Text text1=new Text("Owned dirhams:"+players[i].decodePlayerString(););
         }
-
-        if (boardStringPosition == -1 || assamStringPosition == -1) {
-            throw new RuntimeException("Invalid String Format");
-        }
-        String assamString = state.substring(assamStringPosition, boardStringPosition);
-        if(assamString.length()!=4){
-            throw new RuntimeException("Invalid String Format");
-        }
-        String boardString = state.substring(boardStringPosition);
-        //Start with i=1.
+        Tile[][] tiles = marrakech.board.tiles;
         //Draw the color of the rug on the board.
-        for(int i =1;i<boardString.length();i+=3){
-            if(boardString.charAt(i)=='n'){
-                continue;
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COLUMN; j++) {
+                graphicsContext.setFill(Tile.getColorFromString(tiles[i][j].getColour()));
+                graphicsContext.fillRect(STARTX + i * SQUAREHEIGHT, STARTY + j * SQUAREWIDTH, SQUAREWIDTH, SQUAREHEIGHT);
             }
-            switch (boardString.charAt(i)) {
-                case 'c' -> graphicsContext.setFill(Color.CYAN);
-                case 'y' -> graphicsContext.setFill(Color.YELLOW);
-                case 'r' -> graphicsContext.setFill(Color.RED);
-                case 'p' -> graphicsContext.setFill(Color.PURPLE);
-                default -> throw new RuntimeException("Invalid game string format");
-            }
-            graphicsContext.fillRect(STARTX + SQUAREWIDTH * (boardString.charAt(i+2)-'0'),
-                    STARTY + SQUAREWIDTH *(boardString.charAt(i+1)-'0'), SQUAREWIDTH, SQUAREHEIGHT);
         }
-
         //Draw the assam on the board
         //If assam heads to the west
         graphicsContext.setFill(Color.BLACK);
-        if (assamString.charAt(3) == 'W') {
-            double x1=STARTX+(assamString.charAt(2)-'0' + 1) * SQUAREWIDTH;
-            double x2=x1;
-            double x3=x1-SQUAREWIDTH;
-            double y1=STARTY + (assamString.charAt(1)-'0') * SQUAREHEIGHT;
-            double y2=STARTY + (assamString.charAt(1)-'0' + 1) * SQUAREHEIGHT;
-            double y3=(y1+y2)/2;
+        if (Direction.WEST.equals(assamDirection)) {
+            double x1 = STARTX + (assamPosition.getY() + 1) * SQUAREWIDTH;
+            double x2 = x1;
+            double x3 = x1 - SQUAREWIDTH;
+            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
+            double y2 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
@@ -113,13 +98,13 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the east
-        if(assamString.charAt(3)=='E'){
-            double x1=STARTX+(assamString.charAt(2)-'0') * SQUAREWIDTH;
-            double x2=x1;
-            double x3=x1+SQUAREWIDTH;
-            double y1=STARTY + (assamString.charAt(1)-'0') * SQUAREHEIGHT;
-            double y2=STARTY + (assamString.charAt(1)-'0' + 1) * SQUAREHEIGHT;
-            double y3=(y1+y2)/2;
+        if (Direction.EAST.equals(assamDirection)) {
+            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
+            double x2 = x1;
+            double x3 = x1 + SQUAREWIDTH;
+            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
+            double y2 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
@@ -130,13 +115,13 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the north
-        if(assamString.charAt(3)=='N'){
-            double x1=STARTX+(assamString.charAt(2)-'0') * SQUAREWIDTH;
-            double x2=x1+SQUAREWIDTH;
-            double x3=(x1+x2)/2;
-            double y1=STARTY + (assamString.charAt(1)-'0' + 1) * SQUAREHEIGHT;
-            double y2=y1;
-            double y3=y2-SQUAREHEIGHT;
+        if (Direction.NORTH.equals(assamDirection)) {
+            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
+            double x2 = x1 + SQUAREWIDTH;
+            double x3 = (x1 + x2) / 2;
+            double y1 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double y2 = y1;
+            double y3 = y2 - SQUAREHEIGHT;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
@@ -147,13 +132,13 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the south
-        if(assamString.charAt(3)=='S'){
-            double x1=STARTX+(assamString.charAt(2)-'0') * SQUAREWIDTH;
-            double x2=x1+SQUAREWIDTH;
-            double x3=(x1+x2)/2;
-            double y1=STARTY + (assamString.charAt(1)-'0') * SQUAREHEIGHT;
-            double y2=y1;
-            double y3=y2+SQUAREHEIGHT;
+        if (Direction.SOUTH.equals(assamDirection)) {
+            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
+            double x2 = x1 + SQUAREWIDTH;
+            double x3 = (x1 + x2) / 2;
+            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
+            double y2 = y1;
+            double y3 = y2 + SQUAREHEIGHT;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
@@ -187,11 +172,11 @@ public class Viewer extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Marrakech Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
-        root.getChildren().addAll(canvas,controls);
+        root.getChildren().addAll(canvas, controls);
         makeControls();
         scene.setOnKeyReleased(event -> {
-            KeyCode keyCode=event.getCode();
-            if(keyCode.equals(KeyCode.ENTER)){
+            KeyCode keyCode = event.getCode();
+            if (keyCode.equals(KeyCode.ENTER)) {
                 displayState(boardTextField.getText());
             }
         });

@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import javafx.scene.paint.Color;
+
 /**
  * Tile coordinates and their state on the board.
  */
@@ -15,6 +17,21 @@ public class Tile {
 
     String colour;
 
+    /**
+     * @return Colour
+     */
+    public String getColour() {
+        return this.colour;
+    }
+
+    /**
+     * Set the colour of one tile
+     *
+     * @param colour
+     */
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
 
     /**
      * Constructor of tile
@@ -36,9 +53,30 @@ public class Tile {
     }
 
     /**
-     *Checks the current owner of the tile.
+     * Checks the current owner of the tile.
      */
     public Player checkOccupation() {
         return null;
+    }
+
+
+    /**
+     * A method for converting a string to a Color
+     *
+     * @param colour
+     * @return Color
+     */
+    public static Color getColorFromString(String colour) {
+        if ("YELLOW".equalsIgnoreCase(colour)) {
+            return Color.YELLOW;
+        } else if ("RED".equalsIgnoreCase(colour)) {
+            return Color.RED;
+        } else if ("GREEN".equalsIgnoreCase(colour)) {
+            return Color.GREEN;
+        } else if ("CYAN".equalsIgnoreCase(colour)) {
+            return Color.CYAN;
+        } else {
+            return Color.WHITE;
+        }
     }
 }

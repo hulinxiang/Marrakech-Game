@@ -16,6 +16,8 @@ public class Marrakech {
     //Record of the rugs that have been placed (according to their id).
     ArrayList<Rug> placedRugs = new ArrayList<>();
 
+
+
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
@@ -27,7 +29,6 @@ public class Marrakech {
         numberPlayers = indexAsam / 8; //Number of players in the game.
         //Create each player
         players = new Player[numberPlayers];
-
         for(int i=0; i<numberPlayers; i++){
             players[i] = new Player();
             players[i].decodePlayerString(gameString.substring((i*8),(i*8)+8));
@@ -42,6 +43,7 @@ public class Marrakech {
         board = new Board();
         //Board string is from the end of the asam string to the end of game string (exclude the B when passing to method).
         //Assign owner to board using players[]
+
         board.tiles = makeTiles(gameString.substring(indexAsam+5));
 
 
@@ -52,12 +54,12 @@ public class Marrakech {
      * Assigns the state of each tile on the board based on their ID and colour.
      */
     public Tile[][] makeTiles(String boardString){
-        Tile[][] tiles = new Tile[board.BOARD_HEIGHT][board.BOARD_WIDTH];
+        Tile[][] tiles = new Tile[Board.BOARD_HEIGHT][Board.BOARD_WIDTH];
 
         int counter = 0;
         //Double for loop, looping through each column and row
-        for(int j=0; j<board.BOARD_WIDTH; j++){ //LOOPING THROUGH EACH COLUMN
-            for(int k=0; k<board.BOARD_HEIGHT; k++){ //LOOPING THROUGH EACH ROW
+        for(int j = 0; j< Board.BOARD_WIDTH; j++){ //LOOPING THROUGH EACH COLUMN
+            for(int k = 0; k< Board.BOARD_HEIGHT; k++){ //LOOPING THROUGH EACH ROW
                 IntPair tilePos = new IntPair(j,k);
                 tiles[j][k] = new Tile(tilePos);
 
@@ -75,6 +77,8 @@ public class Marrakech {
                         break;
                     case "p":
                         colour = "PURPLE";
+                    default:
+                        colour="NULL";
                 }
                 tiles[j][k].colour = colour;
 
@@ -97,9 +101,10 @@ public class Marrakech {
                     }
                     else{
                         boolean booNew = true; //Whether rug has already been added to placedRugs.
-                        for(int i=0; i<placedRugs.size();i++){
-                            if(placedRugs.get(i).rugID == idFromStr) {
+                        for (Rug placedRug : placedRugs) {
+                            if (placedRug.rugID == idFromStr) {
                                 booNew = false;
+                                break;
                             }
                         }
 
