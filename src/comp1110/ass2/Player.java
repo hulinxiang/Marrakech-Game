@@ -22,6 +22,13 @@ public class Player {
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
 
+    public int getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(int playerState) {
+        this.playerState = playerState;
+    }
 
     public int getCoins() {
         return coins;

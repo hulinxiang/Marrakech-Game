@@ -30,15 +30,15 @@ public class Viewer extends Application {
     private Button button;
 
     //The variable denotes where the board starts
-    final int STARTX = 30;
-    final int STARTY = 30;
+    final int START_X = 30;
+    final int START_Y = 30;
     //Variables denote the number of rows and columns
     final int COLUMN = 7;
     final int ROW = 7;
-    final int SQUAREWIDTH = 30;
-    final int SQUAREHEIGHT = 30;
-    final int TEXTSTARTX = 500;
-    final int TEXTSTARTY = 30;
+    final int SQUARE_WIDTH = 30;
+    final int SQUARE_HEIGHT = 30;
+    final int TEXT_START_X = 500;
+    final int TEXT_START_Y = 30;
 
     /**
      * Draw a placement in the window, removing any previously drawn placements
@@ -58,35 +58,51 @@ public class Viewer extends Application {
         //Draw the basic board
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
-                graphicsContext.strokeRect(STARTX + i * SQUAREHEIGHT, STARTY + j * SQUAREWIDTH, SQUAREWIDTH, SQUAREHEIGHT);
+                graphicsContext.strokeRect(START_X + i * SQUARE_HEIGHT, START_Y + j * SQUARE_WIDTH, SQUARE_WIDTH, SQUARE_HEIGHT);
             }
         }
         //Draw the player information
         for(int i=0;i<players.length;i++){
             Text text = new Text("Player 1");
-            text.setLayoutX(TEXTSTARTX);
-            text.setLayoutY(TEXTSTARTY+i*SQUAREHEIGHT);
+            text.setLayoutX(TEXT_START_X);
+            text.setLayoutY(TEXT_START_Y+i*SQUARE_HEIGHT);
             graphicsContext.setFill(Player.getColorFromString(players[i].getColour()));
-            graphicsContext.strokeRect(TEXTSTARTX+SQUAREWIDTH,TEXTSTARTY+i*SQUAREHEIGHT,SQUAREWIDTH, SQUAREHEIGHT);
+            graphicsContext.strokeRect(TEXT_START_X+SQUARE_WIDTH,TEXT_START_Y+i*SQUARE_HEIGHT,SQUARE_WIDTH, SQUARE_HEIGHT);
             Text text1=new Text("Owned dirhams:"+players[i].getCoins());
+            text1.setLayoutX(TEXT_START_X+SQUARE_WIDTH);
+            text1.setLayoutY(TEXT_START_Y+i*SQUARE_HEIGHT);
+            Text text2=new Text("Remained rugs:"+players[i].getRugs());
+            text2.setLayoutX(TEXT_START_X+2*SQUARE_WIDTH);
+            text1.setLayoutY(TEXT_START_Y+i*SQUARE_HEIGHT);
+
+            if(players[i].getPlayerState()==1){
+                Text text3=new Text("In the game");
+                text2.setLayoutX(TEXT_START_X+3*SQUARE_WIDTH);
+                text1.setLayoutY(TEXT_START_Y+i*SQUARE_HEIGHT);
+            }else {
+                Text text3=new Text("Out of the game");
+                text2.setLayoutX(TEXT_START_X+3*SQUARE_WIDTH);
+                text1.setLayoutY(TEXT_START_Y+i*SQUARE_HEIGHT);
+            }
+
         }
         Tile[][] tiles = marrakech.board.tiles;
         //Draw the color of the rug on the board.
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
                 graphicsContext.setFill(Tile.getColorFromString(tiles[i][j].getColour()));
-                graphicsContext.fillRect(STARTX + i * SQUAREHEIGHT, STARTY + j * SQUAREWIDTH, SQUAREWIDTH, SQUAREHEIGHT);
+                graphicsContext.fillRect(START_X + i * SQUARE_HEIGHT, START_Y + j * SQUARE_WIDTH, SQUARE_WIDTH, SQUARE_HEIGHT);
             }
         }
         //Draw the assam on the board
         //If assam heads to the west
         graphicsContext.setFill(Color.BLACK);
         if (Direction.WEST.equals(assamDirection)) {
-            double x1 = STARTX + (assamPosition.getY() + 1) * SQUAREWIDTH;
+            double x1 = START_X + (assamPosition.getY() + 1) * SQUARE_WIDTH;
             double x2 = x1;
-            double x3 = x1 - SQUAREWIDTH;
-            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
-            double y2 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double x3 = x1 - SQUARE_WIDTH;
+            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
+            double y2 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
             double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
@@ -99,11 +115,11 @@ public class Viewer extends Application {
         }
         //If assam heads to the east
         if (Direction.EAST.equals(assamDirection)) {
-            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
+            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
             double x2 = x1;
-            double x3 = x1 + SQUAREWIDTH;
-            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
-            double y2 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double x3 = x1 + SQUARE_WIDTH;
+            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
+            double y2 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
             double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
@@ -116,12 +132,12 @@ public class Viewer extends Application {
         }
         //If assam heads to the north
         if (Direction.NORTH.equals(assamDirection)) {
-            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
-            double x2 = x1 + SQUAREWIDTH;
+            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
+            double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;
-            double y1 = STARTY + (assamPosition.getX() + 1) * SQUAREHEIGHT;
+            double y1 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
             double y2 = y1;
-            double y3 = y2 - SQUAREHEIGHT;
+            double y3 = y2 - SQUARE_HEIGHT;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
@@ -133,12 +149,12 @@ public class Viewer extends Application {
         }
         //If assam heads to the south
         if (Direction.SOUTH.equals(assamDirection)) {
-            double x1 = STARTX + (assamPosition.getY()) * SQUAREWIDTH;
-            double x2 = x1 + SQUAREWIDTH;
+            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
+            double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;
-            double y1 = STARTY + (assamPosition.getX()) * SQUAREHEIGHT;
+            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
             double y2 = y1;
-            double y3 = y2 + SQUAREHEIGHT;
+            double y3 = y2 + SQUARE_HEIGHT;
             graphicsContext.fillPolygon(
                     new double[]{x1,
                             x2,
