@@ -23,12 +23,14 @@ public class Viewer extends Application {
 
     private static final int VIEWER_WIDTH = 1200;
     private static final int VIEWER_HEIGHT = 700;
+    //Use canvas to visualize
     private final Canvas canvas = new Canvas(VIEWER_WIDTH, VIEWER_HEIGHT);
     private final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     private final Group root = new Group();
     private final Group controls = new Group();
     private TextField boardTextField;
     private Button button;
+    //Row distance between each row of player information
     private final int ROW_DISTANCE=15;
     GridPane gridPane = new GridPane();
 
@@ -39,10 +41,13 @@ public class Viewer extends Application {
     //Variables denote the number of rows and columns
     final int COLUMN = 7;
     final int ROW = 7;
+    //The information about squares which consist of the board
     final int SQUARE_WIDTH = 30;
     final int SQUARE_HEIGHT = 30;
+    //The location of player information
     final int TEXT_START_X = 900;
     final int TEXT_START_Y = 30;
+    //The information about squares whicha are colorful
     final int INSIDE_SQUARE = 29;
 
     /**
@@ -54,8 +59,9 @@ public class Viewer extends Application {
         Marrakech marrakech = new Marrakech(state);
         IntPair assamPosition = marrakech.asam.getMerchantPosition();
         Direction assamDirection = marrakech.asam.getDirection();
+        //A array which stores the player information
         Player[] players = marrakech.players;
-        //Clear all
+        //Clear all. To have a refresh performance
         graphicsContext.clearRect(0, 0, VIEWER_WIDTH, VIEWER_HEIGHT);
         gridPane.getChildren().clear();
         canvas.setLayoutX(0);
@@ -69,14 +75,18 @@ public class Viewer extends Application {
         }
         //Draw the player information
         for (int i = 0; i < players.length; i++) {
+            //The i_th player
             Text text = new Text("Player" +(i+1)+": ");
             text.setLayoutX(TEXT_START_X);
             text.setLayoutY(TEXT_START_Y + i * SQUARE_HEIGHT);
+            //Use a square to denote the color of the player
             graphicsContext.setFill(Player.getColorFromString(players[i].getColour()));
             graphicsContext.fillRect(TEXT_START_X, TEXT_START_Y+i*ROW_DISTANCE, ROW_DISTANCE, ROW_DISTANCE);
+            //Owned dirhams
             Text text1 = new Text("Owned dirhams:" + players[i].getCoins()+" ");
             text1.setLayoutX(TEXT_START_X + SQUARE_WIDTH);
             text1.setLayoutY(TEXT_START_Y + i * SQUARE_HEIGHT);
+            //Remained rugs
             Text text2 = new Text("Remained rugs:" + players[i].getRugs()+" ");
             text2.setLayoutX(TEXT_START_X + 2 * SQUARE_WIDTH);
             text2.setLayoutY(TEXT_START_Y + i * SQUARE_HEIGHT);
@@ -90,6 +100,7 @@ public class Viewer extends Application {
                 text3.setLayoutX(TEXT_START_X + 3 * SQUARE_WIDTH);
                 text3.setLayoutY(TEXT_START_Y + i * SQUARE_HEIGHT);
             }
+            //Layout
             gridPane.add(text,0,i);
             gridPane.add(text1,1,i);
             gridPane.add(text2,2,i);
@@ -203,12 +214,14 @@ public class Viewer extends Application {
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         root.getChildren().addAll(canvas, controls, gridPane);
         makeControls();
+        //KeyboardEvent
         scene.setOnKeyReleased(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode.equals(KeyCode.ENTER)) {
                 displayState(boardTextField.getText());
             }
         });
+        //ActionEvent
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
