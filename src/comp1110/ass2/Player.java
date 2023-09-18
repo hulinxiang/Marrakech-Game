@@ -16,11 +16,28 @@ public class Player {
     int rugs;
     //The coordinates of the player's rugs on the board.
     String colour;
+
     //String denoting the colour of the player.
     IntPair[] rugCords;
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
 
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
+
+    public int getRugs() {
+        return rugs;
+    }
+
+    public void setRugs(int rugs) {
+        this.rugs = rugs;
+    }
 
     public String getColour() {
         return colour;

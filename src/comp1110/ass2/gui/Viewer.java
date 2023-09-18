@@ -68,7 +68,7 @@ public class Viewer extends Application {
             text.setLayoutY(TEXTSTARTY+i*SQUAREHEIGHT);
             graphicsContext.setFill(Player.getColorFromString(players[i].getColour()));
             graphicsContext.strokeRect(TEXTSTARTX+SQUAREWIDTH,TEXTSTARTY+i*SQUAREHEIGHT,SQUAREWIDTH, SQUAREHEIGHT);
-            Text text1=new Text("Owned dirhams:"+players[i].decodePlayerString(););
+            Text text1=new Text("Owned dirhams:"+players[i].getCoins());
         }
         Tile[][] tiles = marrakech.board.tiles;
         //Draw the color of the rug on the board.
