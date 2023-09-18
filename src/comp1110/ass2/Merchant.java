@@ -37,21 +37,21 @@ public class Merchant {
      * Decodes the merchant string
      */
     public void decodeAsamString(String asamString){
-        int x = Integer.parseInt(asamString.substring(0,1));
-        int y = Integer.parseInt(asamString.substring(1,2));
+        int x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
+        int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         this.merchantPosition = new IntPair(x, y);
 
-        switch (asamString.substring(2,3)){
-            case "N":
+        switch (asamString.charAt(2)){
+            case 'N':
                 direction = Direction.NORTH;
                 break;
-            case "E":
+            case 'E':
                 direction = Direction.EAST;
                 break;
-            case "S":
+            case 'S':
                 direction = Direction.SOUTH;
                 break;
-            case "W":
+            case 'W':
                 direction = Direction.WEST;
                 break;
             default:

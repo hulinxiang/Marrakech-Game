@@ -71,8 +71,8 @@ public class Tile {
             return Color.YELLOW;
         } else if ("RED".equalsIgnoreCase(colour)) {
             return Color.RED;
-        } else if ("GREEN".equalsIgnoreCase(colour)) {
-            return Color.GREEN;
+        } else if ("PURPLE".equalsIgnoreCase(colour)) {
+            return Color.PURPLE;
         } else if ("CYAN".equalsIgnoreCase(colour)) {
             return Color.CYAN;
         } else {

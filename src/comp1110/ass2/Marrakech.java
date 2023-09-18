@@ -15,37 +15,70 @@ public class Marrakech {
 
     //Record of the rugs that have been placed (according to their id).
     ArrayList<Rug> placedRugs = new ArrayList<>();
+    public final int PLAYER_STRING_LENGTH=8;
+    String boardString;
+    String assamString;
 
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+    public String getBoardString() {
+        return boardString;
+    }
+
+    public void setBoardString(String boardString) {
+        this.boardString = boardString;
+    }
+
+
+    public String getAssamString() {
+        return assamString;
+    }
+
+    public void setAssamString(String assamString) {
+        this.assamString = assamString;
+    }
 
 
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
 
-    public Marrakech(String gameString){
+    public Marrakech(String gameString) {
         int indexAsam = gameString.indexOf("A");
 
+        if (indexAsam == -1) {
+            throw new RuntimeException("Invalid Game String Format");
+        }
+
+        assamString = gameString.substring(indexAsam + 1, indexAsam + 4);
+        boardString = gameString.substring(indexAsam + 5);
+
         //CREATING OBJECT PLAYERS:
-        numberPlayers = indexAsam / 8; //Number of players in the game.
+        numberPlayers = indexAsam / PLAYER_STRING_LENGTH; //Number of players in the game.
         //Create each player
         players = new Player[numberPlayers];
-        for(int i=0; i<numberPlayers; i++){
+        for (int i = 0; i < numberPlayers; i++) {
             players[i] = new Player();
-            players[i].decodePlayerString(gameString.substring((i*8),(i*8)+8));
+            players[i].decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
         }
 
         //CREATING ASAM
         asam = new Merchant();
         //Asam string denotes position (x, y) and direction.
-        asam.decodeAsamString(gameString.substring(indexAsam+1, indexAsam+4));
+        asam.decodeAsamString(assamString);
 
         //CREATING BOARD
         board = new Board();
         //Board string is from the end of the asam string to the end of game string (exclude the B when passing to method).
         //Assign owner to board using players[]
 
-        board.tiles = makeTiles(gameString.substring(indexAsam+5));
-
+        board.tiles = makeTiles(boardString);
 
 
     }
@@ -53,19 +86,19 @@ public class Marrakech {
     /**
      * Assigns the state of each tile on the board based on their ID and colour.
      */
-    public Tile[][] makeTiles(String boardString){
+    public Tile[][] makeTiles(String boardString) {
         Tile[][] tiles = new Tile[Board.BOARD_HEIGHT][Board.BOARD_WIDTH];
 
         int counter = 0;
         //Double for loop, looping through each column and row
-        for(int j = 0; j< Board.BOARD_WIDTH; j++){ //LOOPING THROUGH EACH COLUMN
-            for(int k = 0; k< Board.BOARD_HEIGHT; k++){ //LOOPING THROUGH EACH ROW
-                IntPair tilePos = new IntPair(j,k);
+        for (int j = 0; j < Board.BOARD_WIDTH; j++) { //LOOPING THROUGH EACH COLUMN
+            for (int k = 0; k < Board.BOARD_HEIGHT; k++) { //LOOPING THROUGH EACH ROW
+                IntPair tilePos = new IntPair(j, k);
                 tiles[j][k] = new Tile(tilePos);
 
-                String tileColour = boardString.substring(counter,counter+1);
+                String tileColour = boardString.substring(counter, counter + 1);
                 String colour = "";
-                switch (tileColour){ //2nd character is colour;
+                switch (tileColour) { //2nd character is colour;
                     case "c":
                         colour = "CYAN";
                         break;
@@ -77,29 +110,28 @@ public class Marrakech {
                         break;
                     case "p":
                         colour = "PURPLE";
+                        break;
                     default:
-                        colour="NULL";
+                        colour = "NULL";
                 }
                 tiles[j][k].colour = colour;
 
 
-                if(boardString.substring(counter, counter+3).equals("n00")) { //EMPTY TILE
+                if (boardString.substring(counter, counter + 3).equals("n00")) { //EMPTY TILE
                     tiles[j][k].state = 0; //empty
                     tiles[j][k].owner = null; //empty therefore no owner
-                }
-                else{
+                } else {
                     tiles[j][k].state = 1; //not empty
-                    tiles[j][k].owner = decodeOwner(boardString.substring(counter,counter+1));
+                    tiles[j][k].owner = decodeOwner(boardString.substring(counter, counter + 1));
 
                     //SETTING ID
                     //Check if rug already recorded in array (since can cover two tiles).
-                    int idFromStr = Integer.parseInt(boardString.substring(counter+1, counter+3));
-                    if(placedRugs.size()==0){
+                    int idFromStr = Integer.parseInt(boardString.substring(counter + 1, counter + 3));
+                    if (placedRugs.size() == 0) {
                         Rug newRug = new Rug();
                         newRug.rugID = idFromStr;
                         placedRugs.add(newRug);
-                    }
-                    else{
+                    } else {
                         boolean booNew = true; //Whether rug has already been added to placedRugs.
                         for (Rug placedRug : placedRugs) {
                             if (placedRug.rugID == idFromStr) {
@@ -108,7 +140,7 @@ public class Marrakech {
                             }
                         }
 
-                        if(booNew){ //Rug has not been added to placedRugs
+                        if (booNew) { //Rug has not been added to placedRugs
                             Rug newRug = new Rug();
                             newRug.rugID = idFromStr;
                             placedRugs.add(newRug);
@@ -116,7 +148,7 @@ public class Marrakech {
                     }
 
                 }
-                counter +=3;
+                counter += 3;
 
             }
         }
@@ -127,16 +159,17 @@ public class Marrakech {
      * Assigns owner of the tile based on their colour.
      */
 
-    public Player decodeOwner(String ownerColour){
+    public Player decodeOwner(String ownerColour) {
         Player theOwner;
-        for(int i=0; i<numberPlayers; i++){
-            if(ownerColour.equals(players[i].colour.substring(0,1))) { //First letter of colour compared
+        for (int i = 0; i < numberPlayers; i++) {
+            if (ownerColour.equals(players[i].colour.substring(0, 1))) { //First letter of colour compared
                 theOwner = players[i];
                 return theOwner;
             }
         }
         return null;
     }
+
     /**
      * Determine whether a rug String is valid.
      * For this method, you need to determine whether the rug String is valid, but do not need to determine whether it
