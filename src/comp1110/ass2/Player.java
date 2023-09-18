@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import javafx.scene.paint.Color;
+
 /**
  * All aspects of the player including its coins, and rugs, and current state.
  */
@@ -19,6 +21,14 @@ public class Player {
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
 
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
     /*
     /**
      * Constructor of Player
@@ -74,7 +84,19 @@ public class Player {
         return colour;
 
     }
-
+    public static Color getColorFromString(String colour) {
+        if ("YELLOW".equalsIgnoreCase(colour)) {
+            return Color.YELLOW;
+        } else if ("RED".equalsIgnoreCase(colour)) {
+            return Color.RED;
+        } else if ("GREEN".equalsIgnoreCase(colour)) {
+            return Color.GREEN;
+        } else if ("CYAN".equalsIgnoreCase(colour)) {
+            return Color.CYAN;
+        } else {
+            return Color.WHITE;
+        }
+    }
 
     /**
      * Player pays other player money, updates this.coins field.

@@ -10,7 +10,7 @@ public class Board {
     //The fixed width of board
     public final static int BOARD_WIDTH = 7;
     //Array of tiles that the board is made up of.
-    Tile[][] tiles;
+    public Tile[][] tiles;
     //Merchant on the board.
     Merchant merchant;
     //Denotes the location of the mosaic circles on the board.

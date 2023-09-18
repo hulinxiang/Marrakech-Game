@@ -8,7 +8,22 @@ public class Merchant {
     //Direction of the merchant
     Direction direction;
 
-    /**
+    public IntPair getMerchantPosition() {
+        return merchantPosition;
+    }
+
+    public void setMerchantPosition(IntPair merchantPosition) {
+        this.merchantPosition = merchantPosition;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+/**
      * Constructor of merchant
      *
      * @param center is the center position of the board
@@ -28,18 +43,18 @@ public class Merchant {
 
         switch (asamString.substring(2,3)){
             case "N":
-                this.direction = Direction.NORTH;
+                direction = Direction.NORTH;
                 break;
             case "E":
-                this.direction = Direction.EAST;
+                direction = Direction.EAST;
                 break;
             case "S":
-                this.direction = Direction.SOUTH;
+                direction = Direction.SOUTH;
                 break;
             case "W":
-                this.direction = Direction.WEST;
+                direction = Direction.WEST;
                 break;
-
+            default:
         }
         this.merchantPosition.x = Integer.parseInt(asamString.substring(0,1));
 
