@@ -136,6 +136,7 @@ public class Player {
                 break;
             case "p":
                 colour = "purple";
+            default:
         }
         return colour;
 

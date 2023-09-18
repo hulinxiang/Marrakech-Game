@@ -74,13 +74,15 @@ public class Marrakech {
      */
 
     public Marrakech(String gameString) {
-        int indexAsam = gameString.indexOf("A");
+        int indexAsam = gameString.indexOf("A");//Position of Assam string
+        int indexBoard =  gameString.indexOf("B");
 
+        //Check the correct format of Assam string
         if (indexAsam == -1) {
             throw new RuntimeException("Invalid Game String Format");
         }
 
-        assamString = gameString.substring(indexAsam + 1, indexAsam + 4);
+        assamString = gameString.substring(indexAsam + 1, indexBoard);
         boardString = gameString.substring(indexAsam + 5);
 
         //CREATING OBJECT PLAYERS:
