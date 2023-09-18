@@ -31,11 +31,18 @@ declaration: >-
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
-
+class:
+  - Marrakech
+  - Viewer
+  - Player
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
-
+method:
+  - isRugValid
+  - displayState
+  - start
+  - getColorFromString
 # sign *your* name and uid here
 name: Linxiang Hu
 uid: u7633783

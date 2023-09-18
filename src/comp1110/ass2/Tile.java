@@ -63,8 +63,8 @@ public class Tile {
     /**
      * A method for converting a string to a Color
      *
-     * @param colour
-     * @return Color
+     * @param colour, of type String
+     * @return Color, of type Color
      */
     public static Color getColorFromString(String colour) {
         if ("YELLOW".equalsIgnoreCase(colour)) {
