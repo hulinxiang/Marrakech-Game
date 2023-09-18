@@ -22,34 +22,66 @@ public class Player {
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
     int playerState;
 
+    /**
+     * Getter method of getPlayerState
+     * @return playerState
+     */
     public int getPlayerState() {
         return playerState;
     }
 
+    /**
+     * Setter method of getPlayerState
+     * @param playerState
+     */
     public void setPlayerState(int playerState) {
         this.playerState = playerState;
     }
 
+    /**
+     * Getter method of coins
+     * @return coins
+     */
     public int getCoins() {
         return coins;
     }
 
+    /**
+     * Setter method of coins
+     * @param coins
+     */
     public void setCoins(int coins) {
         this.coins = coins;
     }
 
+    /**
+     * Getter method of rugs
+     * @return rugs
+     */
     public int getRugs() {
         return rugs;
     }
 
+    /**
+     * Setter method of rugs
+     * @param rugs
+     */
     public void setRugs(int rugs) {
         this.rugs = rugs;
     }
 
+    /**
+     * Getter method of colour
+     * @return colour
+     */
     public String getColour() {
         return colour;
     }
 
+    /**
+     * Setter method of colour
+     * @param colour
+     */
     public void setColour(String colour) {
         this.colour = colour;
     }
@@ -108,6 +140,12 @@ public class Player {
         return colour;
 
     }
+
+    /**
+     * Convert a String to a Color class
+     * @param colour
+     * @return Color
+     */
     public static Color getColorFromString(String colour) {
         if ("YELLOW".equalsIgnoreCase(colour)) {
             return Color.YELLOW;

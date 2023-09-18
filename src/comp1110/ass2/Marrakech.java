@@ -19,27 +19,51 @@ public class Marrakech {
     String boardString;
     String assamString;
 
+    /**
+     * Getter method of players
+     * @return players
+     */
     public Player[] getPlayers() {
         return players;
     }
+
+    /**
+     * Setter method of players
+     * @param players
+     */
 
     public void setPlayers(Player[] players) {
         this.players = players;
     }
 
+    /**
+     * Getter method of boardString
+     * @return boardString
+     */
     public String getBoardString() {
         return boardString;
     }
 
+    /**
+     * Setter method of boardString
+     * @param boardString
+     */
     public void setBoardString(String boardString) {
         this.boardString = boardString;
     }
 
-
+    /**
+     * Getter method of assamString
+     * @return assamString
+     */
     public String getAssamString() {
         return assamString;
     }
 
+    /**
+     * Setter method of assamString
+     * @param assamString
+     */
     public void setAssamString(String assamString) {
         this.assamString = assamString;
     }
