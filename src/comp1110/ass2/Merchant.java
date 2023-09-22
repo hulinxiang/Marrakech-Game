@@ -39,6 +39,10 @@ public class Merchant {
     public void decodeAsamString(String asamString){
         int x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
         int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
+        //Check if the Asam is out of game board
+        if (x>6 || y>6 || x < 0 || y < 0){
+            throw new RuntimeException("Invalid Asam position");
+        }
         this.merchantPosition = new IntPair(x, y);
 
         switch (asamString.charAt(2)){
