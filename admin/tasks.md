@@ -26,11 +26,18 @@ During the holidays... Work on part 2 (discuss work allocation next Thursday.)
 
 ## Week 6
 
-...
+Did not meet in person, but corresponded online to complete D2C. 
 
 ## Mid-Semester Break
 
 ## Week 7
+Meeting at 4pm on Friday 22/09/2023:
+Allocated who is writing what test:
+-   HU: DecodeAsam in Merchant Class
+- LIZE: makeTiles in Marrakech Class
+- SHUO: decodeColour in Player Class 
+- Needs to be completed before Week 8 lab. Work together on google doc to create skeleton of test plan and then 
+- Lize will compile Sunday night and send through a draft to check. 
 
 ## Week 8
 
