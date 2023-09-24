@@ -11,3 +11,24 @@
 
 Do **not** include in your test plan the `Marrakech` class or the predefined
 static methods for which we have already provided unit tests.
+
+* Board Class, methods to be unit tested:
+  * withInBoard(IntPair intPair)
+  
+* IntPair Class, methods to be unit tested:
+  * add(IntPair other)
+  
+* Merchant Class, methods to be unit tested: 
+  * decodeAsamString(String asamString)
+  * Rotate(Direction d, int rotateValue)
+  * Move(Direction d, int steps)
+  
+* Player Class, methods to be unit tested: 
+  * decodePlayerString(String playerString)
+  * decodeColour(String colour)
+  
+* Rug Class, methods to be unit tested: 
+  * checkShareBoarder()
+  * ifPlaceCorrectly()
+  * ifOverlap()
+  

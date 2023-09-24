@@ -44,14 +44,6 @@ public class Tile {
         this.colour = null;
     }
 
-    /**
-     * Sets the owner whose rug is on top of the tile.
-     *
-     * @param player who is the owner of this tile
-     */
-    public void occupiedBy(Player player) {
-        this.owner = player;
-    }
 
     /**
      * Checks the current owner of the tile.
