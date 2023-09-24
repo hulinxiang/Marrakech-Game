@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
  */
 public class Tile {
     //Denote the position of each tile
-    private final IntPair tilePosition;
+    public final IntPair tilePosition;
     //Denote the owner of the tile
     Player owner;
     //Denote the state of the tile. 0 means empty and 1 means occupied
@@ -16,6 +16,7 @@ public class Tile {
     int state;
 
     String colour;
+
 
     /**
      * @return Colour
