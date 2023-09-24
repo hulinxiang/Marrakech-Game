@@ -136,7 +136,9 @@ public class Player {
                 break;
             case "p":
                 colour = "purple";
+                break;
             default:
+                throw new RuntimeException("Invalid colour");
         }
         return colour;
 
