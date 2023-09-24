@@ -52,5 +52,5 @@ static methods for which we have already provided unit tests.
   * ifOverlap()
   
 * NOTE: Dice, Tile classes do not require unit tests, either because there is no need for one or because a test
-* is already provided. 
+ is already provided. 
   
