@@ -469,11 +469,8 @@ public class Marrakech {
         System.out.println("Merchant y: " + Game.asam.merchantPosition.y);
         System.out.println("Merchant direction: " + Game.asam.direction);
 
+        System.out.println(Game.board.tiles[0][0]);
 
-        //TESTING THE RUG ID DECODER
-        for (int i = 0; i < Game.placedRugs.size(); i++) {
-            System.out.println(Game.board.tiles[i][i].colour);
-        }
 
     }
 

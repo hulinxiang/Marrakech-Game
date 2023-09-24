@@ -26,16 +26,6 @@ public class Board {
 
 
     /**
-     * This method is to convert an Intpair to the tile on this Intpair;
-     *
-     * @param position the position of a tile
-     * @return tile with the position
-     */
-    public Tile getTileFromPos(IntPair position) {
-        return new Tile(new IntPair(1, 1));
-    }
-
-    /**
      * This method is to check if an Intpair is within the board.
      *
      * @param intPair
