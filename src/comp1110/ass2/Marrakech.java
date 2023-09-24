@@ -70,6 +70,12 @@ public class Marrakech {
 
 
     /**
+     Returns an integer value representing how method rugs are on the board.
+     */
+    public int placedNumber(){
+        return placedRugs.size();
+    }
+    /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
 
@@ -315,6 +321,13 @@ public class Marrakech {
         int randomNum = random.nextInt(6); //Index between 0 and 5 inclusive.
         int rolledNum = diceValues[randomNum];
         return rolledNum;
+    }
+
+    /**
+     * Counts the number of players
+     */
+    public int countPlayers(){
+        return players.length;
     }
 
     /**

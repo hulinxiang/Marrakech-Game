@@ -24,6 +24,13 @@ public class Board {
         Tile[][] tiles = new Tile[BOARD_HEIGHT][BOARD_WIDTH];
     }
 
+    /**
+     * Check that the board has been set up.
+     */
+    public boolean checkBoard(){
+        return true;
+    }
+
 
     /**
      * This method is to check if an Intpair is within the board.
