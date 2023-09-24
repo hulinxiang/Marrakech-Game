@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Marrakech {
 
-    //Players in game.
+    //Players in game
     public Player[] players;
     public Merchant asam;
 
