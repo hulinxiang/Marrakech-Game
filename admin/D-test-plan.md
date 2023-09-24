@@ -15,7 +15,7 @@ static methods for which we have already provided unit tests.
 * **Board Class**, methods to be unit tested:
   * withInBoard(IntPair intPair)
   * While boardSetUp cannot be tested in isolation,after calling boardSetUp, the value (in the implemented code)
-    returned by checkBoard should be true. 
+    returned by checkBoard should be true.  
   
 * **IntPair Class,** methods to be unit tested:
   * add(IntPair other)
