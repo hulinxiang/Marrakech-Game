@@ -22,6 +22,10 @@ public class MakeTilesTest {
     Marrakech Game = new Marrakech(gameString);
 
 
+    /**
+     * This method generates a random gameString which can be used to test the MakeTiles method.
+     * @return
+     */
     public static String[] generateTestString(){
         String theString = "";
         //First part of game string does not really matter since we are testing makeTiles hence first part
@@ -95,47 +99,50 @@ public class MakeTilesTest {
         return returnS;
     }
 
+    /**
+     * Testing that the state, owner, and colour of empty tiles ae correctly recorded.
+     */
     @Test
     public void emptyTileTest(){
-       // generateTestString();
-        //Marrakech Game = new Marrakech(gameString);
         //Testing that the state for empty tiles is 0.In the test string above, the 3rd tile is empty.
-        Assertions.assertEquals(0, Game.board.tiles[0][0].state);
+        Assertions.assertEquals(0, Game.board.tiles[0][0].state, "The state of an empty tile should be 0.");
 
         //Testing that the owner of the empty tile is null.
-        Assertions.assertEquals(null, Game.board.tiles[0][0].owner);
+        Assertions.assertEquals(null, Game.board.tiles[0][0].owner, "The owner of an empty tile should be null.");
 
         //Testing the colour of empty tile is "NULL".
-        Assertions.assertEquals("NULL", Game.board.tiles[0][0].colour);
+        Assertions.assertEquals("NULL", Game.board.tiles[0][0].colour, "The colour of an empty tile should be NULL.");
     }
 
+    /**
+     * Testing that the position of each tile is correctly recorded.
+     */
     @Test
     public void correctPositionTest(){
-        //generateTestString();
-        //Marrakech Game = new Marrakech(gameString);
         for(int h=0; h<Board.BOARD_WIDTH; h++){
             for(int i=0; i<Board.BOARD_HEIGHT; i++){
                 IntPair expectedPos = new IntPair(h, i);
-                Assertions.assertEquals(expectedPos, Game.board.tiles[h][i].tilePosition);
+                Assertions.assertEquals(expectedPos, Game.board.tiles[h][i].tilePosition, "Incorrect tile position");
             }
         }
 
     }
 
+    /**
+     * Randomly testing that the colour of each tile is correctly recorded.
+     */
     @Test
     public void correctColourTest(){
-        //generateTestString();
-        //Marrakech Game = new Marrakech(gameString);
         Random random = new Random();
         //Test 20 times
         int counter = 0;
         while(counter < 20){
             int randomIndex = random.nextInt(49); //There are 49 tiles, random between 0 and 48 inclusive.
-            int x = randomIndex / 7; //Using integer divsion
-            int y = randomIndex % 7;
+            int x = randomIndex / 7; //Using integer division
+            int y = randomIndex % 7; //Using modular division
             String expectedColour = cString.substring(randomIndex, randomIndex+1).toUpperCase();
             //Get the first letter of the colour and compare with what the colour should be.
-            Assertions.assertEquals(expectedColour, Game.board.tiles[x][y].colour.substring(0,1));
+            Assertions.assertEquals(expectedColour, Game.board.tiles[x][y].colour.substring(0,1), "Incorrect tile colour");
             counter += 1;
         }
 
