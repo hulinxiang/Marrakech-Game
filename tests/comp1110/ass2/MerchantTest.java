@@ -19,10 +19,10 @@ public class MerchantTest {
                 merchant.decodeAsamString(test);
                 int x = merchant.merchantPosition.getX();
                 int y = merchant.merchantPosition.getY();
-                String direction=merchant.getDirection().toString().substring(0,1);
-                Assertions.assertEquals(Integer.parseInt(test.substring(0,1)),x);
-                Assertions.assertEquals(Integer.parseInt(test.substring(1,2)),y);
-                Assertions.assertEquals(test.substring(2),direction);
+                String direction = merchant.getDirection().toString().substring(0, 1);
+                Assertions.assertEquals(Integer.parseInt(test.substring(0, 1)), x);
+                Assertions.assertEquals(Integer.parseInt(test.substring(1, 2)), y);
+                Assertions.assertEquals(test.substring(2), direction);
             }
         }
     }
