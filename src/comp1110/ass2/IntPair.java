@@ -39,6 +39,24 @@ public class IntPair {
     }
 
     /**
+     * setter method for x
+     *
+     * @param x
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * setter method for y
+     *
+     * @param y
+     */
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    /**
      * Creates a new IntPair object that is the element-wise sum of the old and the other
      *
      * @param other Intpair to add to this Intpair
