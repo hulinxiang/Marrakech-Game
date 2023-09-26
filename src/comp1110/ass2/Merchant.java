@@ -41,7 +41,7 @@ public class Merchant {
         int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         //Check if the Asam is out of game board
         if (x>6 || y>6 || x < 0 || y < 0){
-            throw new RuntimeException("Invalid Asam position");
+            throw new RuntimeException("Invalid Asam String");
         }
         this.merchantPosition = new IntPair(x, y);
 
@@ -59,6 +59,7 @@ public class Merchant {
                 direction = Direction.WEST;
                 break;
             default:
+                throw new RuntimeException("Invalid Asam String");
         }
     }
 

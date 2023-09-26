@@ -122,11 +122,11 @@ public class Viewer extends Application {
         //If assam heads to the west
         graphicsContext.setFill(Color.BLACK);
         if (Direction.WEST.equals(assamDirection)) {
-            double x1 = START_X + (assamPosition.getY() + 1) * SQUARE_WIDTH;
+            double x1 = START_X + (assamPosition.getX() + 1) * SQUARE_WIDTH;
             double x2 = x1;
             double x3 = x1 - SQUARE_WIDTH;
-            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
-            double y2 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
+            double y1 = START_Y + (assamPosition.getY()) * SQUARE_HEIGHT;
+            double y2 = START_Y + (assamPosition.getY() + 1) * SQUARE_HEIGHT;
             double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
@@ -139,11 +139,11 @@ public class Viewer extends Application {
         }
         //If assam heads to the east
         if (Direction.EAST.equals(assamDirection)) {
-            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
+            double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1;
             double x3 = x1 + SQUARE_WIDTH;
-            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
-            double y2 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
+            double y1 = START_Y + (assamPosition.getY()) * SQUARE_HEIGHT;
+            double y2 = START_Y + (assamPosition.getY() + 1) * SQUARE_HEIGHT;
             double y3 = (y1 + y2) / 2;
             graphicsContext.fillPolygon(
                     new double[]{x1,
@@ -156,10 +156,10 @@ public class Viewer extends Application {
         }
         //If assam heads to the north
         if (Direction.NORTH.equals(assamDirection)) {
-            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
+            double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;
-            double y1 = START_Y + (assamPosition.getX() + 1) * SQUARE_HEIGHT;
+            double y1 = START_Y + (assamPosition.getY() + 1) * SQUARE_HEIGHT;
             double y2 = y1;
             double y3 = y2 - SQUARE_HEIGHT;
             graphicsContext.fillPolygon(
@@ -173,10 +173,10 @@ public class Viewer extends Application {
         }
         //If assam heads to the south
         if (Direction.SOUTH.equals(assamDirection)) {
-            double x1 = START_X + (assamPosition.getY()) * SQUARE_WIDTH;
+            double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;
-            double y1 = START_Y + (assamPosition.getX()) * SQUARE_HEIGHT;
+            double y1 = START_Y + (assamPosition.getY()) * SQUARE_HEIGHT;
             double y2 = y1;
             double y3 = y2 + SQUARE_HEIGHT;
             graphicsContext.fillPolygon(

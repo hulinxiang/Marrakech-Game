@@ -34,7 +34,7 @@ static methods for which we have already provided unit tests.
   * rugCount()
   * moneyCheck()
   * rugCheck()
-  * Connvected()
+  * Connected()
   * Score()
   * The methods makePayment() and getPayment() may be tested in isolation by checking that the this.coins field 
     is updated correctly. 
