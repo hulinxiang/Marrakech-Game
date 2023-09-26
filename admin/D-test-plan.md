@@ -28,7 +28,9 @@ static methods for which we have already provided unit tests.
     * Rotate(Direction d, int rotateValue)
     * Move(Direction d, int steps)
     cannot be tested in isolation. However, after calling the methods above, the string representation of Asam's state
-    returned by rotateAssam() and moveAsam() in the Marrakech class should be the correct representation. 
+    returned by rotateAssam() and moveAsam() in the Marrakech class should be the correct representation. Note:
+    there are already tests provided that test the aforementioned methods in the Marrakech class. Hence, if these
+    tests pass, then the corresponding methods in the Merchant class are also indirectly tested. 
   
 * **Player Class,** methods to be unit tested: 
   * rugCount()
