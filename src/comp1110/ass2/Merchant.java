@@ -3,10 +3,17 @@ package comp1110.ass2;
 
 
 public class Merchant {
+    private static int x=0;
+    private static int y=0;
     //Position of the merchant
     IntPair merchantPosition;
     //Direction of the merchant
     Direction direction;
+
+    public Merchant() {
+
+    }
+
     public IntPair getMerchantPosition() {
         return merchantPosition;
     }
@@ -41,7 +48,7 @@ public class Merchant {
         int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         //Check if the Asam is out of game board
         if (x>6 || y>6 || x < 0 || y < 0){
-            throw new RuntimeException("Invalid Asam position");
+            throw new RuntimeException("Invalid Asam String");
         }
         this.merchantPosition = new IntPair(x, y);
 
@@ -59,6 +66,7 @@ public class Merchant {
                 direction = Direction.WEST;
                 break;
             default:
+                throw new RuntimeException("Invalid Asam String");
         }
     }
 
@@ -70,27 +78,89 @@ public class Merchant {
 
     }
 
-    /*
+    /**
     Rotates the merchant depending on the player input.
     d: The current direction the merchant is facing.
     rotateValue: -1 = left rotation, 0 = no rotation, 1 = right rotation.
      */
+    public enum Direction{NORTH,WEST,SOUTH,EAST}
     public void Rotate(Direction d, int rotateValue) {
+        if (rotateValue == -1){
+            switch (d){
+                case NORTH:
+                    d = Direction.WEST;
+                    break;
+                case WEST:
+                    d = Direction.SOUTH;
+                    break;
+                case EAST:
+                    d = Direction.NORTH;
+                    break;
+                case SOUTH:
+                    d = Direction.EAST;
+                    break;
+            }
+
+        } else if (rotateValue == 1) {
+            switch (d){
+                case NORTH:
+                    d = Direction.EAST;
+                    break;
+                case WEST:
+                    d = Direction.NORTH;
+                    break;
+                case EAST:
+                    d = Direction.SOUTH;
+                    break;
+                case SOUTH:
+                    d = Direction.WEST;
+                    break;
+            }
+
+        }
 
     }
 
-    /*
+    /**
     Moves the required number of steps as indicated by the die, in the specific direction.
      */
+    public Merchant(int startX, int startY){
+        this.x=startX;
+        this.y=startY;
+        
+    }
     public void Move(Direction d, int steps) {
+        switch (d){
+            case NORTH:
+                y-= steps;
+                break;
+            case SOUTH:
+                y+= steps;
+                break;
+            case EAST:
+                x-= steps;
+                break;
+            case WEST:
+                x+= steps;
+                break;
+        }
 
     }
 
-    /*
+    public static int getX() {
+        return x;
+    }
+
+    public static int getY() {
+        return y;
+    }
+
+    /**
      Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
       */
-    public static boolean checkRotation(Direction d) {
-        return true;
+    public static boolean checkRotation(Direction currentDirection, Direction intendedDirection) {
+        int differences = Math.abs(currentDirection.ordinal() - intendedDirection.ordinal());
+        return differences ==1 || differences == 3;
     }
 
 
