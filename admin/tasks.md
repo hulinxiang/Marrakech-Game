@@ -41,6 +41,9 @@ Allocated who is writing what test:
 - Lize will compile Sunday night and send through a draft to check. 
 
 ## Week 8
+- Shuo and Lize met at 10am on Thursday 28/09/23. Since Hu couldn't make it we will meet again via zoom on Saturday night. 
+- We will each complete the individual component of D2E, and work to fix the build component which is currently not working. 
+- During our Saturday meeting we will assign who reviews what code for the individual component. 
 
 ## Week 9
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/comp1110-ass2.iml" filepath="$PROJECT_DIR$/comp1110-ass2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/out/artifacts/game/test/test.iml" filepath="$PROJECT_DIR$/out/artifacts/game/test/test.iml" />
     </modules>
   </component>
 </project>
