@@ -7,7 +7,7 @@ public class Merchant {
     private static int y=0;
     //Position of the merchant
     IntPair merchantPosition;
-    //Direction of the merchant
+    //Direction of the merchant mmmm
     Direction direction;
 
     public Merchant() {
