@@ -46,7 +46,20 @@ Allocated who is writing what test:
 - During our Saturday meeting we will assign who reviews what code for the individual component. 
 
 ## Week 9
+- Shuo and Lize met at 11.20 on Wednesday 04/10/23. Discussed round robin review and also allcoated tasks for the big upcoming deliverable (D2F). 
+- Review: Shuo will review Hu, Hu will review Lize, and Lize will review Shuo. 
+- Upcoming deliverable allocation plan:
+  - SHUO: Task 8, 11  
+  - LIZE: Task 7, 9, 13 
+  - HU: Task 10, 12, 14
+Task 15 to be checked later. Leave Task 16 and 17 for leave for later.
+MUST ADD TESTS FOR ALL (IF NOT PROVIDED ALREADY)!!!
 
+- Discussed important criteria for the assingment including:
+  - Object orientated
+  - Design
+  - Commenting (code quality).
+  
 ## Week 10
 
 ## Week 11
