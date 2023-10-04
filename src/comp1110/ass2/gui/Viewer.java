@@ -59,7 +59,7 @@ public class Viewer extends Application {
         Marrakech marrakech = new Marrakech(state);
         IntPair assamPosition = marrakech.asam.getMerchantPosition();
         Merchant.Direction assamDirection = marrakech.asam.getDirection();
-        //A array which stores the player information
+        //An array which stores the player information
         Player[] players = marrakech.players;
         //Clear all. To have a refresh performance
         graphicsContext.clearRect(0, 0, VIEWER_WIDTH, VIEWER_HEIGHT);
@@ -121,7 +121,7 @@ public class Viewer extends Application {
         //Draw the assam on the board
         //If assam heads to the west
         graphicsContext.setFill(Color.BLACK);
-        if (Direction.WEST.equals(assamDirection)) {
+        if (Direction.WEST.name().equals(assamDirection.name())) {
             double x1 = START_X + (assamPosition.getX() + 1) * SQUARE_WIDTH;
             double x2 = x1;
             double x3 = x1 - SQUARE_WIDTH;
@@ -138,7 +138,7 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the east
-        if (Direction.EAST.equals(assamDirection)) {
+        if (Direction.EAST.name().equals(assamDirection.name())) {
             double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1;
             double x3 = x1 + SQUARE_WIDTH;
@@ -155,7 +155,7 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the north
-        if (Direction.NORTH.equals(assamDirection)) {
+        if (Direction.NORTH.name().equals(assamDirection.name())) {
             double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;
@@ -172,7 +172,7 @@ public class Viewer extends Application {
                     3);
         }
         //If assam heads to the south
-        if (Direction.SOUTH.equals(assamDirection)) {
+        if (Direction.SOUTH.name().equals(assamDirection.name())) {
             double x1 = START_X + (assamPosition.getX()) * SQUARE_WIDTH;
             double x2 = x1 + SQUARE_WIDTH;
             double x3 = (x1 + x2) / 2;

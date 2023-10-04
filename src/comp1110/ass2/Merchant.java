@@ -7,7 +7,7 @@ public class Merchant {
     private static int y=0;
     //Position of the merchant
     IntPair merchantPosition;
-    //Direction of the merchant mmmm
+    //Direction of the merchant
     Direction direction;
 
     public Merchant() {
@@ -125,8 +125,8 @@ public class Merchant {
     Moves the required number of steps as indicated by the die, in the specific direction.
      */
     public Merchant(int startX, int startY){
-        this.x=startX;
-        this.y=startY;
+        x=startX;
+        y=startY;
         
     }
     public void Move(Direction d, int steps) {
