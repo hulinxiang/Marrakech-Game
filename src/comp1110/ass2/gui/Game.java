@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 
 public class Game extends Application {
 
@@ -18,12 +20,24 @@ public class Game extends Application {
 
     }
 
+
     @Override
     public void start(Stage stage) throws Exception {
 //         FIXME Task 7 and 15
+        Button button = new Button(); //MAKING BUTTON GRIDS
+        button.setText("Sample Button");
+        //Setting the location of the button
+        button.setTranslateX(150);
+        button.setTranslateY(150);
+        //Setting the stage
+//        Group root = new Group(button);
+        this.root.getChildren().add(button);
         Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
 
+    }
+    public static void main(String args[]){
+        launch();
     }
 }
