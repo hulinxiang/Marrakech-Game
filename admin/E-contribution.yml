@@ -10,9 +10,9 @@ declaration: >-
 contributions:
   - uid: 
     contribution: 
-  - uid:
+  - uid: u7704291
     contribution:
-  - uid:
+  - uid: u7633783
     contribution:
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
@@ -20,7 +20,7 @@ contributions:
 signatures:
   - name:
     uid:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Shuo Tan
+    uid: u7704291
+  - name: Linxiang Hu
+    uid: u7633783
