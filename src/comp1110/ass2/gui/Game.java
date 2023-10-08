@@ -1,34 +1,35 @@
 package comp1110.ass2.gui;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
+import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
 public class Game extends Application {
 
-    private final Group root = new Group();
+    private final StackPane root = new StackPane();
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 700;
 
-    //The variable denotes where the board starts
-    final int START_X = 30;
-    final int START_Y = 30;
     //Variables denote the number of rows and columns
     final int COLUMN = 7;
     final int ROW = 7;
     //The information about squares which consist of the board
     final int SQUARE_WIDTH = 50;
     final int SQUARE_HEIGHT = 50;
-    private final Canvas canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
-    private final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+
+
 
     /**
     Calculates the winner
@@ -38,10 +39,19 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Class for button tiles.
+     * Contains constructor that specifies stylistic features, dimensions, and functions.
+     */
     public class TileButton extends Button{
         double xLocation;
         double yLocation;
 
+        /**
+         * Constructor for each tile
+         * @param xLocation Specifies the x location of the tile-button in the window.
+         * @param yLocation Specifies the y location of the tile-button in the window.
+         */
         TileButton(double xLocation, double yLocation){
             super();
             this.xLocation = xLocation;
@@ -74,18 +84,30 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Class for the half-circle mosaic tiles.
+     * Contains a contructor that specifies its stylistic features and dimensions.
+     */
+
     public class MosaicTile extends Arc{
         double centerX;
         double centerY;
         double start;
         double end;
 
+        /**
+         * Constructor for the mosaic tile graphics.
+         * @param centerX Specifies the center x location of the arc in the window.
+         * @param centerY Specifies the center y location of the arc in the window.
+         * @param start Specifies where the 'tracing' of the arc starts (in terms of angle).
+         * @param end Specifies how big to trace the arc (e.g. 180 --> half circle).
+         */
         MosaicTile(double centerX, double centerY, double start, double end){
             super();
             this.centerX = centerX;
             this.centerY = centerY;
             this.start = start; //Where to start tracing the arc.
-            this.end = end; //Where to end the arc.
+            this.end = end; //How big is the arc.
 
 
             //SETTING DIMENSIONS
@@ -106,15 +128,54 @@ public class Game extends Application {
 
     }
 
+    public void startScreen(){
+
+        //ADDING IMAGE
+        ImageView viewSky = new ImageView();
+        Image imageSky = new Image("file:./assets/moon.png");
+        viewSky.setImage(imageSky);
+        StackPane.setAlignment(viewSky, Pos.TOP_LEFT);
+        root.getChildren().add(viewSky);
+
+        ImageView viewCity = new ImageView();
+        Image imageCity = new Image("file:./assets/city.png");
+        viewCity.setImage(imageCity);
+        StackPane.setAlignment(viewCity, Pos.BOTTOM_CENTER);
+        root.getChildren().add(viewCity);
 
 
-    @Override
-    public void start(Stage stage) throws Exception {
+        //ADDING WELCOME TEXT
+        Text welcomeText = new Text();
+        welcomeText.setText("\n Welcome to Marrakech!");
+        StackPane.setAlignment(welcomeText, Pos.TOP_CENTER);
+        welcomeText.setFill(Color.WHITE);
+        Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 80);
+        welcomeText.setFont(moroccanFont);
+        root.getChildren().add(welcomeText);
 
+        Button startButton = new Button("START GAME");
+        //Setting the style of the start button.
+        startButton.setStyle(
+                "-fx-font-size: 18px;" +                    // Font size
+                        "-fx-text-fill: white;" +           // Text color
+                        "-fx-background-color: #f8a102;"    // Blue background color
+        );
+
+        // Set the action for the "Go" button
+        startButton.setOnAction(event -> changeScene());
+
+        // Add the button to the StackPane
+        root.getChildren().add(startButton);
+
+        root.setStyle("-fx-background-color: #0099ff;");
+    }
+
+    public Group gameBasicsDisplay(){
+
+        Group group = new Group();
         final int DRAW_START_X =100; //Where to start 'drawing'
         final int DRAW_START_Y=100;
 
-//         FIXME Task 7 and 15
         //DRAW RECTANGLE TO SERVE AS BORDER:
         double margin = 10;
         Rectangle rectBorder = new Rectangle(SQUARE_WIDTH*COLUMN+margin, SQUARE_HEIGHT*ROW+margin); // Width and height of the rectangle
@@ -126,50 +187,68 @@ public class Game extends Application {
         // Set the stroke color (border color) of the rectangle
         rectBorder.setStrokeWidth(3);
         rectBorder.setStroke(Color.web("#603300"));
-        this.root.getChildren().add(rectBorder);
+        group.getChildren().add(rectBorder);
 
 
         //BOTTOM LEFT MOSAIC TILE
         MosaicTile mosaicCorner = new MosaicTile(SQUARE_WIDTH+DRAW_START_X/2, SQUARE_HEIGHT*COLUMN+DRAW_START_Y, 90, 270);
-        this.root.getChildren().add(mosaicCorner);
+        group.getChildren().add(mosaicCorner);
 
         //TOP RIGHT MOSAIC TILE
         MosaicTile otherCorner = new MosaicTile(SQUARE_WIDTH*ROW+DRAW_START_X, SQUARE_HEIGHT+DRAW_START_Y/2, 180, -270);
-        this.root.getChildren().add(otherCorner);
+        group.getChildren().add(otherCorner);
 
         //CREATING THE BOARD
-        for(int i = 0; i<ROW; i++){
-            double x = SQUARE_WIDTH * i + DRAW_START_X;
+        for(int i = 0; i<ROW; i++){ //Iterate through the columns.
+            double x = SQUARE_WIDTH * i + DRAW_START_X; //Specifying the x location of the tile.
 
             if(i%2==0 && i!=0){ //BOTTOM ROW MOSAIC TILES
                 MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*i+DRAW_START_X, SQUARE_HEIGHT*ROW+DRAW_START_Y, 0, -180);
-                this.root.getChildren().add(mosaic);
+                group.getChildren().add(mosaic);
             }
             else if(i%2==1) { //TOP ROW MOSAIC TILES
                 MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*i+DRAW_START_X, SQUARE_HEIGHT+DRAW_START_Y/2, 0, 180);
-                this.root.getChildren().add(mosaic);
+                group.getChildren().add(mosaic);
             }
 
 
-            for(int j = 0; j<ROW; j++){
+            for(int j = 0; j<ROW; j++){ //Iterate through the rows.
                 if(j%2==0 && j!=0){ //RIGHT MOSAIC TILES
                     MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*COLUMN+DRAW_START_X, SQUARE_HEIGHT*j+DRAW_START_Y, 90, -180);
-                    this.root.getChildren().add(mosaic);
+                    group.getChildren().add(mosaic);
                 }
                 else if(j%2==1) { //LEFT MOSAIC TILES
                     MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH+DRAW_START_X/2, SQUARE_HEIGHT*j+DRAW_START_Y, 90, 180);
-                    this.root.getChildren().add(mosaic);
+                    group.getChildren().add(mosaic);
                 }
 
-                double y = SQUARE_HEIGHT * j + 100;
-                TileButton tile1 = new TileButton(x, y);
-                this.root.getChildren().add(tile1);
+                double y = SQUARE_HEIGHT * j + 100; //Specifying the y location of the tile
+                TileButton tile1 = new TileButton(x, y); //Creating the tile.
+                group.getChildren().add(tile1);
 
             }
 
         }
 
-        Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        return group;
+
+    }
+
+    private void changeScene() {
+        // Clear the screen by removing all child nodes from the root layout container
+        root.getChildren().clear();
+        Group group = gameBasicsDisplay();
+        root.getChildren().add(group);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+//         FIXME Task 7 and 15
+
+        startScreen();
+
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
 
