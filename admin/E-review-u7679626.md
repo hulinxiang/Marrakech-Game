@@ -8,10 +8,12 @@ Component: Merchant Class
 
 ### Comments 
 **WHAT ARE THE BEST FEATURES OF THIS CODE?**
+
 This code is well set out and does not overcomplicate the task. It approaches
 problems with good logic, and is therefore very easy to read. 
 
 **IS THE CODE WELL-DOCUMENTED?**
+
 This code is relatively well-documented, but could do with some more in-depth comments especially
 docstrings. For example, the method checkRotation has a brief docstring that specifies 
 what the method does, but does not specify the parameters. 
@@ -21,17 +23,26 @@ This gives a helpful way of formatting these types of comments. For example in t
 a docstring could look like:
 
 /**
+
 *This method checks that the rotation is no more than 90 degrees. 
+
 *@param currentDirection 
+
 -> This parameter is an object of the enum Direction class and denotes the direction the merchant is currently facing. 
+
 *@param intended Direction 
+
 ->> This parameter is an object of the enum Direction class and denotes the direction to rotate the merchant to.
+
 *@return 
+
 -> The return value is a boolean, return false if rotation greater than 90 degrees, otherwise return true. 
+
 */ 
 
 
 **IS THE PROGRAM DECOMPOSITION (CLASS AND METHOD STRUCTURE) APPROPRIATE?**
+
 The program decomposition is relatively appropriate. The inclusion of getter methods such as
 getMerchantPosition and getDirection is especially useful and a good inclusion. 
 
@@ -45,6 +56,7 @@ By removing duplicate code such as this, the program decomposition is streamline
 
 
 **DOES IT FOLLOW JAVA CODE CONVENTIONS AND IS THE STYLE CONSISTENT?**
+
 A very good part of this code is that it properly handles exceptions, as per java conventions, 
 and when needed throws detailed exception messages that will help those coding find their error. 
 For example: throw new RuntimeException("Invalid Asam String"); 
@@ -57,6 +69,7 @@ java naming conventions. Other stylistic features such as indentation and whites
 with java conventions.
 
 **ANY ERRORS IN THE CODE?**
+
 As far as I can see there are no errors in the code. As seen above there are some quality and stylistic
 considerations that could be improved, but the logic behind the code is sound. 
 Overall Shuo has done a wonderful job contributing to the group, especially considering 
