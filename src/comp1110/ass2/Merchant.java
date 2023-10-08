@@ -158,6 +158,13 @@ public class Merchant {
     /**
      Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
       */
+
+    /**
+     *
+     * @param currentDirection
+     * @param intendedDirection
+     * @return
+     */
     public static boolean checkRotation(Direction currentDirection, Direction intendedDirection) {
         int differences = Math.abs(currentDirection.ordinal() - intendedDirection.ordinal());
         return differences ==1 || differences == 3;

@@ -18,8 +18,8 @@ declaration: >-
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:
-    uid:
+  - name: Lize van der Walt
+    uid: u7679626
   - name: Shuo Tan
     uid: u7704291
   - name: Linxiang Hu
