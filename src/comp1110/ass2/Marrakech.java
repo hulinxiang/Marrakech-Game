@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import com.sun.source.tree.IfTree;
+
 import java.util.*;
 
 public class Marrakech {
@@ -15,12 +17,13 @@ public class Marrakech {
 
     //Record of the rugs that have been placed (according to their id).
     ArrayList<Rug> placedRugs = new ArrayList<>();
-    public final int PLAYER_STRING_LENGTH=8;
+    public final int PLAYER_STRING_LENGTH = 8;
     String boardString;
     String assamString;
 
     /**
      * Getter method of players
+     *
      * @return players
      */
     public Player[] getPlayers() {
@@ -29,6 +32,7 @@ public class Marrakech {
 
     /**
      * Setter method of players
+     *
      * @param players
      */
 
@@ -38,6 +42,7 @@ public class Marrakech {
 
     /**
      * Getter method of boardString
+     *
      * @return boardString
      */
     public String getBoardString() {
@@ -46,6 +51,7 @@ public class Marrakech {
 
     /**
      * Setter method of boardString
+     *
      * @param boardString
      */
     public void setBoardString(String boardString) {
@@ -54,6 +60,7 @@ public class Marrakech {
 
     /**
      * Getter method of assamString
+     *
      * @return assamString
      */
     public String getAssamString() {
@@ -62,6 +69,7 @@ public class Marrakech {
 
     /**
      * Setter method of assamString
+     *
      * @param assamString
      */
     public void setAssamString(String assamString) {
@@ -70,18 +78,19 @@ public class Marrakech {
 
 
     /**
-     Returns an integer value representing how method rugs are on the board.
+     * Returns an integer value representing how method rugs are on the board.
      */
-    public int placedNumber(){
+    public int placedNumber() {
         return placedRugs.size();
     }
+
     /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
 
     public Marrakech(String gameString) {
         int indexAsam = gameString.indexOf("A");//Position of Assam string
-        int indexBoard =  gameString.indexOf("B");
+        int indexBoard = gameString.indexOf("B");
 
         //Check the correct format of Assam string
         if (indexAsam == -1) {
@@ -225,70 +234,56 @@ public class Marrakech {
      * @return true if the rug is valid, and false otherwise.
      */
     public static boolean isRugValid(String gameString, String rug) {
-        final int STRING_LENGTH = 7;
-        //The board is 7x7, which means it  has 7 columns and 7 rows.
-        //Because the coordination starts with 0. So max value is 6.
-        final int MAX_ROW = 6;
-        final int MAX_COLUMN = 6;
-        if (rug.length() != STRING_LENGTH) {
+        int expectedLength = 7;
+        //Check if the rug string length is 7
+        if (rug.length() != expectedLength) {
             return false;
         }
-
-        // Extract different parts of the rug string
-        char color = rug.charAt(0);
-        String id = rug.substring(1, 3);
-        String coords = rug.substring(3, 7);
-        //Location of squares in a rug
-        //The row of first square
-        int firstSquareRow = coords.charAt(0) - '0';
-        //The column of first square
-        int firstSquareColumn = coords.charAt(1) - '0';
-        //The row of second square
-        int secondSquareRow = coords.charAt(2) - '0';
-        //The column of second square
-        int secondSquareColumn = coords.charAt(3) - '0';
-        // Check if these two square are connected. If not, it is not valid
-        if (firstSquareRow != secondSquareRow) {
-            if (firstSquareColumn != secondSquareColumn) {
-                return false;
-            }
-        }
-        //Check if they are larger than valid value
-        if (firstSquareColumn > MAX_COLUMN || secondSquareColumn > MAX_COLUMN || firstSquareRow > MAX_ROW || secondSquareRow > MAX_ROW) {
+        int firstSquareX = Integer.parseInt(rug.substring(3, 4));
+        int firstSquareY = Integer.parseInt(rug.substring(4, 5));
+        int secondSquareX = Integer.parseInt(rug.substring(5, 6));
+        int secondSquareY = Integer.parseInt(rug.substring(6));
+        //Check if two squares of the rug is connected
+        if (firstSquareX != secondSquareX && firstSquareY != secondSquareY) {
             return false;
         }
-
-        //Check if they are smaller than 0
-        if (firstSquareColumn < 0 || secondSquareColumn < 0 || firstSquareRow < 0 || secondSquareRow < 0) {
+        //Check if it is out of bound
+        if(firstSquareX>6||firstSquareY>6||secondSquareX>6||secondSquareY>6){
             return false;
         }
-
-        // Check if color is one of 'c, y, r, p'
-        if ("cyrp".indexOf(color) == -1) {
+        //possibleColour is an ArrayList that contains possible colour
+        ArrayList<String> possibleColour=new ArrayList<>();
+        possibleColour.add("c");
+        possibleColour.add("y");
+        possibleColour.add("p");
+        possibleColour.add("r");
+        String colour=rug.substring(0,1);
+        //Check if the colour of the rug is valid
+        if(!possibleColour.contains(colour)){
             return false;
         }
+        //Check if have the same id and colour for the first square
+        String str=rug.substring(0,3);
+        ArrayList<String> splitedRugStrings =splitBoardString(gameString);
+        return !splitedRugStrings.contains(str);
+    }
 
-        // Create a set to store unique rug identifiers (color + ID)
-        Set<String> uniqueRugs = new HashSet<>();
-
-        // Parse existing rugs from gameString
-        // Assuming that each rug in gameString is 7 characters long, without any delimiters
-        for (int i = 0; i <= gameString.length() - 7; i += 7) {
-            String existingRug = gameString.substring(i, i + 7);
-            // Color + ID
-            String existingRugId = existingRug.substring(0, 3);
-            uniqueRugs.add(existingRugId);
+    /**
+     * It is a method that can help to split gameString into Abbreviated Rug Strings
+     * for operations in isRugValid method
+     * @param gameString the String needs to be split
+     * @return an ArrayList that contains these Abbreviated Rug Strings
+     */
+    public static ArrayList<String> splitBoardString(String gameString){
+        int boardIndex=gameString.indexOf("B");
+        String boardString=gameString.substring(boardIndex+1);
+        ArrayList<String> ans=new ArrayList<>();
+        //Split the gameString three by three
+        //we can obtain the Abbreviated Rug Strings of each tile
+        for(int i=0;i<boardString.length();i+=3){
+            ans.add(boardString.substring(i,i+3));
         }
-
-        // Check for uniqueness of the new rug's color + ID combination
-        String newRugId = color + id;
-        if (uniqueRugs.contains(newRugId)) {
-            return false;
-        }
-
-        // Assuming you will check if coords are valid in a different function (e.g., on-board checks)
-        // FIXME: Task 4
-        return true;
+        return ans;
     }
 
 
@@ -326,7 +321,7 @@ public class Marrakech {
     /**
      * Counts the number of players
      */
-    public int countPlayers(){
+    public int countPlayers() {
         return players.length;
     }
 
