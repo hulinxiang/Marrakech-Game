@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -156,37 +157,43 @@ public class Game extends Application {
         welcomeText.setFont(moroccanFont);
         root.getChildren().add(welcomeText);
 
+        //CREATING SUBMIT BUTTON
+
         Button startButton = new Button("START GAME");
         //Setting the style of the start button.
         startButton.setStyle(
                 "-fx-font-size: 18px;" +                    // Font size
-                "-fx-text-fill: white;" +                   // Text color
-                "-fx-background-color: #f8a102;"          // Blue background color
+                        "-fx-text-fill: white;" +                   // Text color
+                        "-fx-background-color: #f8a102;"          // Blue background color
         );
 
-        // Set the action for the "Go" button
-        startButton.setOnAction(event -> changeScene());
 
-        // Add the button to the StackPane
-        root.getChildren().add(startButton);
+        //Adding box to align button in center, below radio buttons
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().add(startButton);
+        buttonBox.setMargin(startButton, new Insets(120, 0, 0, 0)); //Top margin of 120, to be below middle line.
+        buttonBox.setAlignment(Pos.CENTER);
+        root.getChildren().add(buttonBox);         // Add the box to the StackPane
 
         //ADDING RADIO BUTTON
         ToggleGroup radioGroup = new ToggleGroup();
 
-        RadioButton onePlayer = new RadioButton("One player");
+        RadioButton onePlayer = new RadioButton("1 Player");
         onePlayer.setToggleGroup(radioGroup);
 
-        RadioButton twoPlayer = new RadioButton("Two player");
+        RadioButton twoPlayer = new RadioButton("2 Player");
         twoPlayer.setToggleGroup(radioGroup);
 
-        RadioButton threePlayer = new RadioButton("Three player");
+        RadioButton threePlayer = new RadioButton("3 Player");
         threePlayer.setToggleGroup(radioGroup);
 
-        RadioButton fourPlayer = new RadioButton("Four player");
+        RadioButton fourPlayer = new RadioButton("4 Player");
         fourPlayer.setToggleGroup(radioGroup);
 
-        String styleString = "-fx-font-size: 14px; " +
-                "-fx-text-fill: #333; " +
+        //Setting radio button style
+        String styleString =
+                "-fx-text-fill: #8C0B44; " +
+                ("-fx-font-family: '" + moroccanFont.getName() + "'; -fx-font-size: 25px;") +
                 "-fx-padding: 10; ";
 
         onePlayer.setStyle(styleString);
@@ -198,9 +205,29 @@ public class Game extends Application {
         radioBox.setAlignment(Pos.CENTER);
         radioBox.getChildren().addAll(onePlayer, twoPlayer, threePlayer, fourPlayer);
 
-        root.getChildren().add(radioBox);
+        root.getChildren().add(radioBox); //Add box containing radio button to stack pane
+
+        // Set the action for the "Go" button
+
+        startButton.setOnAction(event -> {
+            if (radioGroup.getSelectedToggle() != null) {
+                RadioButton selectedRadioButton = (RadioButton) radioGroup.getSelectedToggle();
+                Text testText = new Text();
+                testText.setText("BOOOO");
+                root.getChildren().add(testText);
+                changeScene();
+            } else {
+                Text testText = new Text();
+                testText.setText("Must select number of players");
+                root.getChildren().add(testText);
+            }
+
+        });
 
         root.setStyle("-fx-background-color: #0099ff;");
+
+
+
     }
 
     public Group gameBasicsDisplay(){
