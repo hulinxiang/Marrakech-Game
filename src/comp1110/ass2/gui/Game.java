@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.TextField;
 
 public class Game extends Application {
 
@@ -261,6 +262,29 @@ public class Game extends Application {
     }
 
     public void playerScreen(){
+
+        VBox verticalBox = new VBox(); //VBox to vertically align input with Player text.
+        //Names of player input prompt - textfield.
+        TextField nameField = new TextField();
+
+        //Prompt text.
+        nameField.setPromptText("Enter names of players seperated by comma...");
+        nameField.setFocusTraversable(false);
+
+        //Setting dimensions.
+        nameField.setPrefWidth(WINDOW_WIDTH/4);
+        nameField.setMaxWidth(WINDOW_WIDTH/4);
+        Font font = Font.font(18);
+
+        //Set alignment so that displays properly.
+        verticalBox.setAlignment(Pos.CENTER);
+        verticalBox.getChildren().add(nameField);
+        Insets inputMargin = new Insets(300, 0, 0, 0); // Top, Right, Bottom, Left
+        StackPane.setMargin(verticalBox, inputMargin);
+        root.getChildren().add(verticalBox);
+
+
+        //Setting up player section.
         HBox textStore = new HBox(170);
         Text[] playerText = new Text[numberPlayers];
 
