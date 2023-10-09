@@ -4,18 +4,19 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
-import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
@@ -33,6 +34,13 @@ public class Game extends Application {
     final int SQUARE_WIDTH = 50;
     final int SQUARE_HEIGHT = 50;
 
+    private int numberPlayers;
+
+    //Purple, Cyan-Green, Yellow, Red-Pink
+    private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"}; //String of colour codes for players.
+
+    public static void generatePlayerScene(){
+    }
 
 
     /**
@@ -132,22 +140,35 @@ public class Game extends Application {
 
     }
 
-    public void startScreen(){
 
+    /**
+     * Adds city image that is used in some scenes.
+     */
+    public void backgroundCity(){
+        ImageView viewCity = new ImageView();
+        Image imageCity = new Image("file:./assets/city.png");
+        viewCity.setImage(imageCity);
+        StackPane.setAlignment(viewCity, Pos.BOTTOM_CENTER);
+        root.getChildren().add(viewCity);
+    }
+
+    /**
+     * Adds sky image that is used in some scenes.
+     */
+    public void backgroundSky(){
         //ADDING IMAGE
         ImageView viewSky = new ImageView();
         Image imageSky = new Image("file:./assets/moon.png");
         viewSky.setImage(imageSky);
         StackPane.setAlignment(viewSky, Pos.TOP_LEFT);
         root.getChildren().add(viewSky);
+    }
 
-        ImageView viewCity = new ImageView();
-        Image imageCity = new Image("file:./assets/city.png");
-        viewCity.setImage(imageCity);
-        StackPane.setAlignment(viewCity, Pos.BOTTOM_CENTER);
-        root.getChildren().add(viewCity);
+    /**
+     * Creates javaFx graphics for the start 'Welcome to Marrakech' screen.
+     */
 
-
+    public void startScreen(){
         //ADDING WELCOME TEXT
         Text welcomeText = new Text();
         welcomeText.setText("\n Welcome to Marrakech!");
@@ -157,44 +178,31 @@ public class Game extends Application {
         welcomeText.setFont(moroccanFont);
         root.getChildren().add(welcomeText);
 
-        //CREATING SUBMIT BUTTON
-
-        Button startButton = new Button("START GAME");
-        //Setting the style of the start button.
-        startButton.setStyle(
-                "-fx-font-size: 18px;" +                    // Font size
-                        "-fx-text-fill: white;" +                   // Text color
-                        "-fx-background-color: #f8a102;"          // Blue background color
-        );
-
-
-        //Adding box to align button in center, below radio buttons
-        HBox buttonBox = new HBox();
-        buttonBox.getChildren().add(startButton);
-        buttonBox.setMargin(startButton, new Insets(120, 0, 0, 0)); //Top margin of 120, to be below middle line.
-        buttonBox.setAlignment(Pos.CENTER);
-        root.getChildren().add(buttonBox);         // Add the box to the StackPane
-
         //ADDING RADIO BUTTON
+        VBox buttonBox = new VBox(); //Vertical container containing all buttons.
         ToggleGroup radioGroup = new ToggleGroup();
 
         RadioButton onePlayer = new RadioButton("1 Player");
+        onePlayer.setId("1");
         onePlayer.setToggleGroup(radioGroup);
 
         RadioButton twoPlayer = new RadioButton("2 Player");
+        twoPlayer.setId("2");
         twoPlayer.setToggleGroup(radioGroup);
 
         RadioButton threePlayer = new RadioButton("3 Player");
+        threePlayer.setId("3");
         threePlayer.setToggleGroup(radioGroup);
 
         RadioButton fourPlayer = new RadioButton("4 Player");
+        fourPlayer.setId("4");
         fourPlayer.setToggleGroup(radioGroup);
 
         //Setting radio button style
         String styleString =
                 "-fx-text-fill: #8C0B44; " +
-                ("-fx-font-family: '" + moroccanFont.getName() + "'; -fx-font-size: 25px;") +
-                "-fx-padding: 10; ";
+                        ("-fx-font-family: '" + moroccanFont.getName() + "'; -fx-font-size: 25px;") +
+                        "-fx-padding: 10; ";
 
         onePlayer.setStyle(styleString);
         twoPlayer.setStyle(styleString);
@@ -204,32 +212,91 @@ public class Game extends Application {
         HBox radioBox = new HBox(10); //Spacing of 10px between radio buttons.
         radioBox.setAlignment(Pos.CENTER);
         radioBox.getChildren().addAll(onePlayer, twoPlayer, threePlayer, fourPlayer);
+        radioBox.setPrefHeight(100);
+        buttonBox.getChildren().add(radioBox);
 
-        root.getChildren().add(radioBox); //Add box containing radio button to stack pane
+        //Text to prompt user to press button.
+        Text testText = new Text();
+        testText.setText("SELECT NUMBER OF PLAYERS");
+        //Setting style of text
+        testText.setFill(Color.web("#0099ff"));
+        testText.setStyle("-fx-font-size: 12px; ");
+        testText.setTranslateY(-10); // 20 pixels top padding
+        buttonBox.getChildren().add(testText);
 
-        // Set the action for the "Go" button
+        //CREATING START BUTTON
+        Button startButton = new Button("START GAME");
+        //Setting the style of the start button.
+        startButton.setStyle(
+                "-fx-font-size: 23px;" +                    // Font size
+                        "-fx-text-fill: white;" +                   // Text color
+                        "-fx-background-color: #f8a102;"            // Blue background color
+        );
 
+
+        //Adding box to align button in center, below radio buttons
+        buttonBox.getChildren().add(startButton);
+        buttonBox.setAlignment(Pos.CENTER);
+
+
+        //Set the event when 'Start' button is pressed.
         startButton.setOnAction(event -> {
             if (radioGroup.getSelectedToggle() != null) {
                 RadioButton selectedRadioButton = (RadioButton) radioGroup.getSelectedToggle();
-                Text testText = new Text();
-                testText.setText("BOOOO");
-                root.getChildren().add(testText);
-                changeScene();
-            } else {
-                Text testText = new Text();
-                testText.setText("Must select number of players");
-                root.getChildren().add(testText);
+                numberPlayers = Integer.parseInt(selectedRadioButton.getId()); //Record the number of players selected.
+                changeScenePlayer();
+            }
+            else {
+                //Making text visible
+                testText.setFill(Color.WHITE);
             }
 
         });
 
+        root.getChildren().add(buttonBox);         // Add the box to the StackPane
         root.setStyle("-fx-background-color: #0099ff;");
 
 
 
     }
 
+    public void playerScreen(){
+        HBox textStore = new HBox(170);
+        Text[] playerText = new Text[numberPlayers];
+
+        HBox backgroundStore = new HBox(70);
+        Rectangle[] backgrounds = new Rectangle[numberPlayers];
+        for(int i = 1; i<=numberPlayers; i++){
+            playerText[i-1] = new Text();
+            playerText[i-1].setText("Player " +i);
+            StackPane.setAlignment(playerText[i-1], Pos.TOP_CENTER);
+            Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
+            playerText[i-1].setFont(moroccanFont);
+
+            //Set player colour:
+            String colour = colourCodes[i-1];
+            playerText[i-1].setFill(Color.web(colour));
+
+            //Add background for each player using rectangle.
+            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/6, WINDOW_HEIGHT/5); // Specify width and height
+            backgrounds[i-1].setFill(Color.WHITE); // Set the fill color to white
+            double cornerRadius = 20; // Radius for round edges of rectangle.
+            backgrounds[i-1].setArcWidth(cornerRadius);
+            backgrounds[i-1].setArcHeight(cornerRadius);
+
+            backgroundStore.setAlignment(Pos.CENTER);
+            backgroundStore.getChildren().add(backgrounds[i-1]);
+
+            textStore.setAlignment(Pos.CENTER);
+            textStore.getChildren().add(playerText[i-1]);
+        }
+
+        //Add margin at top of rectangle to improve display.
+        root.getChildren().add(backgroundStore);
+        Insets margin = new Insets(70, 0, 0, 0); // Top, Right, Bottom, Left
+        StackPane.setMargin(backgroundStore, margin);
+        root.getChildren().add(textStore);
+    }
     public Group gameBasicsDisplay(){
 
         Group group = new Group();
@@ -294,7 +361,20 @@ public class Game extends Application {
 
     }
 
-    private void changeScene() {
+
+    /**
+     *  Changes scene from start screen to player selection screen.
+     */
+    private void changeScenePlayer() {
+        // Clear the screen by removing all child nodes from the root layout container
+        root.getChildren().clear();
+        backgroundSky();
+        backgroundCity();
+        playerScreen();
+
+    }
+
+    private void changeSceneBoard() {
         // Clear the screen by removing all child nodes from the root layout container
         root.getChildren().clear();
         Group group = gameBasicsDisplay();
@@ -306,6 +386,8 @@ public class Game extends Application {
 
 //         FIXME Task 7 and 15
 
+        backgroundCity();
+        backgroundSky();
         startScreen();
 
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
