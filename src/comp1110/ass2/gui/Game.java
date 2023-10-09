@@ -4,8 +4,11 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -157,8 +160,8 @@ public class Game extends Application {
         //Setting the style of the start button.
         startButton.setStyle(
                 "-fx-font-size: 18px;" +                    // Font size
-                        "-fx-text-fill: white;" +           // Text color
-                        "-fx-background-color: #f8a102;"    // Blue background color
+                "-fx-text-fill: white;" +                   // Text color
+                "-fx-background-color: #f8a102;"          // Blue background color
         );
 
         // Set the action for the "Go" button
@@ -166,6 +169,36 @@ public class Game extends Application {
 
         // Add the button to the StackPane
         root.getChildren().add(startButton);
+
+        //ADDING RADIO BUTTON
+        ToggleGroup radioGroup = new ToggleGroup();
+
+        RadioButton onePlayer = new RadioButton("One player");
+        onePlayer.setToggleGroup(radioGroup);
+
+        RadioButton twoPlayer = new RadioButton("Two player");
+        twoPlayer.setToggleGroup(radioGroup);
+
+        RadioButton threePlayer = new RadioButton("Three player");
+        threePlayer.setToggleGroup(radioGroup);
+
+        RadioButton fourPlayer = new RadioButton("Four player");
+        fourPlayer.setToggleGroup(radioGroup);
+
+        String styleString = "-fx-font-size: 14px; " +
+                "-fx-text-fill: #333; " +
+                "-fx-padding: 10; ";
+
+        onePlayer.setStyle(styleString);
+        twoPlayer.setStyle(styleString);
+        threePlayer.setStyle(styleString);
+        fourPlayer.setStyle(styleString);
+
+        HBox radioBox = new HBox(10); //Spacing of 10px between radio buttons.
+        radioBox.setAlignment(Pos.CENTER);
+        radioBox.getChildren().addAll(onePlayer, twoPlayer, threePlayer, fourPlayer);
+
+        root.getChildren().add(radioBox);
 
         root.setStyle("-fx-background-color: #0099ff;");
     }
