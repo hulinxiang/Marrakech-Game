@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,11 @@ import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Collections;
+import java.util.Stack;
+
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 
 public class Game extends Application {
 
@@ -39,6 +45,8 @@ public class Game extends Application {
     final int SQUARE_HEIGHT = 50;
 
     private int numberPlayers;
+
+    private ArrayList<String> nameArray = new ArrayList<>(); //Array with names of players
 
     //Purple, Cyan-Green, Yellow, Red-Pink
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"}; //String of colour codes for players.
@@ -265,19 +273,53 @@ public class Game extends Application {
     }
 
 
-    public void assignOrder(ArrayList<String> nameArray){
-        for(int j=0;j<numberPlayers;j++){
+    /**
+     * Stores the randomised order of the players in an ArrayList and displays accordingly.
+     */
+    public void assignOrder(){
+        //Use shuffle to randomise order
+        Collections.shuffle(nameArray);
+
+        Text[] nameText = new Text[numberPlayers]; //Display text with names of players.
+        StackPane[] namePane = new StackPane[numberPlayers]; //Stackpane to ensure proper display of text.
+        HBox nameStore = new HBox(WINDOW_WIDTH/10); //HBox to store stackpanes of names.
+
+        //Iterate through number of players, displaying the name of each
+        for(int i = 1; i<=numberPlayers; i++) {
+            nameText[i-1] = new Text();
+            nameText[i-1].setText(nameArray.get(i-1));
+            //Setting stylistic features of nameText:
+            Font basicFont = new Font("Arial", 20);
+            nameText[i-1].setFont(basicFont);
+            nameText[i-1].setFill(Color.web("#000000"));
+
+            namePane[i-1] = new StackPane();
+            namePane[i-1].getChildren().add(nameText[i-1]);
+
+            StackPane.setAlignment(nameText[i-1], Pos.CENTER);
+            nameText[i-1].setTextAlignment(TextAlignment.CENTER);
+            namePane[i-1].setMargin(nameText[i-1], new Insets(110, 0, 0, 0));
+
+            namePane[i-1].setPrefWidth(150); // Preferred width
+            namePane[i-1].setMaxWidth(150);  // Maximum width
+            StackPane.setAlignment(namePane[i-1], Pos.CENTER);
+
+            nameStore.getChildren().add(namePane[i-1]);
+            nameText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
+
 
         }
+        nameStore.setAlignment(Pos.CENTER);
+        root.getChildren().add(nameStore);
+
     }
 
     /**
      * Checks that names entered on the player screen is correct.
-     * @param nameArray array of names entered into the text field (generated from splitting string input at comma).
      * @param nameField textField that takes name input, parsed so that it may be disabled.
      * @param instructionText instruction text that changes depending on whether input correct or not.
      */
-    public void checkNameRequirements(ArrayList<String> nameArray, TextField nameField, Text instructionText){
+    public void checkNameRequirements(TextField nameField, Text instructionText){
         //Checking that names are not repeated, and that number of names match number of players...
         if(nameArray.size() == numberPlayers){
             //Checking that no repeats in set by putting into set and comparing sizes:
@@ -290,8 +332,15 @@ public class Game extends Application {
             else{
                 //System.out.println("Correct");
                 nameField.setEditable(false); //Disable the textfield if correct input received
-                instructionText.setText("Great! Your order and colours are assigned below.");
-                assignOrder(nameArray); //Assign order of play.
+                instructionText.setText("Press ENTER to start the game!");
+                assignOrder(); //Assign order of play.
+
+                //If enter is pressed game screen will appear.
+                nameField.setOnKeyPressed(event -> {
+                    if (event.getCode().getName().equals("Enter")) {
+                        changeSceneBoard(); //Changes scene to board display
+                    }
+                });
             }
 
         }
@@ -378,7 +427,6 @@ public class Game extends Application {
         root.getChildren().add(verticalBox);
 
         //FETCHING NAMES OF PLAYERS FROM THE INPUT AND STORE IN ARRAY
-        ArrayList<String> nameArray = new ArrayList<>();
         //When enter key is pressed, get names input.
         nameField.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Enter")) {
@@ -390,9 +438,9 @@ public class Game extends Application {
                     // Add the input text to the ArrayList - delineated at comma.
                     String[] names = nameInput.split(",");
                     for (String name: names) {
-                        nameArray.add(name);
+                        nameArray.add(name.toUpperCase());
                     }
-                    checkNameRequirements(nameArray, nameField, instructionText); //Checking that valid names entered.
+                    checkNameRequirements(nameField, instructionText); //Checking that valid names entered.
                 }
             }
         });
@@ -400,8 +448,59 @@ public class Game extends Application {
 
 
     }
+
+    public void namesDisplay(){
+        //Setting up player section.
+        HBox namesStore = new HBox(100);
+        Text[] nameText = new Text[numberPlayers];
+        StackPane[] namePane = new StackPane[numberPlayers]; //Stackpane to ensure proper display of text.
+
+        HBox backgroundStore = new HBox(100);
+        Rectangle[] backgrounds = new Rectangle[numberPlayers];
+
+        for(int i = 1; i<=numberPlayers; i++){
+            //Text that displays player name
+            nameText[i-1] = new Text();
+            nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+            Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
+            nameText[i-1].setFont(moroccanFont);
+            String colour = colourCodes[i-1]; //Display player colour
+            nameText[i-1].setFill(Color.web(colour));
+
+            //Stackpane to organise alignment of text
+            namePane[i-1] = new StackPane();
+            namePane[i-1].getChildren().add(nameText[i-1]);
+            StackPane.setAlignment(nameText[i-1], Pos.TOP_CENTER);
+            nameText[i-1].setTextAlignment(TextAlignment.CENTER);
+            namePane[i-1].setMargin(nameText[i-1], new Insets(35, 0, 0, 0));
+            nameText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
+            namePane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
+            namePane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
+            namesStore.setAlignment(Pos.CENTER);
+            namesStore.getChildren().add(namePane[i-1]);
+
+            //Add background for each player using rectangle.
+            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/7, WINDOW_HEIGHT/7); // Specify width and height
+            backgrounds[i-1].setFill(Color.WHITE); // Set the fill color to white
+            double cornerRadius = 20; // Radius for round edges of rectangle.
+            backgrounds[i-1].setArcWidth(cornerRadius);
+            backgrounds[i-1].setArcHeight(cornerRadius);
+            backgroundStore.setAlignment(Pos.TOP_CENTER); //Setting alignment for rectangle.
+            backgroundStore.getChildren().add(backgrounds[i-1]);
+        }
+
+        //Add margin at top of rectangle to improve display.
+        root.getChildren().add(backgroundStore);
+        Insets margin = new Insets(30, 0, 0, 0); // Top, Right, Bottom, Left
+        StackPane.setMargin(backgroundStore, margin);
+        root.getChildren().add(namesStore);
+        StackPane.setAlignment(namesStore, Pos.CENTER);
+
+
+    }
     public Group gameBasicsDisplay(){
 
+        namesDisplay(); //Display names of players
         Group group = new Group();
         final int DRAW_START_X =100; //Where to start 'drawing'
         final int DRAW_START_Y=100;
@@ -459,6 +558,7 @@ public class Game extends Application {
             }
 
         }
+        backgroundCity();
 
         return group;
 
