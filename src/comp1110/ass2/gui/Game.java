@@ -22,6 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 public class Game extends Application {
 
     private final StackPane root = new StackPane();
@@ -261,28 +264,32 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Checks that names entered are correct.
+     */
+    public void checkNameRequirements(ArrayList<String> nameArray){
+        //Checking that names are not repeated, and that number of names match number of players...
+        if(nameArray.size() == numberPlayers){
+            //Checking that no repeats in set by putting into set and comparing sizes:
+            HashSet<String> nameSet = new HashSet<>(nameArray);
+
+            if(nameSet.size() != nameArray.size()){ //Less elements in the set means there are duplicates in the array
+                System.out.println("Duplicates");
+            }
+            else{
+                System.out.println("Correct");
+            }
+
+        }
+        else{
+            System.out.println(nameArray);
+            System.out.println(numberPlayers);
+            System.out.println(nameArray.size());
+            System.out.println("Not same size.");
+        }
+
+    }
     public void playerScreen(){
-
-        VBox verticalBox = new VBox(); //VBox to vertically align input with Player text.
-        //Names of player input prompt - textfield.
-        TextField nameField = new TextField();
-
-        //Prompt text.
-        nameField.setPromptText("Enter names of players seperated by comma...");
-        nameField.setFocusTraversable(false);
-
-        //Setting dimensions.
-        nameField.setPrefWidth(WINDOW_WIDTH/4);
-        nameField.setMaxWidth(WINDOW_WIDTH/4);
-        Font font = Font.font(18);
-
-        //Set alignment so that displays properly.
-        verticalBox.setAlignment(Pos.CENTER);
-        verticalBox.getChildren().add(nameField);
-        Insets inputMargin = new Insets(300, 0, 0, 0); // Top, Right, Bottom, Left
-        StackPane.setMargin(verticalBox, inputMargin);
-        root.getChildren().add(verticalBox);
-
 
         //Setting up player section.
         HBox textStore = new HBox(170);
@@ -320,6 +327,41 @@ public class Game extends Application {
         Insets margin = new Insets(70, 0, 0, 0); // Top, Right, Bottom, Left
         StackPane.setMargin(backgroundStore, margin);
         root.getChildren().add(textStore);
+
+        //SETTING UP TEXT FIELD TO INPUT NAMES.
+        VBox verticalBox = new VBox(); //VBox to vertically align input with Player text.
+        TextField nameField = new TextField();//Names of player input prompt - textfield.
+        nameField.setPromptText("Enter names of players seperated by comma...");//Prompt text.
+        nameField.setFocusTraversable(false);
+
+        //Setting dimensions.
+        nameField.setPrefWidth(WINDOW_WIDTH/4);
+        nameField.setMaxWidth(WINDOW_WIDTH/4);
+        Font font = Font.font(18);
+
+        //Set alignment so that displays properly.
+        verticalBox.setAlignment(Pos.CENTER);
+        verticalBox.getChildren().add(nameField);
+        Insets inputMargin = new Insets(300, 0, 0, 0); // Top, Right, Bottom, Left
+        StackPane.setMargin(verticalBox, inputMargin);
+        root.getChildren().add(verticalBox);
+
+        //FETCHING NAMES OF PLAYERS FROM THE INPUT AND STORE IN ARRAY
+        ArrayList<String> nameArray = new ArrayList<>();
+        //When enter key is pressed, get names input.
+        nameField.setOnKeyPressed(event -> {
+            if (event.getCode().getName().equals("Enter")) {
+
+                String nameInput = nameField.getText().trim(); //Getting names.
+
+                if (!nameInput.isEmpty()) {
+                    // Add the input text to the ArrayList
+                    nameArray.add(nameInput);
+                    checkNameRequirements(nameArray);
+                }
+            }
+        });
+
     }
     public Group gameBasicsDisplay(){
 
