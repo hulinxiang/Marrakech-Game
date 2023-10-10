@@ -168,10 +168,10 @@ public class Game extends Application {
         root.getChildren().add(viewSky);
     }
 
-    /**
-     * Creates javaFx graphics for the start 'Welcome to Marrakech' screen.
-     */
 
+    /**
+     * This method specifies the graphics of the first screen and allows users to specify the number of players.
+     */
     public void startScreen(){
         //ADDING WELCOME TEXT
         Text welcomeText = new Text();
@@ -265,30 +265,47 @@ public class Game extends Application {
     }
 
     /**
-     * Checks that names entered are correct.
+     * Checks that names entered on the player screen is correct.
+     * @param nameArray array of names entered into the text field (generated from splitting string input at comma).
+     * @param nameField textField that takes name input, parsed so that it may be disabled.
+     * @param instructionText instruction text that changes depending on whether input correct or not.
      */
-    public void checkNameRequirements(ArrayList<String> nameArray){
+
+    public void assignOrder(ArrayList<String> nameArray){
+        for(int j=0;j<numberPlayers;j++){
+
+        }
+    }
+    public void checkNameRequirements(ArrayList<String> nameArray, TextField nameField, Text instructionText){
         //Checking that names are not repeated, and that number of names match number of players...
         if(nameArray.size() == numberPlayers){
             //Checking that no repeats in set by putting into set and comparing sizes:
             HashSet<String> nameSet = new HashSet<>(nameArray);
 
             if(nameSet.size() != nameArray.size()){ //Less elements in the set means there are duplicates in the array
-                System.out.println("Duplicates");
+                //System.out.println("Duplicates");
+                instructionText.setText("No duplicate names allowed...");
             }
             else{
-                System.out.println("Correct");
+                //System.out.println("Correct");
+                nameField.setEditable(false); //Disable the textfield if correct input received
+                instructionText.setText("Great! Your order and colours are assigned below.");
+                assignOrder(nameArray); //Assign order of play.
             }
 
         }
         else{
-            System.out.println(nameArray);
-            System.out.println(numberPlayers);
-            System.out.println(nameArray.size());
-            System.out.println("Not same size.");
+            //System.out.println("Not same size.");
+            instructionText.setText("Number of names must match number of players");
         }
 
     }
+
+    /**
+     * PLAYER SCREEN GRAPHICS.
+     * This method creates the graphics for the screen following the welcome screen.
+     * Allows users to specify the names of the players.
+     */
     public void playerScreen(){
 
         //Setting up player section.
@@ -329,21 +346,34 @@ public class Game extends Application {
         root.getChildren().add(textStore);
 
         //SETTING UP TEXT FIELD TO INPUT NAMES.
-        VBox verticalBox = new VBox(); //VBox to vertically align input with Player text.
+        VBox verticalBox = new VBox(12); //VBox to vertically align input with Player text.
+
+        //Add instruction text and style it.
+        Text instructionText = new Text();
+        instructionText.setText("What are the names of the players?");
+        verticalBox.getChildren().add(instructionText);
+        Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
+        instructionText.setFont(moroccanFont);
+        instructionText.setFill(Color.web("#ffffff"));
+
+        //Text field itself.
         TextField nameField = new TextField();//Names of player input prompt - textfield.
-        nameField.setPromptText("Enter names of players seperated by comma...");//Prompt text.
+        nameField.setPromptText("Enter names seperated by comma... e.g. bob,jane");//Prompt text.
         nameField.setFocusTraversable(false);
 
-        //Setting dimensions.
-        nameField.setPrefWidth(WINDOW_WIDTH/4);
-        nameField.setMaxWidth(WINDOW_WIDTH/4);
-        Font font = Font.font(18);
+        //Setting dimensions and font
+        nameField.setPrefWidth(WINDOW_WIDTH/2.6);
+        nameField.setMaxWidth(WINDOW_WIDTH/2.6);
+        Font fieldFont = new Font("Arial", 16);
+        nameField.setFont(fieldFont);
 
         //Set alignment so that displays properly.
         verticalBox.setAlignment(Pos.CENTER);
         verticalBox.getChildren().add(nameField);
-        Insets inputMargin = new Insets(300, 0, 0, 0); // Top, Right, Bottom, Left
+        Insets inputMargin = new Insets(-200, 0, 0, 0); // Top, Right, Bottom, Left
         StackPane.setMargin(verticalBox, inputMargin);
+
+
         root.getChildren().add(verticalBox);
 
         //FETCHING NAMES OF PLAYERS FROM THE INPUT AND STORE IN ARRAY
@@ -352,15 +382,21 @@ public class Game extends Application {
         nameField.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Enter")) {
 
-                String nameInput = nameField.getText().trim(); //Getting names.
+                nameArray.clear(); //Must clear array so that it contains the current input only.
+                String nameInput = nameField.getText(); //Getting names input.
 
                 if (!nameInput.isEmpty()) {
-                    // Add the input text to the ArrayList
-                    nameArray.add(nameInput);
-                    checkNameRequirements(nameArray);
+                    // Add the input text to the ArrayList - delineated at comma.
+                    String[] names = nameInput.split(",");
+                    for (String name: names) {
+                        nameArray.add(name);
+                    }
+                    checkNameRequirements(nameArray, nameField, instructionText); //Checking that valid names entered.
                 }
             }
         });
+
+
 
     }
     public Group gameBasicsDisplay(){
