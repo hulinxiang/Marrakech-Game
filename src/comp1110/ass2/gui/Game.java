@@ -264,18 +264,19 @@ public class Game extends Application {
 
     }
 
-    /**
-     * Checks that names entered on the player screen is correct.
-     * @param nameArray array of names entered into the text field (generated from splitting string input at comma).
-     * @param nameField textField that takes name input, parsed so that it may be disabled.
-     * @param instructionText instruction text that changes depending on whether input correct or not.
-     */
 
     public void assignOrder(ArrayList<String> nameArray){
         for(int j=0;j<numberPlayers;j++){
 
         }
     }
+
+    /**
+     * Checks that names entered on the player screen is correct.
+     * @param nameArray array of names entered into the text field (generated from splitting string input at comma).
+     * @param nameField textField that takes name input, parsed so that it may be disabled.
+     * @param instructionText instruction text that changes depending on whether input correct or not.
+     */
     public void checkNameRequirements(ArrayList<String> nameArray, TextField nameField, Text instructionText){
         //Checking that names are not repeated, and that number of names match number of players...
         if(nameArray.size() == numberPlayers){
