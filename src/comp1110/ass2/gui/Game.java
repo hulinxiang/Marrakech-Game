@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.Marrakech;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,6 +53,7 @@ public class Game extends Application {
     //Purple, Cyan-Green, Yellow, Red-Pink
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"}; //String of colour codes for players.
 
+    Text messageText = new Text(); //Global since dplayed throughout the game.
     public static void generatePlayerScene(){
     }
 
@@ -331,16 +334,28 @@ public class Game extends Application {
             }
             else{
                 //System.out.println("Correct");
-                nameField.setEditable(false); //Disable the textfield if correct input received
-                instructionText.setText("Press ENTER to start the game!");
-                assignOrder(); //Assign order of play.
-
-                //If enter is pressed game screen will appear.
-                nameField.setOnKeyPressed(event -> {
-                    if (event.getCode().getName().equals("Enter")) {
-                        changeSceneBoard(); //Changes scene to board display
+                boolean proceed = true;
+                for(int i=0; i<numberPlayers;i++){
+                    if(nameArray.get(i)==""){ //Check that each name at least 1 character long
+                        proceed = false;
                     }
-                });
+                }
+
+                if(proceed){ //If proceed is true then can go to next stage of game.
+                    nameField.setEditable(false); //Disable the textfield if correct input received
+                    instructionText.setText("Press ENTER to start the game!");
+                    assignOrder(); //Assign order of play.
+
+                    //If enter is pressed game screen will appear.
+                    nameField.setOnKeyPressed(event -> {
+                        if (event.getCode().getName().equals("Enter")) {
+                            changeSceneBoard(); //Changes scene to board display
+                        }
+                    });
+                }
+                else{
+                    instructionText.setText("Names must be minimum one character.");
+                }
             }
 
         }
@@ -449,6 +464,9 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Displays the names of the players at the top of the main screen.
+     */
     public void namesDisplay(){
         //Setting up player section.
         HBox namesStore = new HBox(100);
@@ -498,9 +516,87 @@ public class Game extends Application {
 
 
     }
-    public Group gameBasicsDisplay(){
+
+    /**
+     * Sets the instruction for the messageText to display.
+     * @param instructionString String to be displayed.
+     */
+    public void setMessage(String instructionString){
+        messageText.setText(instructionString);
+    }
+
+    /**
+     * Displays the instruction message which is altered throughout the game depending on game state.
+     */
+    public void messageDisplay(){
+        //Display the messageText (global variable)
+        messageText.setText("Let us begin!");
+        Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
+        messageText.setFont(moroccanFont);
+        messageText.setFill(Color.web("#ffffff"));
+        messageText.setWrappingWidth(WINDOW_WIDTH/6); // Set the wrapping width
+        //Create vBox to ensure proper alignment
+        VBox messageBox = new VBox(); //Container to display the text
+        messageBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
+        messageBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        messageBox.getChildren().add(messageText);
+        messageBox.setAlignment(Pos.CENTER_LEFT);
+
+        //Adding the messageBox to the root.
+        StackPane.setAlignment(messageBox, Pos.CENTER_RIGHT);
+        root.getChildren().add(messageBox);
+    }
+
+    /**
+     * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
+     */
+    public void diceDisplay(){
+        //CREATING DICE BUTTON
+        VBox diceBox = new VBox(); //Container to display dice button
+        Button diceButton = new Button("ROLL");
+        //Setting the style of the start button.
+        diceButton.setStyle(
+                "-fx-font-size: 15px;" +                    //Font size
+                "-fx-text-fill: white;" +                   //Text color
+                "-fx-background-color: #f8a102;"            //Yellow background color
+        );
+
+        //SETTING SIZE OF BUTTON
+        double buttonSize = 60; // Set the size of the square button
+        diceButton.setPrefWidth(buttonSize);
+        diceButton.setPrefHeight(buttonSize);
+
+        diceBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
+        diceBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        diceBox.getChildren().add(diceButton);
+        diceBox.setAlignment(Pos.CENTER_RIGHT);
+
+        StackPane.setAlignment(diceBox, Pos.CENTER_LEFT);
+        root.getChildren().add(diceBox);
+
+        //Setting up event handler for when button is clicked:
+        diceButton.setOnAction(event -> {
+            int rolledNumber = Marrakech.rollDie(); //Roll the dice.
+            String textInstructions= "";
+            if(rolledNumber==1){
+                textInstructions = "Asam has moved " + rolledNumber + " step.";
+            }
+            else{
+                textInstructions = "Asam has moved " + rolledNumber + " steps.";
+            }
+            setMessage(textInstructions);
+        });
+
+
+    }
+
+
+    public Group gameBoardDisplay(){
 
         namesDisplay(); //Display names of players
+        diceDisplay(); //Display the button to serve as the dice.
+        messageDisplay(); //Display the introduction message.
+
         Group group = new Group();
         final int DRAW_START_X =100; //Where to start 'drawing'
         final int DRAW_START_Y=100;
@@ -580,7 +676,7 @@ public class Game extends Application {
     private void changeSceneBoard() {
         // Clear the screen by removing all child nodes from the root layout container
         root.getChildren().clear();
-        Group group = gameBasicsDisplay();
+        Group group = gameBoardDisplay();
         root.getChildren().add(group);
     }
 
