@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -54,8 +55,7 @@ public class Game extends Application {
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"}; //String of colour codes for players.
 
     Text messageText = new Text(); //Global since dplayed throughout the game.
-    public static void generatePlayerScene(){
-    }
+    AsamSymbol asam = new AsamSymbol(0, 0); //Global asam variable, called in different methods.
 
 
     /**
@@ -155,6 +155,33 @@ public class Game extends Application {
 
     }
 
+    public class AsamSymbol extends Polygon {
+        //Polygon triangle = new Polygon();
+        double x;
+        double y;
+        double side = SQUARE_WIDTH;
+        AsamSymbol(double x, double y){
+            super();
+            this.x = x;
+            this.y = y;
+
+            this.getPoints().addAll(
+                    0.0,-sqrtSide,
+                    halfSide, sqrtSide,
+                    -halfSide, sqrtSide
+            );
+
+            this.setStroke(Color.web("#603300"));
+            this.setFill(Color.web("#0099ff"));
+
+            this.setLayoutX(this.x);
+            this.setLayoutY(this.y);
+        }
+
+        double halfSide = SQUARE_WIDTH / 2.0;
+        double sqrtSide = Math.sqrt(Math.pow(SQUARE_WIDTH, 2) - Math.pow(halfSide, 2))/2.0;
+
+    }
 
     /**
      * Adds city image that is used in some scenes.
@@ -591,6 +618,18 @@ public class Game extends Application {
     }
 
 
+    public void asamDisplay(){
+        root.getChildren().add(asam);
+    }
+
+    /**
+     *Rotates asam 90 degrees left or right from its current rotation
+     * @param factor An integer either 1 (rotate clockwise) or -1 (rotate counter-clockwise).
+     */
+    public void asamRotate(int factor){
+        asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
+
+    }
     public Group gameBoardDisplay(){
 
         namesDisplay(); //Display names of players
@@ -655,10 +694,10 @@ public class Game extends Application {
 
         }
         backgroundCity();
-
         return group;
 
     }
+
 
 
     /**
@@ -678,7 +717,9 @@ public class Game extends Application {
         root.getChildren().clear();
         Group group = gameBoardDisplay();
         root.getChildren().add(group);
+        asamDisplay();
     }
+
 
     @Override
     public void start(Stage stage) throws Exception {
