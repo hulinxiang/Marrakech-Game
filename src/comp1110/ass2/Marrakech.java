@@ -90,15 +90,8 @@ public class Marrakech {
 
     public Marrakech(String gameString) {
         int indexAsam = gameString.indexOf("A");//Position of Assam string
-        int indexBoard = gameString.indexOf("B");
-
-        //Check the correct format of Assam string
-        if (indexAsam == -1) {
-            throw new RuntimeException("Invalid Game String Format");
-        }
-
-        assamString = gameString.substring(indexAsam + 1, indexBoard);
-        boardString = gameString.substring(indexAsam + 5);
+        assamString = decodeAssamString(gameString);
+        boardString = decodeBoardString(gameString);
 
         //CREATING OBJECT PLAYERS:
         numberPlayers = indexAsam / PLAYER_STRING_LENGTH; //Number of players in the game.
@@ -122,6 +115,67 @@ public class Marrakech {
         board.tiles = makeTiles(boardString);
 
 
+    }
+
+    /**
+     * Method for decode assam string from game string
+     *
+     * @param gameString
+     * @return assam string
+     */
+    public static String decodeAssamString(String gameString) {
+        int indexAsam = gameString.indexOf("A");//Position of Assam string
+        int indexBoard = gameString.indexOf("B");
+        if (indexAsam == -1) {
+            throw new RuntimeException("Invalid Game String Format");
+        }
+        return gameString.substring(indexAsam + 1, indexBoard);
+    }
+
+    /**
+     * Method for decode boardString from game string
+     *
+     * @param gameString
+     * @return board string
+     */
+    public static String decodeBoardString(String gameString) {
+        int indexAsam = gameString.indexOf("A");//Position of Assam string
+        return gameString.substring(indexAsam + 5);
+    }
+
+    /**
+     * Method for returning the x position of assam
+     *
+     * @param assamString
+     * @return x position
+     */
+    public static int getAssamPositionX(String assamString) {
+        return Integer.parseInt(assamString.substring(0, 1));
+    }
+
+    /**
+     * Method for returning the y position of assam
+     *
+     * @param assamString
+     * @return y position
+     */
+    public static int getAssamPositionY(String assamString) {
+        return Integer.parseInt(assamString.substring(1, 2));
+    }
+
+    /**
+     * A method for decoding rug string
+     *
+     * @param rugString
+     * @return IntPair of two squares of the rug
+     */
+    public static IntPair[] decodeRugString(String rugString) {
+        IntPair[] ans = new IntPair[2];
+        ans[0] = new IntPair(Integer.parseInt(rugString.substring(3, 4)),
+                Integer.parseInt(rugString.substring(4, 5)));
+        ans[1] = new IntPair(Integer.parseInt(rugString.substring(5, 6)),
+                Integer.parseInt(rugString.substring(6, 7)));
+        return ans;
     }
 
     /**
@@ -248,40 +302,41 @@ public class Marrakech {
             return false;
         }
         //Check if it is out of bound
-        if(firstSquareX>6||firstSquareY>6||secondSquareX>6||secondSquareY>6){
+        if (firstSquareX > 6 || firstSquareY > 6 || secondSquareX > 6 || secondSquareY > 6) {
             return false;
         }
         //possibleColour is an ArrayList that contains possible colour
-        ArrayList<String> possibleColour=new ArrayList<>();
+        ArrayList<String> possibleColour = new ArrayList<>();
         possibleColour.add("c");
         possibleColour.add("y");
         possibleColour.add("p");
         possibleColour.add("r");
-        String colour=rug.substring(0,1);
+        String colour = rug.substring(0, 1);
         //Check if the colour of the rug is valid
-        if(!possibleColour.contains(colour)){
+        if (!possibleColour.contains(colour)) {
             return false;
         }
         //Check if have the same id and colour for the first square
-        String str=rug.substring(0,3);
-        ArrayList<String> splitedRugStrings =splitBoardString(gameString);
+        String str = rug.substring(0, 3);
+        ArrayList<String> splitedRugStrings = splitBoardString(gameString);
         return !splitedRugStrings.contains(str);
     }
 
     /**
      * It is a method that can help to split gameString into Abbreviated Rug Strings
      * for operations in isRugValid method
+     *
      * @param gameString the String needs to be split
      * @return an ArrayList that contains these Abbreviated Rug Strings
      */
-    public static ArrayList<String> splitBoardString(String gameString){
-        int boardIndex=gameString.indexOf("B");
-        String boardString=gameString.substring(boardIndex+1);
-        ArrayList<String> ans=new ArrayList<>();
+    public static ArrayList<String> splitBoardString(String gameString) {
+        int boardIndex = gameString.indexOf("B");
+        String boardString = gameString.substring(boardIndex + 1);
+        ArrayList<String> ans = new ArrayList<>();
         //Split the gameString three by three
         //we can obtain the Abbreviated Rug Strings of each tile
-        for(int i=0;i<boardString.length();i+=3){
-            ans.add(boardString.substring(i,i+3));
+        for (int i = 0; i < boardString.length(); i += 3) {
+            ans.add(boardString.substring(i, i + 3));
         }
         return ans;
     }
@@ -371,9 +426,58 @@ public class Marrakech {
      * @return true if the placement is valid, and false otherwise.
      */
     public static boolean isPlacementValid(String gameState, String rug) {
+        isRugValid(gameState, rug);
         // FIXME: Task 10
-        return false;
+        int assamX = getAssamPositionX(decodeAssamString(gameState));
+        int assamY = getAssamPositionY(decodeAssamString(gameState));
+        IntPair[] rugPosition = decodeRugString(rug);
+        //Check situation 1. A new rug must have one edge adjacent to Assam
+        if (!ifConnectedAssam(rugPosition[0].getX(), rugPosition[0].getY(), rugPosition[1].getX(), rugPosition[1].getY(), assamX, assamY)) {
+            return false;
+        }
+        ;
+        //Check situation 2.  A new rug must not completely cover another rug.
+        //Get the position of information about the original rug.
+        //If the original rug strings share the same color and id, return false.(Except that they are both "n00")
+        List<String> splitedRugStrings = splitBoardString(gameState);
+        int indexOfFirst = (7 * rugPosition[0].getX()) + rugPosition[0].getY();
+        int indexOfSecond = (7 * rugPosition[1].getX()) + rugPosition[1].getY();
+        if (splitedRugStrings.get(indexOfFirst).equals(splitedRugStrings.get(indexOfSecond))) {
+            if ("n00".equals(splitedRugStrings.get(indexOfFirst))) {
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
+
+    /**
+     * Method for checking if a square of the rug is connected to assam
+     *
+     * @param x1     the x position of the first square
+     * @param y1     the y position of the first square
+     * @param x2     the x position of the second square
+     * @param y2     the y position of the second square
+     * @param assamX the x position of assam
+     * @param assamY the y position of assam
+     * @return true if connected; else, return false;
+     */
+    public static boolean ifConnectedAssam(int x1, int y1, int x2, int y2, int assamX, int assamY) {
+        //first square cannot overlap the asam
+        if (x1 == assamX && y1 == assamY) {
+            return false;
+        }
+        //second square cannot overlap the asam
+        if( x2 == assamX && y2 == assamY){
+            return false;
+        }
+        //check if connected
+        else if (x1 != assamX && x2 != assamX &&  y1 != assamY && y2 != assamY) {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Determine the amount of payment required should another player land on a square.
