@@ -417,6 +417,13 @@ public class Marrakech {
      * rotation is illegal.
      */
     public static String rotateAssam(String currentAssam, int rotation) {
+        Merchant merchant = new Merchant();
+        if (rotation != 90|| rotation != 0|| rotation != -90){
+           return currentAssam;
+        }
+        if (rotation==90){
+        }
+
         // FIXME: Task 9
         return "";
     }
