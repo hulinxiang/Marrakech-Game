@@ -391,8 +391,8 @@ public class Marrakech {
      */
     public static boolean isGameOver(String currentGame) {
         System.out.println("CurrentGame:" + currentGame);
-        for(int i =0;i<4; i++){
-            int startIndex = i*8;
+        for(int player =0;player<4; player++){
+            int startIndex = player*8;
             if (currentGame.charAt(startIndex+7)== 'i' && (currentGame.charAt(startIndex + 5) !='0'
             || currentGame.charAt(startIndex+6)!='0') ){
                 return false;
