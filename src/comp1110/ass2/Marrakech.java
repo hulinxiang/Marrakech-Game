@@ -99,7 +99,7 @@ public class Marrakech {
         players = new Player[numberPlayers];
         for (int i = 0; i < numberPlayers; i++) {
             players[i] = new Player();
-            players[i].decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
+            players[i] = Player.decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
         }
 
         //CREATING ASAM
@@ -390,7 +390,6 @@ public class Marrakech {
      * @return true if the game is over, or false otherwise.
      */
     public static boolean isGameOver(String currentGame) {
-        System.out.println("CurrentGame:" + currentGame);
         for(int player =0;player<4; player++){
             int startIndex = player*8;
             if (currentGame.charAt(startIndex+7)== 'i' && (currentGame.charAt(startIndex + 5) !='0'
@@ -486,11 +485,11 @@ public class Marrakech {
             return false;
         }
         //second square cannot overlap the asam
-        if( x2 == assamX && y2 == assamY){
+        if (x2 == assamX && y2 == assamY) {
             return false;
         }
         //check if connected
-        else if (x1 != assamX && x2 != assamX &&  y1 != assamY && y2 != assamY) {
+        else if (x1 != assamX && x2 != assamX && y1 != assamY && y2 != assamY) {
             return false;
         }
         return true;
@@ -530,8 +529,204 @@ public class Marrakech {
      */
     public static char getWinner(String gameState) {
         // FIXME: Task 12
-        return '\0';
+        //If the game is not over
+        if (!ifGameOver(gameState)) {
+            return 'n';
+        } else {
+            return calWinner(gameState);
+        }
     }
+
+    /**
+     * Method for checking if the game is over
+     *
+     * @param gameState String for denoting the game state
+     * @return true, if the game is over; false, if the game is not over
+     */
+    public static boolean ifGameOver(String gameState) {
+        Marrakech marrakech = new Marrakech(gameState);
+        int num = marrakech.numberPlayers;
+        //The array to denote the state of every player
+        //1: in the game;0: out of game
+        Integer[] playerState = new Integer[num];
+        Arrays.fill(playerState, 1);
+        //Condition 1: check game state of every player
+        for (int i = 0; i < num; i++) {
+            //playerState==-1 denotes that he is out of game
+            if (marrakech.players[i].playerState == -1) {
+                playerState[i] = 0;
+            }
+        }
+        //Condition 2: Check if he is out of rugs
+        for (int i = 0; i < num; i++) {
+            //rugs denote the rugs that one player have
+            if (marrakech.players[i].rugs == 0) {
+                playerState[i] = 0;
+            }
+        }
+        //Check the number of players out of game
+        int count = 0;
+        for (Integer i : playerState) {
+            if (i == 0) {
+                count++;
+            }
+        }
+        if (count == num) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * A method to calculate the game winner according to the game string if the game is over
+     *
+     * @param gameState the string to denote the game state
+     * @return winner's colour;If tied, return 't';
+     */
+    public static char calWinner(String gameState) {
+        Marrakech marrakech = new Marrakech(gameState);
+        //A hashmap to denote the play's colour and his coins
+        HashMap<Character, Integer> coins = new HashMap<>();
+        for (Player p : marrakech.players) {
+            coins.put(p.colour.charAt(0), p.coins);
+        }
+        //A hashmap to denote the play's colour and his dirhams
+        HashMap<Character, Integer> dirhams = calDirhams(splitBoardString(gameState));
+        //A hashmap to denote the play's colour and his property(coins+dirhams)
+        HashMap<Character, Integer> scores = new HashMap<>();
+        for (Map.Entry<Character, Integer> entry : dirhams.entrySet()) {
+            scores.put(entry.getKey(), coins.get(entry.getKey()) + dirhams.get(entry.getKey()));
+        }
+        //If a player is out of game, the score he has will not take into account.
+        for (int i = 0; i < marrakech.numberPlayers; i++) {
+            //If he is out of game
+            if (marrakech.players[i].playerState == -1) {
+                scores.remove(marrakech.players[i].colour.charAt(0));
+                dirhams.remove(marrakech.players[i].colour.charAt(0));
+            }
+        }
+        //The variable to denote if there is a tied situation that all scores are same.
+        boolean tied = false;
+        //The score is the highest scores that one player has
+        int score = Integer.MIN_VALUE;
+        for (int i = 0; i < scores.values().size(); i++) {
+            if (getValueFromHashSet(scores, i) > score) {
+                score = getValueFromHashSet(scores, i);
+                tied = false;
+            } else if (getValueFromHashSet(scores, i) == score) {
+                tied = true;
+            }
+        }
+        if (tied) {
+            StringBuilder palyersWithSameScores = new StringBuilder();
+            //Get the colour the players with same total scores
+            for (int i = 0; i < scores.size(); i++) {
+                if (getValueFromHashSet(scores, i) == score) {
+                    palyersWithSameScores.append(getKeyFromHashSet(scores, i));
+                }
+            }
+            //Check if players with same scores have different dirhams
+            boolean differentDirhams = false;
+            //Make the default dirhamsNum be the number of dirhams that the first player among the players with same total scores has
+            int dirhamNum = dirhams.get(palyersWithSameScores.charAt(0));
+            for (int i = 1; i < palyersWithSameScores.length(); i++) {
+                if (dirhams.get(palyersWithSameScores.charAt(i)) > dirhamNum) {
+                    differentDirhams = false;
+                    dirhamNum = dirhams.get(palyersWithSameScores.charAt(i));
+                } else if(dirhams.get(palyersWithSameScores.charAt(i)) == dirhamNum){
+                    differentDirhams = true;
+                }
+            }
+            if (!differentDirhams) {
+                return getKeyByValue(dirhams, dirhamNum);
+            } else {
+                return 't';
+            }
+        }
+        return getKeyByValue(scores, score);
+
+    }
+
+    /**
+     * A method for calculating the dirhams on the board
+     *
+     * @param splitedBoardString ArrayList with the collection of all abbreviated rugs strings
+     * @return HashMap, keys are colour of players and integers are number of their dirhams on the board
+     */
+    public static HashMap<Character, Integer> calDirhams(ArrayList<String> splitedBoardString) {
+        //var is used to collect all chars that denotes colours
+        StringBuilder var = new StringBuilder();
+        //Character is the colour of one player
+        //Integer is the number of dirhams the one has
+        HashMap<Character, Integer> ans = new HashMap<>();
+        for (String s : splitedBoardString) {
+            var.append(s.charAt(0));
+        }
+        for (int i = 0; i < var.length(); i++) {
+            char dirham = var.charAt(i);
+            if (dirham == 'n') {
+                continue;
+            }
+            //If this is a new colour
+            if (!ans.containsKey(dirham)) {
+                ans.put(dirham, 1);
+            } else {
+                //Update HashMap
+                ans.replace(dirham, ans.get(dirham) + 1);
+            }
+        }
+        return ans;
+
+    }
+
+    /**
+     * A method for returning a key according to value in hashmap
+     *
+     * @param map   a hash map
+     * @param value a value in hashmap
+     * @return key
+     */
+    public static Character getKeyByValue(HashMap<Character, Integer> map, Integer value) {
+        for(int i=0;i<map.size();i++){
+            if(getValueFromHashSet(map, i).equals(value)){
+                return getKeyFromHashSet(map,i);
+            }
+        }
+        throw new RuntimeException("The score is invalid");
+    }
+
+    /**
+     * A method for getting ith value in the value set
+     *
+     * @param map the hashMap
+     * @param i   the index of the value we want
+     * @return ith value in the value set of map
+     */
+    public static Integer getValueFromHashSet(HashMap<Character, Integer> map, int i) {
+        Integer val = 0;
+        ArrayList<Integer> values = new ArrayList<>(map.values());
+        for (int j = 0; j <= i; j++) {
+            val = values.get(j);
+        }
+        return val;
+    }
+
+    /**
+     * A method for getting ith value in the key set
+     *
+     * @param map the hashMap
+     * @param i   the index of the key we want
+     * @return ith value in the key set of map
+     */
+    public static Character getKeyFromHashSet(HashMap<Character, Integer> map, int i) {
+        Character val = '0';
+        ArrayList<Character> keys = new ArrayList<>(map.keySet());
+        for (int j = 0; j <= i; j++) {
+            val = keys.get(j);
+        }
+        return val;
+    }
+
 
     /**
      * Implement Assam's movement.
