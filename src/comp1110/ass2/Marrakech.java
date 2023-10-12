@@ -390,10 +390,10 @@ public class Marrakech {
      * @return true if the game is over, or false otherwise.
      */
     public static boolean isGameOver(String currentGame) {
-        for(int player =0;player<4; player++){
-            int startIndex = player*8;
-            if (currentGame.charAt(startIndex+7)== 'i' && (currentGame.charAt(startIndex + 5) !='0'
-            || currentGame.charAt(startIndex+6)!='0') ){
+        for (int player = 0; player < 4; player++) {
+            int startIndex = player * 8;
+            if (currentGame.charAt(startIndex + 7) == 'i' && (currentGame.charAt(startIndex + 5) != '0'
+                    || currentGame.charAt(startIndex + 6) != '0')) {
                 return false;
             }
         }
@@ -417,10 +417,10 @@ public class Marrakech {
      */
     public static String rotateAssam(String currentAssam, int rotation) {
         Merchant merchant = new Merchant();
-        if (rotation != 1|| rotation != 0|| rotation != -1){
-          return currentAssam;
+        if (rotation != 1 || rotation != 0 || rotation != -1) {
+            return currentAssam;
         }
-        if (rotation==1){
+        if (rotation == 1) {
             merchant.Rotate(1);
         } else if (rotation == 3) {
             merchant.Rotate(3);
@@ -457,8 +457,8 @@ public class Marrakech {
         //Get the position of information about the original rug.
         //If the original rug strings share the same color and id, return false.(Except that they are both "n00")
         List<String> splitedRugStrings = splitBoardString(gameState);
-        int indexOfFirst = (7 * rugPosition[0].getX()) + rugPosition[0].getY();
-        int indexOfSecond = (7 * rugPosition[1].getX()) + rugPosition[1].getY();
+        int indexOfFirst = getPositionFromCoordinates(rugPosition[0].getX(), rugPosition[0].getY());
+        int indexOfSecond = getPositionFromCoordinates(rugPosition[1].getX(), rugPosition[1].getY());
         if (splitedRugStrings.get(indexOfFirst).equals(splitedRugStrings.get(indexOfSecond))) {
             if ("n00".equals(splitedRugStrings.get(indexOfFirst))) {
                 return true;
@@ -466,6 +466,17 @@ public class Marrakech {
             return false;
         }
         return true;
+    }
+
+    /**
+     * A method for convert the coordinates of a tile into the index in the BoardString
+     *
+     * @param x coordinate x of the tile
+     * @param y coordinate y of the tile
+     * @return the index
+     */
+    public static int getPositionFromCoordinates(int x, int y) {
+        return 7 * x + y;
     }
 
     /**
@@ -586,22 +597,23 @@ public class Marrakech {
     public static char calWinner(String gameState) {
         Marrakech marrakech = new Marrakech(gameState);
         //A hashmap to denote the play's colour and his coins
-        HashMap<Character, Integer> coins = new HashMap<>();
+        HashMap<Character, Integer> dirhams = new HashMap<>();
         for (Player p : marrakech.players) {
-            coins.put(p.colour.charAt(0), p.coins);
+            dirhams.put(p.colour.charAt(0), p.coins);
         }
-        //A hashmap to denote the play's colour and his dirhams
-        HashMap<Character, Integer> dirhams = calDirhams(splitBoardString(gameState));
+        //A hashmap to denote the play's colour and his squares
+        HashMap<Character, Integer> squares = calDirhams(splitBoardString(gameState));
         //A hashmap to denote the play's colour and his property(coins+dirhams)
         HashMap<Character, Integer> scores = new HashMap<>();
-        for (Map.Entry<Character, Integer> entry : dirhams.entrySet()) {
-            scores.put(entry.getKey(), coins.get(entry.getKey()) + dirhams.get(entry.getKey()));
+        for (Map.Entry<Character, Integer> entry : squares.entrySet()) {
+            scores.put(entry.getKey(), dirhams.get(entry.getKey()) + squares.get(entry.getKey()));
         }
         //If a player is out of game, the score he has will not take into account.
         for (int i = 0; i < marrakech.numberPlayers; i++) {
             //If he is out of game
             if (marrakech.players[i].playerState == -1) {
                 scores.remove(marrakech.players[i].colour.charAt(0));
+                squares.remove(marrakech.players[i].colour.charAt(0));
                 dirhams.remove(marrakech.players[i].colour.charAt(0));
             }
         }
@@ -632,13 +644,13 @@ public class Marrakech {
             for (int i = 1; i < palyersWithSameScores.length(); i++) {
                 if (dirhams.get(palyersWithSameScores.charAt(i)) > dirhamNum) {
                     differentDirhams = false;
-                    dirhamNum = dirhams.get(palyersWithSameScores.charAt(i));
-                } else if(dirhams.get(palyersWithSameScores.charAt(i)) == dirhamNum){
+                    dirhamNum = squares.get(palyersWithSameScores.charAt(i));
+                } else if (dirhams.get(palyersWithSameScores.charAt(i)) == dirhamNum) {
                     differentDirhams = true;
                 }
             }
             if (!differentDirhams) {
-                return getKeyByValue(dirhams, dirhamNum);
+                return getKeyByValue(squares, dirhamNum);
             } else {
                 return 't';
             }
@@ -687,9 +699,9 @@ public class Marrakech {
      * @return key
      */
     public static Character getKeyByValue(HashMap<Character, Integer> map, Integer value) {
-        for(int i=0;i<map.size();i++){
-            if(getValueFromHashSet(map, i).equals(value)){
-                return getKeyFromHashSet(map,i);
+        for (int i = 0; i < map.size(); i++) {
+            if (getValueFromHashSet(map, i).equals(value)) {
+                return getKeyFromHashSet(map, i);
             }
         }
         throw new RuntimeException("The score is invalid");
