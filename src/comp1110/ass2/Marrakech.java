@@ -418,13 +418,13 @@ public class Marrakech {
      */
     public static String rotateAssam(String currentAssam, int rotation) {
         Merchant merchant = new Merchant();
-        if (rotation != 90|| rotation != 0|| rotation != -90){
+        if (rotation != 1|| rotation != 0|| rotation != -1){
           return currentAssam;
         }
-        if (rotation==90){
-            merchant.Rotate(90);
-        } else if (rotation == 270) {
-            merchant.Rotate(270);
+        if (rotation==1){
+            merchant.Rotate(1);
+        } else if (rotation == 3) {
+            merchant.Rotate(3);
         }
 
         // FIXME: Task 9

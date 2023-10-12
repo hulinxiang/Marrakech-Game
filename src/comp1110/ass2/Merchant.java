@@ -84,36 +84,36 @@ public class Merchant {
     rotateValue: -1 = left rotation, 0 = no rotation, 1 = right rotation.
      */
     public enum Direction{NORTH,WEST,SOUTH,EAST}
-    public void Rotate(Direction d, int rotateValue) {
+    public void Rotate(int rotateValue) {
         if (rotateValue == -1){
-            switch (d){
+            switch (this.direction){
                 case NORTH:
-                    d = Direction.WEST;
+                    this.direction = Direction.WEST;
                     break;
                 case WEST:
-                    d = Direction.SOUTH;
+                    this.direction = Direction.SOUTH;
                     break;
                 case EAST:
-                    d = Direction.NORTH;
+                    this.direction = Direction.NORTH;
                     break;
                 case SOUTH:
-                    d = Direction.EAST;
+                    this.direction = Direction.EAST;
                     break;
             }
 
         } else if (rotateValue == 1) {
-            switch (d){
+            switch (this.direction){
                 case NORTH:
-                    d = Direction.EAST;
+                    this.direction = Direction.EAST;
                     break;
                 case WEST:
-                    d = Direction.NORTH;
+                    this.direction = Direction.NORTH;
                     break;
                 case EAST:
-                    d = Direction.SOUTH;
+                    this.direction = Direction.SOUTH;
                     break;
                 case SOUTH:
-                    d = Direction.WEST;
+                    this.direction = Direction.WEST;
                     break;
                 default:
             }
@@ -171,6 +171,13 @@ public class Merchant {
         int differences = Math.abs(currentDirection.ordinal() - intendedDirection.ordinal());
         return differences ==1 || differences == 3;
     }
-
-
+    public String getString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("A");
+        sb.append(getX());
+        sb.append(getY());
+        sb.append(direction);
+        return sb.toString();
+    }
 }
+
