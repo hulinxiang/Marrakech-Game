@@ -390,8 +390,16 @@ public class Marrakech {
      * @return true if the game is over, or false otherwise.
      */
     public static boolean isGameOver(String currentGame) {
+        System.out.println("CurrentGame:" + currentGame);
+        for(int i =0;i<4; i++){
+            int startIndex = i*8;
+            if (currentGame.charAt(startIndex+7)== 'i' && (currentGame.charAt(startIndex + 5) !='0'
+            || currentGame.charAt(startIndex+6)!='0') ){
+                return false;
+            }
+        }
+        return true;
         // FIXME: Task 8
-        return false;
     }
 
     /**

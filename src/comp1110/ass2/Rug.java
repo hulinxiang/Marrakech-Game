@@ -6,7 +6,7 @@ package comp1110.ass2;
 public class Rug { //Maybe useful... which rug has occupied tile?
     //If placed, the rug has an id (integer denoting when the rug was placed).
     int rugID;
-    //Denote the iposition of rug
+    //Denote the in position of rug
     /*
     private final IntPair[] rugPosition;
 

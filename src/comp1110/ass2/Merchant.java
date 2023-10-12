@@ -115,6 +115,7 @@ public class Merchant {
                 case SOUTH:
                     d = Direction.WEST;
                     break;
+                default:
             }
 
         }
@@ -143,6 +144,7 @@ public class Merchant {
             case WEST:
                 x+= steps;
                 break;
+            default:
         }
 
     }
