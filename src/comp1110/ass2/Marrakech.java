@@ -602,7 +602,7 @@ public class Marrakech {
             dirhams.put(p.colour.charAt(0), p.coins);
         }
         //A hashmap to denote the play's colour and his squares
-        HashMap<Character, Integer> squares = calDirhams(splitBoardString(gameState));
+        HashMap<Character, Integer> squares = calSquares(splitBoardString(gameState));
         //A hashmap to denote the play's colour and his property(coins+dirhams)
         HashMap<Character, Integer> scores = new HashMap<>();
         for (Map.Entry<Character, Integer> entry : squares.entrySet()) {
@@ -663,9 +663,9 @@ public class Marrakech {
      * A method for calculating the dirhams on the board
      *
      * @param splitedBoardString ArrayList with the collection of all abbreviated rugs strings
-     * @return HashMap, keys are colour of players and integers are number of their dirhams on the board
+     * @return HashMap, keys are colour of players and integers are number of their squares on the board
      */
-    public static HashMap<Character, Integer> calDirhams(ArrayList<String> splitedBoardString) {
+    public static HashMap<Character, Integer> calSquares(ArrayList<String> splitedBoardString) {
         //var is used to collect all chars that denotes colours
         StringBuilder var = new StringBuilder();
         //Character is the colour of one player
@@ -771,7 +771,111 @@ public class Marrakech {
      */
     public static String makePlacement(String currentGame, String rug) {
         // FIXME: Task 14
-        return "";
+        if (!isRugValid(currentGame, rug)) {
+            return currentGame;
+        }
+        if (!isPlacementValid(currentGame, rug)) {
+            return currentGame;
+        }
+        String playerStrng = decodedPlayerString(currentGame);
+        //decodeAsamString returns a string without 'A'. So add it at head
+        String AssamString = 'A' + decodeAssamString(currentGame);
+        ArrayList<String> splitedBoadString = splitBoardString(currentGame);
+        String rugColourId = rugColourId(rug);
+        int indexOfFirstTile = getFirstTileIndex(rug);
+        int indexOfSecondTile = getSecondTileIndex(rug);
+        //Update PlayerString
+        playerStrng = updatePlayerString(playerStrng, rugColour(rug));
+        //Update BoardString
+        splitedBoadString.set(indexOfFirstTile, rugColourId);
+        splitedBoadString.set(indexOfSecondTile, rugColourId);
+        //splitBoardString returns a ArrayList without 'B'. So add it at head
+        StringBuilder newBoardString = new StringBuilder("B");
+        for (int i = 0; i < splitedBoadString.size(); i++) {
+            newBoardString.append(splitedBoadString.get(i));
+        }
+        //Return new gameString. Because Assam String is unmoved, assamString is same as before
+        return playerStrng + AssamString + newBoardString;
+    }
+
+
+    /**
+     * A method for updating player string
+     *
+     * @param playerString string of all player's strings
+     * @param player       the colour of the playerString that needs updates
+     * @return a new string of all playerStrings
+     */
+    public static String updatePlayerString(String playerString, char player) {
+        int indexOfColour = playerString.indexOf(player);
+        int rugsRemained = Integer.parseInt(playerString.substring(indexOfColour + 4, indexOfColour + 6));
+        //Because the player has placed a rug, the number of remained rugs -1;
+        rugsRemained--;
+        if (rugsRemained < 10) {
+            return playerString.substring(0, indexOfColour + 4) + "0" + rugsRemained + playerString.substring(indexOfColour + 6);
+        }
+        return playerString.substring(0, indexOfColour + 4) + rugsRemained + playerString.substring(indexOfColour + 6);
+
+    }
+
+
+    /**
+     * A method returns rug's colour and Id
+     *
+     * @param rug
+     * @return
+     */
+    public static String rugColourId(String rug) {
+        return rug.substring(0, 3);
+    }
+
+    /**
+     * A method returns rug's colour
+     *
+     * @param rug
+     * @return
+     */
+    public static char rugColour(String rug) {
+        return rug.charAt(0);
+    }
+
+
+    /**
+     * Get all playerStrings from the game string
+     *
+     * @return playerString
+     */
+    public static String decodedPlayerString(String gameString) {
+        int indexA = gameString.indexOf('A');
+        return gameString.substring(0, indexA);
+    }
+
+    /**
+     * A method for getting the first tile position in the boardString using rug string
+     *
+     * @param rug string of a rug
+     * @return index of the first rug in the boardString
+     */
+    public static int getFirstTileIndex(String rug) {
+        //x coordinates
+        int x = Integer.parseInt(rug.substring(3, 4));
+        //y coordinates
+        int y = Integer.parseInt(rug.substring(4, 5));
+        return getPositionFromCoordinates(x, y);
+    }
+
+    /**
+     * A method for getting the second tile position in the boardString using rug string
+     *
+     * @param rug
+     * @return index of the second rug in the boardString
+     */
+    public static int getSecondTileIndex(String rug) {
+        //x coordinates
+        int x = Integer.parseInt(rug.substring(5, 6));
+        //y coordinates
+        int y = Integer.parseInt(rug.substring(6, 7));
+        return getPositionFromCoordinates(x, y);
     }
 
     public static void main(String[] args) {
