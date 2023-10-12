@@ -416,18 +416,38 @@ public class Marrakech {
      * rotation is illegal.
      */
     public static String rotateAssam(String currentAssam, int rotation) {
-        Merchant merchant = new Merchant();
-        if (rotation != 1 || rotation != 0 || rotation != -1) {
+        char assamDirection = getAssamDirection(currentAssam);
+        char newAssamDirection = Merchant.rotate(assamDirection, rotation);
+        // FIXME: Task 9
+        //'i' means "invalid". In the rotate method, return 'i' if the requested rotation is illegal
+        if(newAssamDirection=='i'){
             return currentAssam;
         }
-        if (rotation == 1) {
-            merchant.Rotate(1);
-        } else if (rotation == 3) {
-            merchant.Rotate(3);
-        }
+        return getNewAssamString(currentAssam, newAssamDirection);
+    }
 
-        // FIXME: Task 9
-        return merchant.getString();
+    /**
+     * A method for getting assamDirection according to currentAssam
+     *
+     * @param currentAssam A String representing Assam's current state
+     * @return 'W' if it faces to West
+     * 'E' if it faces to East
+     * 'N' if it faces to North
+     * 'S' if it faces to South
+     */
+    public static char getAssamDirection(String currentAssam) {
+        return currentAssam.charAt(3);
+    }
+
+    /**
+     * A method for getting newAssamDirection if it rotates to a new direction
+     *
+     * @param currentAssam
+     * @param newAssamDirection
+     * @return
+     */
+    public static String getNewAssamString(String currentAssam, char newAssamDirection) {
+        return currentAssam.substring(0, 3) + newAssamDirection;
     }
 
     /**

@@ -58,7 +58,7 @@ public class Viewer extends Application {
     void displayState(String state) {
         Marrakech marrakech = new Marrakech(state);
         IntPair assamPosition = marrakech.asam.getMerchantPosition();
-        Merchant.Direction assamDirection = marrakech.asam.getDirection();
+        Direction assamDirection = marrakech.asam.getDirection();
         //An array which stores the player information
         Player[] players = marrakech.players;
         //Clear all. To have a refresh performance
