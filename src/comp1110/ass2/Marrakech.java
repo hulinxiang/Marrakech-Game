@@ -99,7 +99,7 @@ public class Marrakech {
         players = new Player[numberPlayers];
         for (int i = 0; i < numberPlayers; i++) {
             players[i] = new Player();
-            players[i].decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
+            players[i] = Player.decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
         }
 
         //CREATING ASAM
@@ -390,8 +390,15 @@ public class Marrakech {
      * @return true if the game is over, or false otherwise.
      */
     public static boolean isGameOver(String currentGame) {
+        for (int player = 0; player < 4; player++) {
+            int startIndex = player * 8;
+            if (currentGame.charAt(startIndex + 7) == 'i' && (currentGame.charAt(startIndex + 5) != '0'
+                    || currentGame.charAt(startIndex + 6) != '0')) {
+                return false;
+            }
+        }
+        return true;
         // FIXME: Task 8
-        return false;
     }
 
     /**
@@ -409,8 +416,38 @@ public class Marrakech {
      * rotation is illegal.
      */
     public static String rotateAssam(String currentAssam, int rotation) {
+        char assamDirection = getAssamDirection(currentAssam);
+        char newAssamDirection = Merchant.rotate(assamDirection, rotation);
         // FIXME: Task 9
-        return "";
+        //'i' means "invalid". In the rotate method, return 'i' if the requested rotation is illegal
+        if(newAssamDirection=='i'){
+            return currentAssam;
+        }
+        return getNewAssamString(currentAssam, newAssamDirection);
+    }
+
+    /**
+     * A method for getting assamDirection according to currentAssam
+     *
+     * @param currentAssam A String representing Assam's current state
+     * @return 'W' if it faces to West
+     * 'E' if it faces to East
+     * 'N' if it faces to North
+     * 'S' if it faces to South
+     */
+    public static char getAssamDirection(String currentAssam) {
+        return currentAssam.charAt(3);
+    }
+
+    /**
+     * A method for getting newAssamDirection if it rotates to a new direction
+     *
+     * @param currentAssam
+     * @param newAssamDirection
+     * @return
+     */
+    public static String getNewAssamString(String currentAssam, char newAssamDirection) {
+        return currentAssam.substring(0, 3) + newAssamDirection;
     }
 
     /**
@@ -440,8 +477,8 @@ public class Marrakech {
         //Get the position of information about the original rug.
         //If the original rug strings share the same color and id, return false.(Except that they are both "n00")
         List<String> splitedRugStrings = splitBoardString(gameState);
-        int indexOfFirst = (7 * rugPosition[0].getX()) + rugPosition[0].getY();
-        int indexOfSecond = (7 * rugPosition[1].getX()) + rugPosition[1].getY();
+        int indexOfFirst = getPositionFromCoordinates(rugPosition[0].getX(), rugPosition[0].getY());
+        int indexOfSecond = getPositionFromCoordinates(rugPosition[1].getX(), rugPosition[1].getY());
         if (splitedRugStrings.get(indexOfFirst).equals(splitedRugStrings.get(indexOfSecond))) {
             if ("n00".equals(splitedRugStrings.get(indexOfFirst))) {
                 return true;
@@ -449,6 +486,17 @@ public class Marrakech {
             return false;
         }
         return true;
+    }
+
+    /**
+     * A method for convert the coordinates of a tile into the index in the BoardString
+     *
+     * @param x coordinate x of the tile
+     * @param y coordinate y of the tile
+     * @return the index
+     */
+    public static int getPositionFromCoordinates(int x, int y) {
+        return 7 * x + y;
     }
 
     /**
@@ -468,11 +516,11 @@ public class Marrakech {
             return false;
         }
         //second square cannot overlap the asam
-        if( x2 == assamX && y2 == assamY){
+        if (x2 == assamX && y2 == assamY) {
             return false;
         }
         //check if connected
-        else if (x1 != assamX && x2 != assamX &&  y1 != assamY && y2 != assamY) {
+        else if (x1 != assamX && x2 != assamX && y1 != assamY && y2 != assamY) {
             return false;
         }
         return true;
@@ -491,8 +539,42 @@ public class Marrakech {
      * @return The amount of payment due, as an integer.
      */
     public static int getPaymentAmount(String gameString) {
+        // Parse the gameString to get the board state, Assam's position, etc.
+        Marrakech marrakech = new Marrakech(gameString);
+        Tile[][] tiles = marrakech.board.tiles;
+        IntPair assamPosition = marrakech.asam.getMerchantPosition();
+
+        // Get the color of the rug Assam landed on
+        String landedColor = tiles[assamPosition.getX()][assamPosition.getY()].getColour();
+
+        // If Assam landed on a square without a rug, return 0
+        if (landedColor == null || landedColor.isEmpty()) {
+            return 0;
+        }
+
+        // Use DFS to count the number of connected squares of the same color
+        boolean[][] visited = new boolean[tiles.length][tiles[0].length];
+        int paymentAmount = dfs(assamPosition.getX(), assamPosition.getY(), tiles, visited, landedColor);
+
+        return paymentAmount;
+    }
+
+    private static int dfs(int x, int y, Tile[][] tiles, boolean[][] visited, String color) {
+        if (x < 0 || x >= tiles.length || y < 0 || y >= tiles[0].length || visited[x][y] || !tiles[x][y].getColour().equals(color)) {
+            return 0;
+        }
+
+        visited[x][y] = true;
+
+        int count = 1; // Count the current square
+        count += dfs(x + 1, y, tiles, visited, color); // Right
+        count += dfs(x - 1, y, tiles, visited, color); // Left
+        count += dfs(x, y + 1, tiles, visited, color); // Down
+        count += dfs(x, y - 1, tiles, visited, color); // Up
+
+        return count;
         // FIXME: Task 11
-        return -1;
+
     }
 
     /**
@@ -512,8 +594,205 @@ public class Marrakech {
      */
     public static char getWinner(String gameState) {
         // FIXME: Task 12
-        return '\0';
+        //If the game is not over
+        if (!ifGameOver(gameState)) {
+            return 'n';
+        } else {
+            return calWinner(gameState);
+        }
     }
+
+    /**
+     * Method for checking if the game is over
+     *
+     * @param gameState String for denoting the game state
+     * @return true, if the game is over; false, if the game is not over
+     */
+    public static boolean ifGameOver(String gameState) {
+        Marrakech marrakech = new Marrakech(gameState);
+        int num = marrakech.numberPlayers;
+        //The array to denote the state of every player
+        //1: in the game;0: out of game
+        Integer[] playerState = new Integer[num];
+        Arrays.fill(playerState, 1);
+        //Condition 1: check game state of every player
+        for (int i = 0; i < num; i++) {
+            //playerState==-1 denotes that he is out of game
+            if (marrakech.players[i].playerState == -1) {
+                playerState[i] = 0;
+            }
+        }
+        //Condition 2: Check if he is out of rugs
+        for (int i = 0; i < num; i++) {
+            //rugs denote the rugs that one player have
+            if (marrakech.players[i].rugs == 0) {
+                playerState[i] = 0;
+            }
+        }
+        //Check the number of players out of game
+        int count = 0;
+        for (Integer i : playerState) {
+            if (i == 0) {
+                count++;
+            }
+        }
+        if (count == num) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * A method to calculate the game winner according to the game string if the game is over
+     *
+     * @param gameState the string to denote the game state
+     * @return winner's colour;If tied, return 't';
+     */
+    public static char calWinner(String gameState) {
+        Marrakech marrakech = new Marrakech(gameState);
+        //A hashmap to denote the play's colour and his coins
+        HashMap<Character, Integer> dirhams = new HashMap<>();
+        for (Player p : marrakech.players) {
+            dirhams.put(p.colour.charAt(0), p.coins);
+        }
+        //A hashmap to denote the play's colour and his squares
+        HashMap<Character, Integer> squares = calSquares(splitBoardString(gameState));
+        //A hashmap to denote the play's colour and his property(coins+dirhams)
+        HashMap<Character, Integer> scores = new HashMap<>();
+        for (Map.Entry<Character, Integer> entry : squares.entrySet()) {
+            scores.put(entry.getKey(), dirhams.get(entry.getKey()) + squares.get(entry.getKey()));
+        }
+        //If a player is out of game, the score he has will not take into account.
+        for (int i = 0; i < marrakech.numberPlayers; i++) {
+            //If he is out of game
+            if (marrakech.players[i].playerState == -1) {
+                scores.remove(marrakech.players[i].colour.charAt(0));
+                squares.remove(marrakech.players[i].colour.charAt(0));
+                dirhams.remove(marrakech.players[i].colour.charAt(0));
+            }
+        }
+        //The variable to denote if there is a tied situation that all scores are same.
+        boolean tied = false;
+        //The score is the highest scores that one player has
+        int score = Integer.MIN_VALUE;
+        for (int i = 0; i < scores.values().size(); i++) {
+            if (getValueFromHashSet(scores, i) > score) {
+                score = getValueFromHashSet(scores, i);
+                tied = false;
+            } else if (getValueFromHashSet(scores, i) == score) {
+                tied = true;
+            }
+        }
+        if (tied) {
+            StringBuilder palyersWithSameScores = new StringBuilder();
+            //Get the colour the players with same total scores
+            for (int i = 0; i < scores.size(); i++) {
+                if (getValueFromHashSet(scores, i) == score) {
+                    palyersWithSameScores.append(getKeyFromHashSet(scores, i));
+                }
+            }
+            //Check if players with same scores have different dirhams
+            boolean differentDirhams = false;
+            //Make the default dirhamsNum be the number of dirhams that the first player among the players with same total scores has
+            int dirhamNum = dirhams.get(palyersWithSameScores.charAt(0));
+            for (int i = 1; i < palyersWithSameScores.length(); i++) {
+                if (dirhams.get(palyersWithSameScores.charAt(i)) > dirhamNum) {
+                    differentDirhams = false;
+                    dirhamNum = squares.get(palyersWithSameScores.charAt(i));
+                } else if (dirhams.get(palyersWithSameScores.charAt(i)) == dirhamNum) {
+                    differentDirhams = true;
+                }
+            }
+            if (!differentDirhams) {
+                return getKeyByValue(squares, dirhamNum);
+            } else {
+                return 't';
+            }
+        }
+        return getKeyByValue(scores, score);
+
+    }
+
+    /**
+     * A method for calculating the dirhams on the board
+     *
+     * @param splitedBoardString ArrayList with the collection of all abbreviated rugs strings
+     * @return HashMap, keys are colour of players and integers are number of their squares on the board
+     */
+    public static HashMap<Character, Integer> calSquares(ArrayList<String> splitedBoardString) {
+        //var is used to collect all chars that denotes colours
+        StringBuilder var = new StringBuilder();
+        //Character is the colour of one player
+        //Integer is the number of dirhams the one has
+        HashMap<Character, Integer> ans = new HashMap<>();
+        for (String s : splitedBoardString) {
+            var.append(s.charAt(0));
+        }
+        for (int i = 0; i < var.length(); i++) {
+            char dirham = var.charAt(i);
+            if (dirham == 'n') {
+                continue;
+            }
+            //If this is a new colour
+            if (!ans.containsKey(dirham)) {
+                ans.put(dirham, 1);
+            } else {
+                //Update HashMap
+                ans.replace(dirham, ans.get(dirham) + 1);
+            }
+        }
+        return ans;
+
+    }
+
+    /**
+     * A method for returning a key according to value in hashmap
+     *
+     * @param map   a hash map
+     * @param value a value in hashmap
+     * @return key
+     */
+    public static Character getKeyByValue(HashMap<Character, Integer> map, Integer value) {
+        for (int i = 0; i < map.size(); i++) {
+            if (getValueFromHashSet(map, i).equals(value)) {
+                return getKeyFromHashSet(map, i);
+            }
+        }
+        throw new RuntimeException("The score is invalid");
+    }
+
+    /**
+     * A method for getting ith value in the value set
+     *
+     * @param map the hashMap
+     * @param i   the index of the value we want
+     * @return ith value in the value set of map
+     */
+    public static Integer getValueFromHashSet(HashMap<Character, Integer> map, int i) {
+        Integer val = 0;
+        ArrayList<Integer> values = new ArrayList<>(map.values());
+        for (int j = 0; j <= i; j++) {
+            val = values.get(j);
+        }
+        return val;
+    }
+
+    /**
+     * A method for getting ith value in the key set
+     *
+     * @param map the hashMap
+     * @param i   the index of the key we want
+     * @return ith value in the key set of map
+     */
+    public static Character getKeyFromHashSet(HashMap<Character, Integer> map, int i) {
+        Character val = '0';
+        ArrayList<Character> keys = new ArrayList<>(map.keySet());
+        for (int j = 0; j <= i; j++) {
+            val = keys.get(j);
+        }
+        return val;
+    }
+
 
     /**
      * Implement Assam's movement.
@@ -546,7 +825,111 @@ public class Marrakech {
      */
     public static String makePlacement(String currentGame, String rug) {
         // FIXME: Task 14
-        return "";
+        if (!isRugValid(currentGame, rug)) {
+            return currentGame;
+        }
+        if (!isPlacementValid(currentGame, rug)) {
+            return currentGame;
+        }
+        String playerStrng = decodedPlayerString(currentGame);
+        //decodeAsamString returns a string without 'A'. So add it at head
+        String AssamString = 'A' + decodeAssamString(currentGame);
+        ArrayList<String> splitedBoadString = splitBoardString(currentGame);
+        String rugColourId = rugColourId(rug);
+        int indexOfFirstTile = getFirstTileIndex(rug);
+        int indexOfSecondTile = getSecondTileIndex(rug);
+        //Update PlayerString
+        playerStrng = updatePlayerString(playerStrng, rugColour(rug));
+        //Update BoardString
+        splitedBoadString.set(indexOfFirstTile, rugColourId);
+        splitedBoadString.set(indexOfSecondTile, rugColourId);
+        //splitBoardString returns a ArrayList without 'B'. So add it at head
+        StringBuilder newBoardString = new StringBuilder("B");
+        for (int i = 0; i < splitedBoadString.size(); i++) {
+            newBoardString.append(splitedBoadString.get(i));
+        }
+        //Return new gameString. Because Assam String is unmoved, assamString is same as before
+        return playerStrng + AssamString + newBoardString;
+    }
+
+
+    /**
+     * A method for updating player string
+     *
+     * @param playerString string of all player's strings
+     * @param player       the colour of the playerString that needs updates
+     * @return a new string of all playerStrings
+     */
+    public static String updatePlayerString(String playerString, char player) {
+        int indexOfColour = playerString.indexOf(player);
+        int rugsRemained = Integer.parseInt(playerString.substring(indexOfColour + 4, indexOfColour + 6));
+        //Because the player has placed a rug, the number of remained rugs -1;
+        rugsRemained--;
+        if (rugsRemained < 10) {
+            return playerString.substring(0, indexOfColour + 4) + "0" + rugsRemained + playerString.substring(indexOfColour + 6);
+        }
+        return playerString.substring(0, indexOfColour + 4) + rugsRemained + playerString.substring(indexOfColour + 6);
+
+    }
+
+
+    /**
+     * A method returns rug's colour and Id
+     *
+     * @param rug
+     * @return
+     */
+    public static String rugColourId(String rug) {
+        return rug.substring(0, 3);
+    }
+
+    /**
+     * A method returns rug's colour
+     *
+     * @param rug
+     * @return
+     */
+    public static char rugColour(String rug) {
+        return rug.charAt(0);
+    }
+
+
+    /**
+     * Get all playerStrings from the game string
+     *
+     * @return playerString
+     */
+    public static String decodedPlayerString(String gameString) {
+        int indexA = gameString.indexOf('A');
+        return gameString.substring(0, indexA);
+    }
+
+    /**
+     * A method for getting the first tile position in the boardString using rug string
+     *
+     * @param rug string of a rug
+     * @return index of the first rug in the boardString
+     */
+    public static int getFirstTileIndex(String rug) {
+        //x coordinates
+        int x = Integer.parseInt(rug.substring(3, 4));
+        //y coordinates
+        int y = Integer.parseInt(rug.substring(4, 5));
+        return getPositionFromCoordinates(x, y);
+    }
+
+    /**
+     * A method for getting the second tile position in the boardString using rug string
+     *
+     * @param rug
+     * @return index of the second rug in the boardString
+     */
+    public static int getSecondTileIndex(String rug) {
+        //x coordinates
+        int x = Integer.parseInt(rug.substring(5, 6));
+        //y coordinates
+        int y = Integer.parseInt(rug.substring(6, 7));
+        return getPositionFromCoordinates(x, y);
     }
 
     public static void main(String[] args) {
