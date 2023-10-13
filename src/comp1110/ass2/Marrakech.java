@@ -539,8 +539,42 @@ public class Marrakech {
      * @return The amount of payment due, as an integer.
      */
     public static int getPaymentAmount(String gameString) {
+        // Parse the gameString to get the board state, Assam's position, etc.
+        Marrakech marrakech = new Marrakech(gameString);
+        Tile[][] tiles = marrakech.board.tiles;
+        IntPair assamPosition = marrakech.asam.getMerchantPosition();
+
+        // Get the color of the rug Assam landed on
+        String landedColor = tiles[assamPosition.getX()][assamPosition.getY()].getColour();
+
+        // If Assam landed on a square without a rug, return 0
+        if (landedColor == null || landedColor.isEmpty()) {
+            return 0;
+        }
+
+        // Use DFS to count the number of connected squares of the same color
+        boolean[][] visited = new boolean[tiles.length][tiles[0].length];
+        int paymentAmount = dfs(assamPosition.getX(), assamPosition.getY(), tiles, visited, landedColor);
+
+        return paymentAmount;
+    }
+
+    private static int dfs(int x, int y, Tile[][] tiles, boolean[][] visited, String color) {
+        if (x < 0 || x >= tiles.length || y < 0 || y >= tiles[0].length || visited[x][y] || !tiles[x][y].getColour().equals(color)) {
+            return 0;
+        }
+
+        visited[x][y] = true;
+
+        int count = 1; // Count the current square
+        count += dfs(x + 1, y, tiles, visited, color); // Right
+        count += dfs(x - 1, y, tiles, visited, color); // Left
+        count += dfs(x, y + 1, tiles, visited, color); // Down
+        count += dfs(x, y - 1, tiles, visited, color); // Up
+
+        return count;
         // FIXME: Task 11
-        return -1;
+
     }
 
     /**
