@@ -612,6 +612,7 @@ public class Game extends Application {
                 textInstructions = "Asam has moved " + rolledNumber + " steps.";
             }
             setMessage(textInstructions);
+            asamRotate(1);
         });
 
 

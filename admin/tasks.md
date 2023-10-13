@@ -61,5 +61,13 @@ MUST ADD TESTS FOR ALL (IF NOT PROVIDED ALREADY)!!!
   - Commenting (code quality).
   
 ## Week 10
+Met at 4pm on Friday 13th Nov. 
+- Hu will attempt tsk 16, 17.
+- Shuo will work on task 13. 
+- Lize continue to work on tak 7, 15 (display, and making it play)
+Through the weekend, complete test cases as well. 
+Have the above completed by Wednesday. Meet Thursday morning to discuss program, play the game, 
+check that the code is cohesive, and also write any more comments. Complete the admin files then.
+On Thursday meet to plan a bit of our video. 
 
 ## Week 11
