@@ -51,10 +51,12 @@ public class Game extends Application {
 
     private ArrayList<String> nameArray = new ArrayList<>(); //Array with names of players
 
-    //Purple, Cyan-Green, Yellow, Red-Pink
-    private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"}; //String of colour codes for players.
+    //String array representing the order of colours of the players:
+    private String[] colourLetters = new String[] {"p","c","y","r"};
 
-    Text messageText = new Text(); //Global since dplayed throughout the game.
+    // String of colour codes for players... Purple, Cyan-Green, Yellow, Red-Pink
+    private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
+    Text messageText = new Text(); //Global since displayed throughout the game.
     AsamSymbol asam = new AsamSymbol(0, 0); //Global asam variable, called in different methods.
 
 
@@ -492,6 +494,27 @@ public class Game extends Application {
     }
 
     /**
+     * Start of game, game string generated to be translated in the Marrakech class.
+     */
+    public String initialStringGenerate(){
+        String initialGameString = "";
+        for(int i=0; i<numberPlayers;i++){
+            //Each player starts with 30 dirhams and 15 rugs.
+            String individualString = "P" + colourLetters[i] + "030" + "15";
+            initialGameString += individualString;
+        }
+
+        //Asam starts facing north in the middle of the board aka position (3,3)
+        initialGameString += "A33NB";
+
+        //Intially all the tiles are empty hence add 49 empty squares:
+        for(int j = 0; j<49; j++){
+            initialGameString += "n00";
+        }
+        return initialGameString;
+    }
+
+    /**
      * Displays the names of the players at the top of the main screen.
      */
     public void namesDisplay(){
@@ -612,7 +635,6 @@ public class Game extends Application {
                 textInstructions = "Asam has moved " + rolledNumber + " steps.";
             }
             setMessage(textInstructions);
-            asamRotate(1);
         });
 
 
@@ -701,6 +723,10 @@ public class Game extends Application {
 
 
 
+    public void getInitial(){
+        String initialString = initialStringGenerate();
+        Marrakech theGame = new Marrakech(initialString);
+    }
     /**
      *  Changes scene from start screen to player selection screen.
      */
@@ -713,9 +739,15 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Changes scene to the main game.
+     */
     private void changeSceneBoard() {
-        // Clear the screen by removing all child nodes from the root layout container
+        //Clear the screen by removing all child nodes from the root layout container
         root.getChildren().clear();
+
+        getInitial(); //Assign and create initial objects based on initial state.
+
         Group group = gameBoardDisplay();
         root.getChildren().add(group);
         asamDisplay();

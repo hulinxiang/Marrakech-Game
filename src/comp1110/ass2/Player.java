@@ -104,22 +104,22 @@ public class Player {
      */
     public static Player decodePlayerString(String playerString){
         //Setting player colour
-        Player res=new Player();
-        res.colour = decodeColour(playerString.substring(1,2));
+        Player player =new Player();
+        player.colour = decodeColour(playerString.substring(1,2));
 
-        res.coins = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
-        res.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
+        player.coins = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
+        player.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
 
         //Setting the player state:
         if(playerString.substring(7).equals("i"))
         {
-            res.playerState = 1; //1 Means player is in the game.
+            player.playerState = 1; //1 Means player is in the game.
         }
         else
         {
-            res.playerState = -1; //1 Means player is out of the game.
+            player.playerState = -1; //1 Means player is out of the game.
         }
-        return res;
+        return player;
 
     }
 
