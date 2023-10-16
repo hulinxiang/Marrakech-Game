@@ -807,8 +807,94 @@ public class Marrakech {
      * @return A String representing Assam's state after the movement.
      */
     public static String moveAssam(String currentAssam, int dieResult) {
+        // Assam's current position and direction
+        int x = Character.getNumericValue(currentAssam.charAt(1));
+        int y = Character.getNumericValue(currentAssam.charAt(2));
+        char direction = currentAssam.charAt(3);
+
+        //move Assam based on the die result and direction
+        for (int i = 0; i < dieResult; i++){
+            switch (direction){
+                case 'N':
+                    y--;
+                    if (y<0 && x%2 != 0){
+                        y = 0;
+                        x--;
+                        direction='S'; //Adjust direction based on the tracks
+                    } else if (y < 0 && x%2==0 && x!=6) {
+                        y = 0;
+                        x++;
+                        direction='S';
+                    } else if (y<0 && x == 6) {
+                        y=0;
+                        x--;
+                        x+=1;
+                        direction = 'W';
+
+                    }
+                    break;
+                case 'E':
+                    x++;
+                    if (x>6 && y%2 != 0){
+                        x = 6;
+                        y ++;
+                        direction = 'W';
+                    } else if (x>6 && y%2==0 && y!=0) {
+                        x = 6;
+                        y--;
+                        direction = 'W';
+                    } else if (x >6 && y==0) {
+                        x=6;
+                        y++;
+                        y-=1;
+                        direction = 'S';
+
+                    }
+                    break;
+                case 'S':
+                    y ++;
+                    if (y > 6 && x%2 != 0){
+                        y=6;
+                        x++;
+                        direction = 'N';
+                    } else if (y > 6 && x%2 == 0 && x!=0) {
+                        y=6;
+                        x--;
+                        direction = 'N';
+
+                    } else if (y > 6 && x ==0) {
+                        y=6;
+                        x++;
+                        x-=1;
+                        direction = 'E';
+
+                    }
+                    break;
+                case 'W':
+                    x --;
+                    if (x <0 && y%2 !=0){
+                        x = 0;
+                        y --;
+                        direction = 'E';
+                    } else if (x <0 && y%2 ==0 && y !=6) {
+                        x = 0;
+                        y++;
+                        direction = 'E';
+
+                    } else if (x < 0 && y ==6) {
+                        x = 0;
+                        y--;
+                        y+=1;
+                        direction ='N';
+
+                    }
+                    break;
+                default:
+            }
+
+        }
         // FIXME: Task 13
-        return "";
+        return "A" + x +y + direction;
     }
 
     /**
