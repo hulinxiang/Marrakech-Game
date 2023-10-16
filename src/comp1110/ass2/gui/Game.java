@@ -57,8 +57,9 @@ public class Game extends Application {
     // String of colour codes for players... Purple, Cyan-Green, Yellow, Red-Pink
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
     Text messageText = new Text(); //Global since displayed throughout the game.
-    AsamSymbol asam = new AsamSymbol(0, 0); //Global asam variable, called in different methods.
+    AsamSymbol asam; //Global asam variable, called in different methods.
 
+    Marrakech theGame; //New Marrakech class, initialised in getInitial() method.
 
     /**
     Calculates the winner
@@ -497,10 +498,10 @@ public class Game extends Application {
      * Start of game, game string generated to be translated in the Marrakech class.
      */
     public String initialStringGenerate(){
-        String initialGameString = "";
+        String initialGameString = ""; //Game string starts wiht a P to denote player strings.
         for(int i=0; i<numberPlayers;i++){
-            //Each player starts with 30 dirhams and 15 rugs.
-            String individualString = "P" + colourLetters[i] + "030" + "15";
+            //Each player starts with 30 dirhams and 15 rugs. Initially all players are in the game.
+            String individualString = "P" + colourLetters[i] + "030" + "15" + "i";
             initialGameString += individualString;
         }
 
@@ -642,7 +643,10 @@ public class Game extends Application {
 
 
     public void asamDisplay(){
+        asam = new AsamSymbol(0, 0); //Creating a new Asam symbol, initial rotation is 0, and position is in middle
         root.getChildren().add(asam);
+
+
     }
 
     /**
@@ -721,11 +725,68 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Displays the player statistics such as the nummber of Dirhams and Rugs.
+     * @param initial If displaying for the first time then true, otherwise if just displaying updated sats then false.
+     */
+    public void displayStats(boolean initial){
+        //Similar to the player names, the dirham and rug display is organised using Hboxes and Stackpanes.
+        HBox statStore = new HBox(100);
+        StackPane[] statPane = new StackPane[numberPlayers];
+        Text[] statText = new Text[numberPlayers];
 
+        if(initial) { //If displaying for the first time, the visual aspects need to be set as well.
+            for (int i = 1; i <= numberPlayers; i++) {
+                //Text that displays player the statistics - dirhams and rugs.
+                statText[i - 1] = new Text();
 
+                //Getting the number of dirhams and rugs from the Marrakech class.
+                int numberDirhams = theGame.getPlayers()[i-1].coins;
+                int numberRugs = theGame.getPlayers()[i-1].rugs;
+
+                statText[i - 1].setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
+
+                //Setting the visual aspect of the display
+                Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 20);
+                statText[i - 1].setFont(moroccanFont);
+                String colour = colourCodes[i - 1]; //Display player colour
+                statText[i - 1].setFill(Color.web(colour));
+
+                //Stackpane to organise alignment of text
+                statPane[i-1] = new StackPane();
+                statPane[i-1].getChildren().add(statText[i-1]);
+                StackPane.setAlignment(statText[i-1], Pos.TOP_CENTER);
+                statText[i-1].setTextAlignment(TextAlignment.CENTER);
+                statPane[i-1].setMargin(statText[i-1], new Insets(70, 0, 0, 0));
+                statText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
+                statPane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
+                statPane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
+                statStore.setAlignment(Pos.CENTER);
+                statStore.getChildren().add(statPane[i-1]);
+            }
+
+            root.getChildren().add(statStore);
+        }
+        else { //Only update the text not the visual aspects.
+            for (int j = 1; j <= numberPlayers; j++) {
+                //Getting the number of dirhams and rugs from Marrakech class.
+                int numberDirhams = theGame.getPlayers()[j - 1].coins;
+                int numberRugs = theGame.getPlayers()[j - 1].rugs;
+                statText[j - 1].setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the
+            }
+        }
+    }
+
+    /**
+     * Decode the initial string to set the player 'stats', the colours of the squares, and asam's position.
+     */
     public void getInitial(){
         String initialString = initialStringGenerate();
-        Marrakech theGame = new Marrakech(initialString);
+        //System.out.println(initialString);
+        theGame = new Marrakech(initialString);
+        displayStats(true);
+        asamDisplay();
+
     }
     /**
      *  Changes scene from start screen to player selection screen.
@@ -745,12 +806,9 @@ public class Game extends Application {
     private void changeSceneBoard() {
         //Clear the screen by removing all child nodes from the root layout container
         root.getChildren().clear();
-
-        getInitial(); //Assign and create initial objects based on initial state.
-
         Group group = gameBoardDisplay();
         root.getChildren().add(group);
-        asamDisplay();
+        getInitial(); //Initialise instance of Marrakech class based on the game string generated:
     }
 
 

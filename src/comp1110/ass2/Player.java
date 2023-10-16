@@ -11,16 +11,16 @@ public class Player {
     // Starting number of rugs;
     static int START_RUGS = 15;
     //Number of coins
-    int coins;
+    public int coins;
     //Number of rugs
-    int rugs;
+    public int rugs;
     //The coordinates of the player's rugs on the board.
-    String colour;
+    public String colour;
 
     //String denoting the colour of the player.
     IntPair[] rugCords;
     //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
-    int playerState;
+    public int playerState;
 
     /**
      * Getter method of getPlayerState

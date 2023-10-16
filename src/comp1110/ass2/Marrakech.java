@@ -143,6 +143,7 @@ public class Marrakech {
         return gameString.substring(indexAsam + 5);
     }
 
+
     /**
      * Method for returning the x position of assam
      *
@@ -329,15 +330,16 @@ public class Marrakech {
      * @param gameString the String needs to be split
      * @return an ArrayList that contains these Abbreviated Rug Strings
      */
+
     public static ArrayList<String> splitBoardString(String gameString) {
         int boardIndex = gameString.indexOf("B");
         String boardString = gameString.substring(boardIndex + 1);
         ArrayList<String> ans = new ArrayList<>();
         //Split the gameString three by three
         //we can obtain the Abbreviated Rug Strings of each tile
-        for (int i = 0; i < boardString.length(); i += 3) {
+        /*for (int i = 0; i < boardString.length(); i += 3) {
             ans.add(boardString.substring(i, i + 3));
-        }
+        }*/
         return ans;
     }
 
@@ -1040,6 +1042,8 @@ public class Marrakech {
         //TEST FOR STRING DECODING
 
         Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02n00c03c04y05p06c07c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36");
+        //String gameString = "Pr00803iPy01305iPc01510oA04NBc01c02n00c03c04y05p06c07c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36";
+
 
         System.out.println("The colour: " + Game.players[0].colour);
         System.out.println("Number of coins: " + Game.players[0].coins);

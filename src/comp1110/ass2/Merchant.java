@@ -2,12 +2,12 @@ package comp1110.ass2;
 
 
 public class Merchant {
-    private static int x = 0;
-    private static int y = 0;
+    public static int x = 0;
+    public static int y = 0;
     //Position of the merchant
-    IntPair merchantPosition;
+    public IntPair merchantPosition;
     //Direction of the merchant
-    Direction direction;
+    public Direction direction;
 
     public Merchant() {
 
