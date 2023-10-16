@@ -65,6 +65,7 @@ public class Game extends Application {
     Marrakech theGame; //New Marrakech class, initialised in getInitial() method.
 
     int roundCounter = 0; //Counts how many rounds the game has gone through
+    int playerCounter = 1; //Counts which player's turn it is
 
     /**
     Calculates the winner
@@ -636,10 +637,33 @@ public class Game extends Application {
         root.getChildren().add(messageBox);
     }
 
+    public void movementDisplay(boolean directionChange){
+        //RECORD CURRENT POSITION DISPLAYED.
+        double currentX = asam.x;
+        double currentY = asam.y;
+
+        double newX = (theGame.asam.getX() -3) * SQUARE_WIDTH;
+        double newY = (theGame.asam.getY() -3) *SQUARE_HEIGHT;
+
+        asam.setTranslateX(newX);
+        asam.setTranslateY(newY);
+
+        //DETECT DIRECTION CHANGE
+        if(directionChange && currentX == newX && currentY == newY){ //CORNER MOSAIC TILES
+            System.out.println("yes");
+            asam.setRotate(asam.getRotate() + 270); //Flip asam from current direction
+        }
+        else if(directionChange){ //NORMAL MOSAIC TILES
+            asam.setRotate(asam.getRotate() + 180); //Flip asam from current direction
+        }
+
+    }
+
     /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
      */
-    public void diceDisplay(){
+    public void diceRoll(){
+        setMessage("Roll the die!");
         //CREATING DICE BUTTON
         VBox diceBox = new VBox(); //Container to display dice button
         Button diceButton = new Button("ROLL");
@@ -666,12 +690,28 @@ public class Game extends Application {
         //Setting up event handler for when button is clicked:
         diceButton.setOnAction(event -> {
             int rolledNumber = Marrakech.rollDie(); //Roll the dice.
+
+            //Record Asam's previous direction
+            Direction previousDirection = theGame.asam.getDirection();
+
+            //MOVE ASAM IN THE DIRECTION SPECIFIED BY THE DICE
+            String currentAsamString = theGame.asam.getString(); //Generate asam string
+            String movedString = Marrakech.moveAssam(currentAsamString, rolledNumber); //Move asam.
+            theGame.asam.decodeAsamString(movedString);
+
+            if(theGame.asam.getDirection().equals(previousDirection)){
+                movementDisplay(false); //Display does not need to account for change in direction
+            }
+            else{
+                movementDisplay(true);
+            }
+
             String textInstructions= "";
             if(rolledNumber==1){
                 textInstructions = "Asam has moved " + rolledNumber + " step.";
             }
             else{
-                textInstructions = "Asam has moved " + rolledNumber + " steps.";
+                textInstructions = "Asam has moved " + rolledNumber + " steps";
             }
             setMessage(textInstructions);
         });
@@ -862,6 +902,8 @@ public class Game extends Application {
         //Setting up event handler for when button is clicked:
         for(int j=0; j<3; j++){
             directionButton[j].setOnAction(event -> {
+                directionBox.getChildren().removeAll();
+                root.getChildren().removeAll(directionBox);
                 //-1 for right, 0 for middle, 1 for left.
                 int rotationFactor = Integer.parseInt(((Button) event.getSource()).getId()); //Setting the message displayed to the id.
 
@@ -875,8 +917,7 @@ public class Game extends Application {
                 asamRotateDisplay(rotationFactor);
 
                 //Once direction has been decided, display next stay of game: Rolling the dice
-                root.getChildren().remove(directionBox);
-                diceDisplay();
+                diceRoll();
             });
         }
 
@@ -886,14 +927,11 @@ public class Game extends Application {
      * Go through one round of play
      */
     public void round(){
-        //Looping through the number of players
-        for(int j=0; j<numberPlayers; j++){
-            roundDisplay(false, j+1); //Where j+1 is the current player
-            setMessage("Set the direction of Asam");
-            //display Asam direction buttons
-            asamRotateButton();
+        roundDisplay(false, playerCounter); //Display the round and the player whose turn it is.
+        setMessage("Set the direction of Asam");
+        //display Asam direction buttons
+        asamRotateButton();
 
-        }
 
         roundCounter += 1;
         if(roundCounter == 1){
@@ -910,7 +948,6 @@ public class Game extends Application {
      */
     public void getInitial(){
         String initialString = initialStringGenerate();
-        //System.out.println(initialString);
         theGame = new Marrakech(initialString);
         displayStats(true);
         asamDisplay();

@@ -46,9 +46,8 @@ public class Merchant {
         if(String.valueOf(asamString.charAt(0)).equals("A")){
             asamString = asamString.substring(1);
         }
-
-        int x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
-        int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
+        this.x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
+        this.y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         //Check if the Asam is out of game board
         if (x > 6 || y > 6 || x < 0 || y < 0) {
             throw new RuntimeException("Invalid Asam String");
@@ -111,11 +110,11 @@ public class Merchant {
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     /**

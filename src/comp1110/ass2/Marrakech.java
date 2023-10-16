@@ -339,9 +339,9 @@ public class Marrakech {
         ArrayList<String> ans = new ArrayList<>();
         //Split the gameString three by three
         //we can obtain the Abbreviated Rug Strings of each tile
-        /*for (int i = 0; i < boardString.length(); i += 3) {
+        for (int i = 0; i < boardString.length(); i += 3) {
             ans.add(boardString.substring(i, i + 3));
-        }*/
+        }
         return ans;
     }
 
