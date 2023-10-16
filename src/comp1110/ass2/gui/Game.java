@@ -638,10 +638,7 @@ public class Game extends Application {
     }
 
     public void movementDisplay(boolean directionChange){
-        //RECORD CURRENT POSITION DISPLAYED.
-        double currentX = asam.x;
-        double currentY = asam.y;
-
+        //-3 since 3,3 on board is considered 0,0 on dispalay.
         double newX = (theGame.asam.getX() -3) * SQUARE_WIDTH;
         double newY = (theGame.asam.getY() -3) *SQUARE_HEIGHT;
 
@@ -649,12 +646,8 @@ public class Game extends Application {
         asam.setTranslateY(newY);
 
         //DETECT DIRECTION CHANGE
-        if(directionChange && currentX == newX && currentY == newY){ //CORNER MOSAIC TILES
-            System.out.println("yes");
-            asam.setRotate(asam.getRotate() + 270); //Flip asam from current direction
-        }
-        else if(directionChange){ //NORMAL MOSAIC TILES
-            asam.setRotate(asam.getRotate() + 180); //Flip asam from current direction
+        if(directionChange) {
+            asamRotateDisplay();
         }
 
     }
@@ -729,10 +722,26 @@ public class Game extends Application {
 
     /**
      *Rotates asam 90 degrees left or right from its current rotation
-     * @param factor An integer either 1 (rotate clockwise) or -1 (rotate counter-clockwise).
      */
-    public void asamRotateDisplay(int factor){
-        asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
+    public void asamRotateDisplay(){
+
+        //Switch case to check and display asam's rotation
+        switch(theGame.asam.getDirection()){
+            case NORTH:
+                asam.setRotate(0);
+                break;
+            case EAST:
+                asam.setRotate(90);
+                break;
+            case SOUTH:
+                asam.setRotate(180);
+                break;
+            case WEST:
+                asam.setRotate(270);
+                break;
+
+        }
+        //asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
 
     }
     public Group gameBoardDisplay(){
@@ -914,7 +923,7 @@ public class Game extends Application {
                 String newAsamString = Marrakech.rotateAssam(currentAsamString, rotationFactor*90);
                 theGame.asam.decodeAsamString(newAsamString);
                 //Display this rotation
-                asamRotateDisplay(rotationFactor);
+                asamRotateDisplay();
 
                 //Once direction has been decided, display next stay of game: Rolling the dice
                 diceRoll();
