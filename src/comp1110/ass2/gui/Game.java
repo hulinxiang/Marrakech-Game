@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.Direction;
 import comp1110.ass2.Marrakech;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -57,9 +58,13 @@ public class Game extends Application {
     // String of colour codes for players... Purple, Cyan-Green, Yellow, Red-Pink
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
     Text messageText = new Text(); //Global since displayed throughout the game.
+
+    Text roundText = new Text(); //Global since displayed throughout the game.
     AsamSymbol asam; //Global asam variable, called in different methods.
 
     Marrakech theGame; //New Marrakech class, initialised in getInitial() method.
+
+    int roundCounter = 0; //Counts how many rounds the game has gone through
 
     /**
     Calculates the winner
@@ -568,6 +573,39 @@ public class Game extends Application {
 
     }
 
+    public void roundDisplay(boolean start, int currentPlayer){
+        //If at the start display the text, if not just update the text.
+        if(start) {
+            roundText.setText(" Round " + roundCounter + "\n Player " + currentPlayer);
+            Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
+            roundText.setFont(moroccanFont);
+            roundText.setFill(Color.web("#ffffff"));
+
+            //Create vBox to ensure proper alignment
+            VBox roundBox = new VBox(); //Container to display the text
+            roundBox.setPrefWidth(WINDOW_WIDTH / 5); // Preferred width
+            roundBox.setMaxWidth(WINDOW_WIDTH / 5);  // Maximum width
+            roundBox.getChildren().add(roundText);
+            roundBox.setAlignment(Pos.TOP_LEFT);
+
+            // Set the minimum height of the VBox
+            roundBox.setMinHeight(100);
+
+            // Set the preferred height of the VBox
+            roundBox.setPrefHeight(100);
+
+            // Set the maximum height of the VBox
+            roundBox.setMaxHeight(100);
+
+
+            //Adding the messageBox to the root.
+            StackPane.setAlignment(roundBox, Pos.TOP_LEFT);
+            root.getChildren().add(roundBox);
+        }
+        else{
+            roundText.setText(" Round " + roundCounter + "\n Player " + currentPlayer);
+        }
+    }
     /**
      * Sets the instruction for the messageText to display.
      * @param instructionString String to be displayed.
@@ -653,14 +691,13 @@ public class Game extends Application {
      *Rotates asam 90 degrees left or right from its current rotation
      * @param factor An integer either 1 (rotate clockwise) or -1 (rotate counter-clockwise).
      */
-    public void asamRotate(int factor){
+    public void asamRotateDisplay(int factor){
         asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
 
     }
     public Group gameBoardDisplay(){
 
         namesDisplay(); //Display names of players
-        diceDisplay(); //Display the button to serve as the dice.
         messageDisplay(); //Display the introduction message.
 
         Group group = new Group();
@@ -777,6 +814,97 @@ public class Game extends Application {
         }
     }
 
+    public void asamRotateButton(){
+        //CREATING DICE BUTTON
+        VBox directionBox = new VBox(); //Container to display dice button
+        HBox horizontalBox = new HBox(10); //10 in between.
+
+        Button[] directionButton = new Button[3]; //3 buttons in array 90 degrees left, right, or no rotation
+
+        //Getting Asam's current direction
+        Direction currentDirection = theGame.asam.getDirection();
+
+        for(int i=0; i<directionButton.length; i++){
+            //If i is 0 then left button, if 1 then no rotate button, if 2 then right rotate button
+            //Find possible directions left and right to get button name.
+            Direction buttonDirection = theGame.possibleDirections(currentDirection, i-1);
+            directionButton[i] = new Button(buttonDirection.name());
+
+            //Give the button an id so that it can be identified by the event listener.
+            String id = Integer.toString(i-1); //-1 if left, 0 if none, 1 if right
+            directionButton[i].setId(id);
+
+            //SETTING THE STYLE OF THE BUTTON
+            directionButton[i].setStyle(
+                    "-fx-font-size: 10px;" +                    //Font size
+                            "-fx-text-fill: white;" +                   //Text color
+                            "-fx-background-color: #f8a102;"            //Yellow background color
+            );
+
+            //SETTING SIZE OF BUTTON
+            double buttonSize = 60; // Set the size of the square button
+            directionButton[i].setPrefWidth(buttonSize);
+            directionButton[i].setPrefHeight(buttonSize);
+
+            horizontalBox.getChildren().add(directionButton[i]);
+
+        }
+
+        horizontalBox.setAlignment(Pos.CENTER_RIGHT);
+        directionBox.getChildren().add(horizontalBox);
+        //Setting up alginment
+        directionBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
+        directionBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        directionBox.setAlignment(Pos.CENTER_RIGHT);
+        StackPane.setAlignment(directionBox, Pos.CENTER_LEFT);
+        root.getChildren().add(directionBox);
+
+        //Setting up event handler for when button is clicked:
+        for(int j=0; j<3; j++){
+            directionButton[j].setOnAction(event -> {
+                //-1 for right, 0 for middle, 1 for left.
+                int rotationFactor = Integer.parseInt(((Button) event.getSource()).getId()); //Setting the message displayed to the id.
+
+                //GENERATE ASAM STRING
+                String currentAsamString = theGame.asam.getString();
+
+                //Rotate and decode the new string.
+                String newAsamString = Marrakech.rotateAssam(currentAsamString, rotationFactor*90);
+                theGame.asam.decodeAsamString(newAsamString);
+                //Display this rotation
+                asamRotateDisplay(rotationFactor);
+
+                //Once direction has been decided, display next stay of game: Rolling the dice
+                root.getChildren().remove(directionBox);
+                diceDisplay();
+            });
+        }
+
+    }
+
+    /**
+     * Go through one round of play
+     */
+    public void round(){
+        //Looping through the number of players
+        for(int j=0; j<numberPlayers; j++){
+            roundDisplay(false, j+1); //Where j+1 is the current player
+            setMessage("Set the direction of Asam");
+            //display Asam direction buttons
+            asamRotateButton();
+
+        }
+
+        roundCounter += 1;
+        if(roundCounter == 1){
+            roundDisplay(true, 1); //Start of game so visuals need to be set.
+        }
+        else{
+            roundDisplay(false, 1);
+        }
+
+    }
+
     /**
      * Decode the initial string to set the player 'stats', the colours of the squares, and asam's position.
      */
@@ -786,6 +914,7 @@ public class Game extends Application {
         theGame = new Marrakech(initialString);
         displayStats(true);
         asamDisplay();
+        round();
 
     }
     /**

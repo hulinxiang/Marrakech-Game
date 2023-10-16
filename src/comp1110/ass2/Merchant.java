@@ -43,6 +43,10 @@ public class Merchant {
      * Decodes the merchant string
      */
     public void decodeAsamString(String asamString) {
+        if(String.valueOf(asamString.charAt(0)).equals("A")){
+            asamString = asamString.substring(1);
+        }
+
         int x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
         int y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         //Check if the Asam is out of game board
@@ -106,11 +110,11 @@ public class Merchant {
 
     }
 
-    public static int getX() {
+    public int getX() {
         return x;
     }
 
-    public static int getY() {
+    public int getY() {
         return y;
     }
 
@@ -133,7 +137,7 @@ public class Merchant {
         sb.append("A");
         sb.append(getX());
         sb.append(getY());
-        sb.append(direction);
+        sb.append(direction.name().substring(0,1));
         return sb.toString();
     }
 

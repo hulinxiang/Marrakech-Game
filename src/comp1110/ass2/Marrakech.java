@@ -21,6 +21,8 @@ public class Marrakech {
     String boardString;
     String assamString;
 
+    ArrayList<Direction> arrayDirections = new ArrayList<Direction>((Arrays.asList(Direction.NORTH,Direction.EAST,Direction.SOUTH,Direction.WEST)));
+
     /**
      * Getter method of players
      *
@@ -452,6 +454,22 @@ public class Marrakech {
         return currentAssam.substring(0, 3) + newAssamDirection;
     }
 
+    public Direction possibleDirections(Direction currentDirection, int whichWay){
+        Direction possibleDirection;
+        int currentIndex = arrayDirections.indexOf(currentDirection);
+        //Making sure that index is not out of bounds.
+        if(currentIndex == 0 && whichWay == -1){ //If at start wrap around to end.
+            possibleDirection = arrayDirections.get(arrayDirections.size() + whichWay);
+        }
+        else if(currentIndex == arrayDirections.size() - 1 && whichWay == 1) { //if at end wrap around to start.
+            possibleDirection = arrayDirections.get(0);
+        }
+        else{
+            possibleDirection = arrayDirections.get(currentIndex + whichWay);
+        }
+
+        return possibleDirection;
+    }
     /**
      * Determine whether a potential new placement is valid (i.e that it describes a legal way to place a rug).
      * There are a number of rules which apply to potential new placements, which are detailed in the README but to
