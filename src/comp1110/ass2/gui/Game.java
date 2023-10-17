@@ -59,6 +59,8 @@ public class Game extends Application {
     Text messageText = new Text(); //Global since displayed throughout the game.
 
     Text roundText = new Text(); //Global since displayed throughout the game.
+    StackPane rugPane = new StackPane(); //Stack pane that needs to be global because it is added/removed from root throughout
+
     AsamSymbol asam; //Global asam variable, called in different methods.
 
     Marrakech theGame; //New Marrakech class, initialised in getInitial() method.
@@ -662,22 +664,33 @@ public class Game extends Application {
     }
 
     public void rugPlacementOne(){
+        //Must set width of stackpane otherwise not able to click other buttons
+        //Set width to the width of the board.
+        rugPane.setPrefWidth(SQUARE_WIDTH*7);
+        rugPane.setMinWidth(SQUARE_WIDTH*7);
+        rugPane.setMaxWidth(SQUARE_WIDTH*7);
+
+        rugPane.getChildren().removeAll(); //Before displaying new buttons remove all previous
+        root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
+
         //Add event listeners to all squares possible to select
-        TileButton nOne = new TileButton((theGame.asam.getX()-4) * SQUARE_WIDTH,theGame.asam.getY()-3);
+        TileButton nOne = new TileButton((theGame.asam.getX()-4) * SQUARE_WIDTH,(theGame.asam.getY()-3)*SQUARE_HEIGHT);
         nOne.setText("ONE");
-        root.getChildren().add(nOne);
+        rugPane.getChildren().add(nOne);
 
-        TileButton nTwo = new TileButton((theGame.asam.getX()-2) * SQUARE_WIDTH,theGame.asam.getY()-3);
+        TileButton nTwo = new TileButton((theGame.asam.getX()-2) * SQUARE_WIDTH,(theGame.asam.getY()-3)*SQUARE_HEIGHT);
         nTwo.setText("TWO");
-        root.getChildren().add(nTwo);
+        rugPane.getChildren().add(nTwo);
 
-        TileButton nThree = new TileButton(theGame.asam.getX()-3, (theGame.asam.getY() -2)* SQUARE_HEIGHT);
+        TileButton nThree = new TileButton((theGame.asam.getX()-3) * SQUARE_WIDTH, (theGame.asam.getY() -2)* SQUARE_HEIGHT);
         nThree.setText("THREE");
-        root.getChildren().add(nThree);
+        rugPane.getChildren().add(nThree);
 
-        TileButton nFour = new TileButton(theGame.asam.getX()-3,(theGame.asam.getY()-4) * SQUARE_HEIGHT);
+        TileButton nFour = new TileButton((theGame.asam.getX()-3) *SQUARE_WIDTH,(theGame.asam.getY()-4) * SQUARE_HEIGHT);
         nFour.setText("FOUR");
-        root.getChildren().add(nFour);
+        rugPane.getChildren().add(nFour);
+
+        root.getChildren().add(rugPane);
 
     }
 
@@ -738,6 +751,8 @@ public class Game extends Application {
             setMessage(textInstructions);
 
             //Once dice has been rolled and Asam has been moved, rug placement is next.
+            System.out.println(theGame.asam.getX());
+            System.out.println(theGame.asam.getY());
             rugPlacementOne();
         });
 
