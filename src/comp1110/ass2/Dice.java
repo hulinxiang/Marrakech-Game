@@ -13,7 +13,7 @@ public class Dice {
      * @return rolledInt is the result of the rotation
      */
     public static int Roll() {
-        int randomNum = (int) Math.floor(Math.random() *6); //Index between 1 and 6 inclusive.
+        int randomNum = (int) Math.floor(Math.random() *6); //Index between 0 and 5.
         int rolledNum = diceValues[randomNum];
         return rolledNum;
     }

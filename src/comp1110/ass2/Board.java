@@ -39,6 +39,8 @@ public class Board {
      * @return boolean that denotes if this Intpair is within the board.
      */
     public boolean withInBoard(IntPair intPair) {
-        return true;
+        int x = intPair.getX();
+        int y = intPair.getY();
+        return x>=0 && x <=BOARD_WIDTH && y >= 0 && y <= BOARD_HEIGHT;
     }
 }
