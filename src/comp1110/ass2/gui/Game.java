@@ -1,5 +1,8 @@
 package comp1110.ass2.gui;
 
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+
 import comp1110.ass2.Direction;
 import comp1110.ass2.Marrakech;
 import javafx.application.Application;
@@ -68,6 +71,8 @@ public class Game extends Application {
     int roundCounter = 0; //Counts how many rounds the game has gone through
     int playerCounter = 1; //Counts which player's turn it is
 
+    boolean firstBool; //Records which button has been selected.
+
     /**
     Calculates the winner
      */
@@ -107,7 +112,6 @@ public class Game extends Application {
             this.setPrefWidth(SQUARE_WIDTH);
             this.setPrefHeight(SQUARE_HEIGHT);
 
-            this.setStyle("-fx-background-color: white;");
 
             // Set the border color, width, and style using CSS
             this.setStyle(
@@ -119,7 +123,36 @@ public class Game extends Application {
 
             //SET EVENT LISTENER FOR EACH TILE BUTTON
             this.setOnAction(event -> {
-                System.out.println("yes");
+
+                String borderColour = colourCodes[playerCounter-1]; //Player who selected the square
+
+                //CHECK IF THIS IS FIRST OR SECOND RUG SQUARE SELECTED
+                if(firstBool){
+                    //Set style
+                    this.setStyle("-fx-border-color: " + borderColour +";" +
+                            "-fx-border-width: 4px;" +
+                            "-fx-background-color: transparent;");
+                    //Remove all except current button from rugpane.
+                    rugPane.getChildren().removeIf(node -> node instanceof Button && node != this);
+
+                    //Remove the event listener
+                    this.setDisable(true);
+                    firstBool = false;
+                    rugPlacementOne((int) Math.round(this.xLocation/SQUARE_WIDTH +3), (int) Math.round(this.yLocation/SQUARE_HEIGHT +3));
+                }
+                else{
+                    this.setStyle("-fx-border-color: " + borderColour +";" +
+                            "-fx-border-width: 2px;" +
+                            "-fx-background-color: transparent;");
+                    //Remove all buttons except first and the selected button
+                    rugPane.getChildren().removeIf(node
+                            -> node instanceof Button && node != this && node != rugPane.getChildren().get(0) );
+
+
+                    //Create rug string
+
+                }
+
             });
         }
 
@@ -663,34 +696,108 @@ public class Game extends Application {
 
     }
 
-    public void rugPlacementOne(){
+    public boolean[] firstConditions(boolean[] coordinateBool, int xRef, int yRef){
+        if(xRef==0){
+            //Don't create left button
+            coordinateBool[0] = false;
+        }
+        else if(xRef==6){
+            //Don't create right button
+            coordinateBool[1] = false;
+        }
+
+        if(yRef==0){
+            //Don't create top button
+            coordinateBool[2] = false;
+        }
+        else if(yRef==6){
+            //Don't create bottom button
+            coordinateBool[3] = false;
+        }
+
+
+        return coordinateBool;
+    }
+    public boolean[] additionalConditions(boolean[] coordinateBool, int xRef, int yRef){
+        coordinateBool = firstConditions(coordinateBool, xRef,yRef);
+        if(xRef-1 == theGame.asam.getX()){ //Asam is to left
+            coordinateBool[0] = false;
+        }
+        else if(xRef+1 == theGame.asam.getX()){ //Asam is to right
+            coordinateBool[1] = false;
+        }
+
+        if(yRef-1 == theGame.asam.getY()){ //Asam is to the top
+            coordinateBool[2] = false;
+        }
+        else if(yRef+1 == theGame.asam.getY()){ //Asam is to the bottom
+            coordinateBool[3] = false;
+        }
+
+        return coordinateBool;
+    }
+    public void rugPlacementOne(int xRef, int yRef){
         //Must set width of stackpane otherwise not able to click other buttons
         //Set width to the width of the board.
         rugPane.setPrefWidth(SQUARE_WIDTH*7);
         rugPane.setMinWidth(SQUARE_WIDTH*7);
         rugPane.setMaxWidth(SQUARE_WIDTH*7);
 
-        rugPane.getChildren().removeAll(); //Before displaying new buttons remove all previous
+        /*
+        rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
         root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
 
-        //Add event listeners to all squares possible to select
-        TileButton nOne = new TileButton((theGame.asam.getX()-4) * SQUARE_WIDTH,(theGame.asam.getY()-3)*SQUARE_HEIGHT);
-        nOne.setText("ONE");
-        rugPane.getChildren().add(nOne);
+         */
 
-        TileButton nTwo = new TileButton((theGame.asam.getX()-2) * SQUARE_WIDTH,(theGame.asam.getY()-3)*SQUARE_HEIGHT);
-        nTwo.setText("TWO");
-        rugPane.getChildren().add(nTwo);
+        //Array of booleans - LEFT, RIGHT, TOP BOTTOM
+        boolean[] coordinateBool = new boolean[4];
 
-        TileButton nThree = new TileButton((theGame.asam.getX()-3) * SQUARE_WIDTH, (theGame.asam.getY() -2)* SQUARE_HEIGHT);
-        nThree.setText("THREE");
-        rugPane.getChildren().add(nThree);
+        for(int i = 0; i<4; i++){
+            coordinateBool[i] = true;
+        }
 
-        TileButton nFour = new TileButton((theGame.asam.getX()-3) *SQUARE_WIDTH,(theGame.asam.getY()-4) * SQUARE_HEIGHT);
-        nFour.setText("FOUR");
-        rugPane.getChildren().add(nFour);
+        if(!firstBool) {//Additional conditions to be checked if second button
+            coordinateBool = additionalConditions(coordinateBool, xRef,yRef);
+        }
+        else{
+            coordinateBool = firstConditions(coordinateBool, xRef, yRef);
+        }
 
-        root.getChildren().add(rugPane);
+        makeRugButtons(coordinateBool, xRef,yRef);
+
+    }
+
+    public void makeRugButtons(boolean[] coordinateBool, int xRef, int yRef){
+        //Make buttons and customise display
+        String styleString = "-fx-border-width: 4px;" +
+                "-fx-border-style: solid;" +
+                "-fx-border-color: #ffffff;" +
+                "-fx-background-color: transparent"; //Transparent since need to be able to see what is behind.
+
+        if(coordinateBool[0]){ //LEFT BUTTON
+            TileButton buttonLeft = new TileButton((xRef-4) * SQUARE_WIDTH,(yRef-3)*SQUARE_HEIGHT);
+            buttonLeft.setStyle(styleString);
+            rugPane.getChildren().add(buttonLeft);
+        }
+
+        if(coordinateBool[1]){ //RIGHT BUTTON
+            TileButton buttonRight = new TileButton((xRef-2) * SQUARE_WIDTH,(yRef-3)*SQUARE_HEIGHT);
+            buttonRight.setStyle(styleString);
+            rugPane.getChildren().add(buttonRight);
+        }
+
+        if(coordinateBool[2]){ //TOP BUTTON
+            TileButton buttonTop = new TileButton((xRef-3) *SQUARE_WIDTH,(yRef-4) * SQUARE_HEIGHT);
+            buttonTop.setStyle(styleString);
+            rugPane.getChildren().add(buttonTop);
+
+        }
+
+        if(coordinateBool[3]){ //BOTTOM BUTTON
+            TileButton buttonBot = new TileButton((xRef-3) * SQUARE_WIDTH, (yRef -2)* SQUARE_HEIGHT);
+            buttonBot.setStyle(styleString);
+            rugPane.getChildren().add(buttonBot);
+        }
 
     }
 
@@ -751,9 +858,16 @@ public class Game extends Application {
             setMessage(textInstructions);
 
             //Once dice has been rolled and Asam has been moved, rug placement is next.
-            System.out.println(theGame.asam.getX());
-            System.out.println(theGame.asam.getY());
-            rugPlacementOne();
+            //Wait one second then introduce rug placement
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(e -> {
+                firstBool = true;
+                //Call rug placement function with asam's coordinates as reference
+                rugPlacementOne(theGame.asam.getX(), theGame.asam.getY());
+                root.getChildren().add(rugPane);
+                setMessage("Select first square for rug placement.");
+            });
+            pause.play();
         });
 
 
