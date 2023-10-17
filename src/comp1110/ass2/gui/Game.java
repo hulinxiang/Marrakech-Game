@@ -150,6 +150,10 @@ public class Game extends Application {
 
 
                     //Create rug string
+                    String gameString = theGame.generateGameString();
+                    String rugString = theGame.generateRugString(colourLetters[playerCounter-1]);
+                    System.out.println(rugString);
+
 
                 }
 

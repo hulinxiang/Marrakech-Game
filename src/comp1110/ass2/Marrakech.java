@@ -1038,6 +1038,66 @@ public class Marrakech {
         return getPositionFromCoordinates(x, y);
     }
 
+    public String generateGameString(){
+        String gameString = "";
+
+        //Create the player string
+        for(int i=0; i<numberPlayers; i++){
+            String zeroes = "0"; //Number of 0s depend on number of digits.
+
+            String colour = players[i].getColour().substring(0,1).toLowerCase(Locale.ROOT);
+
+            String dirhams = Integer.toString(players[i].getCoins());
+            dirhams = zeroes.repeat(3-dirhams.length()) + dirhams; //Update through concatenation
+
+            String rugs = Integer.toString(players[i].getRugs());
+            rugs = zeroes.repeat(2-rugs.length()) + rugs;
+
+            String state;
+            int stateInt = players[i].getPlayerState();
+            if(stateInt == 1){
+                state = "i";
+            }
+            else{
+                state = "o";
+            }
+
+            //Concatonate all together to form player string
+            gameString += "P" + colour + dirhams + rugs + state;
+
+        }
+
+        //Add asam string and board string
+        gameString += this.asam.getString() + this.getBoardString();
+
+        //Add board string
+        return gameString;
+    }
+
+    public String generateRugString(String colour){
+        String rugString = "";
+
+        //Add colour code
+        rugString += colour;
+
+        //Generate potential id
+        int recentID;
+        if(placedRugs.size()>0){
+            recentID = placedRugs.get(placedRugs.size()-1).rugID; //Get id of most recent added rug
+        }
+        else{
+            recentID = 0; //Get id of most recent added rug
+        }
+        String potentialID = Integer.toString(recentID + 1);
+        potentialID = "0".repeat(2-potentialID.length()) + potentialID;
+
+
+        rugString += potentialID;
+
+
+        return rugString;
+
+    }
     public static void main(String[] args) {
         // Test the isRugValid method
         System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
