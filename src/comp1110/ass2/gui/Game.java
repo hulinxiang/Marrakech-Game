@@ -25,7 +25,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -115,6 +114,11 @@ public class Game extends Application {
                     "-fx-border-style: solid;"+             // Border style (solid line)
                     "-fx-background-color: #FFBB6E;"          // Fill colour
             );
+
+            //SET EVENT LISTENER FOR EACH TILE BUTTON
+            this.setOnAction(event -> {
+                System.out.println("yes");
+            });
         }
 
 
@@ -637,8 +641,13 @@ public class Game extends Application {
         root.getChildren().add(messageBox);
     }
 
+    /**
+     * Displays asam's movement on the screen.
+     * @param directionChange Boolean value that indicates whether asam's direction has changed
+     *                        during the movement.
+     */
     public void movementDisplay(boolean directionChange){
-        //-3 since 3,3 on board is considered 0,0 on dispalay.
+        //-3 since 3,3 on board is considered 0,0 on display.
         double newX = (theGame.asam.getX() -3) * SQUARE_WIDTH;
         double newY = (theGame.asam.getY() -3) *SQUARE_HEIGHT;
 
@@ -649,6 +658,26 @@ public class Game extends Application {
         if(directionChange) {
             asamRotateDisplay();
         }
+
+    }
+
+    public void rugPlacementOne(){
+        //Add event listeners to all squares possible to select
+        TileButton nOne = new TileButton((theGame.asam.getX()-4) * SQUARE_WIDTH,theGame.asam.getY()-3);
+        nOne.setText("ONE");
+        root.getChildren().add(nOne);
+
+        TileButton nTwo = new TileButton((theGame.asam.getX()-2) * SQUARE_WIDTH,theGame.asam.getY()-3);
+        nTwo.setText("TWO");
+        root.getChildren().add(nTwo);
+
+        TileButton nThree = new TileButton(theGame.asam.getX()-3, (theGame.asam.getY() -2)* SQUARE_HEIGHT);
+        nThree.setText("THREE");
+        root.getChildren().add(nThree);
+
+        TileButton nFour = new TileButton(theGame.asam.getX()-3,(theGame.asam.getY()-4) * SQUARE_HEIGHT);
+        nFour.setText("FOUR");
+        root.getChildren().add(nFour);
 
     }
 
@@ -707,17 +736,20 @@ public class Game extends Application {
                 textInstructions = "Asam has moved " + rolledNumber + " steps";
             }
             setMessage(textInstructions);
+
+            //Once dice has been rolled and Asam has been moved, rug placement is next.
+            rugPlacementOne();
         });
 
 
     }
 
-
+    /**
+     * Initialises a new asam symbol and adds to the root.
+     */
     public void asamDisplay(){
         asam = new AsamSymbol(0, 0); //Creating a new Asam symbol, initial rotation is 0, and position is in middle
         root.getChildren().add(asam);
-
-
     }
 
     /**
@@ -745,9 +777,9 @@ public class Game extends Application {
 
     }
     public Group gameBoardDisplay(){
+        backgroundCity(); //Add city in background of baord.
 
-        namesDisplay(); //Display names of players
-        messageDisplay(); //Display the introduction message.
+        TileButton[] tileButton = new TileButton[49];  //49 tiles on the board.
 
         Group group = new Group();
         final int DRAW_START_X =100; //Where to start 'drawing'
@@ -776,6 +808,7 @@ public class Game extends Application {
         group.getChildren().add(otherCorner);
 
         //CREATING THE BOARD
+        int counter = 0; //counter which counts iteration of double for loop
         for(int i = 0; i<ROW; i++){ //Iterate through the columns.
             double x = SQUARE_WIDTH * i + DRAW_START_X; //Specifying the x location of the tile.
 
@@ -800,13 +833,13 @@ public class Game extends Application {
                 }
 
                 double y = SQUARE_HEIGHT * j + 100; //Specifying the y location of the tile
-                TileButton tile1 = new TileButton(x, y); //Creating the tile.
-                group.getChildren().add(tile1);
+                tileButton[counter] = new TileButton(x, y); //Creating the tile.
+                group.getChildren().add(tileButton[counter]);
+                counter +=1; //Increase counter by 1.
 
             }
 
         }
-        backgroundCity();
         return group;
 
     }
@@ -863,6 +896,10 @@ public class Game extends Application {
         }
     }
 
+    /**
+     * Displays end specifies names of rotation buttons.
+     * Add event listener to the button, and specifies the methods to be called when button clicked.
+     */
     public void asamRotateButton(){
         //CREATING DICE BUTTON
         VBox directionBox = new VBox(); //Container to display dice button
@@ -924,7 +961,6 @@ public class Game extends Application {
                 theGame.asam.decodeAsamString(newAsamString);
                 //Display this rotation
                 asamRotateDisplay();
-
                 //Once direction has been decided, display next stay of game: Rolling the dice
                 diceRoll();
             });
@@ -949,6 +985,7 @@ public class Game extends Application {
         else{
             roundDisplay(false, 1);
         }
+
 
     }
 
@@ -981,6 +1018,8 @@ public class Game extends Application {
     private void changeSceneBoard() {
         //Clear the screen by removing all child nodes from the root layout container
         root.getChildren().clear();
+        namesDisplay(); //Display names of players
+        messageDisplay(); //Display the introduction message.
         Group group = gameBoardDisplay();
         root.getChildren().add(group);
         getInitial(); //Initialise instance of Marrakech class based on the game string generated:
