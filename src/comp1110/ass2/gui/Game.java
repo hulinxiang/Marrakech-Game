@@ -1,5 +1,7 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.IntPair;
+import comp1110.ass2.Tile;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -30,6 +32,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Collections;
 import java.util.Stack;
@@ -55,20 +58,22 @@ public class Game extends Application {
     private ArrayList<String> nameArray = new ArrayList<>(); //Array with names of players
 
     //String array representing the order of colours of the players:
-    private String[] colourLetters = new String[] {"p","c","y","r"};
+    private ArrayList<String> colourLetters = new ArrayList<String>(Arrays.asList("p", "c", "y", "r"));
 
     // String of colour codes for players... Purple, Cyan-Green, Yellow, Red-Pink
     private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
     Text messageText = new Text(); //Global since displayed throughout the game.
 
     Text roundText = new Text(); //Global since displayed throughout the game.
+    ArrayList<Text> statText = new ArrayList<Text>(); //Global since updated throughout the game.
     StackPane rugPane = new StackPane(); //Stack pane that needs to be global because it is added/removed from root throughout
 
     AsamSymbol asam; //Global asam variable, called in different methods.
+    TileRect[][] tileRect = new TileRect[ROW][COLUMN];  //49 tiles on the board. Global since called in differet methods
 
     Marrakech theGame; //New Marrakech class, initialised in getInitial() method.
 
-    int roundCounter = 0; //Counts how many rounds the game has gone through
+    int roundCounter = 1; //Counts how many rounds the game has gone through
     int playerCounter = 1; //Counts which player's turn it is
 
     boolean firstBool; //Records which button has been selected.
@@ -79,6 +84,40 @@ public class Game extends Application {
     public void calcWin(){
 
 
+    }
+
+    public class TileRect extends Rectangle {
+        double xLocation;
+        double yLocation;
+
+
+        /**
+         * Constructor for each tile
+         *
+         * @param xLocation Specifies the x location of the tile in the window.
+         * @param yLocation Specifies the y location of the tile in the window.
+         */
+        TileRect(double xLocation, double yLocation) {
+            super();
+            this.xLocation = xLocation;
+            this.yLocation = yLocation;
+
+            this.setTranslateX(xLocation);
+            this.setTranslateY(yLocation);
+
+            // Set width and height
+            this.setWidth(SQUARE_WIDTH);
+            this.setHeight(SQUARE_HEIGHT);
+
+            this.setFill(Color.web("#FFBB6E")); //Set fill colour
+            this.setStrokeWidth(2.0); //Set stroke width
+            this.setStroke(Color.web("#603300"));
+
+        }
+
+        public void setColour(String colour){
+            this.setFill(Color.web(colour)); //Set fill colour
+        }
     }
 
     /**
@@ -138,7 +177,8 @@ public class Game extends Application {
                     //Remove the event listener
                     this.setDisable(true);
                     firstBool = false;
-                    rugPlacementOne((int) Math.round(this.xLocation/SQUARE_WIDTH +3), (int) Math.round(this.yLocation/SQUARE_HEIGHT +3));
+                    setMessage("Select 2nd square for rug.");
+                    rugPlacement((int) Math.round(this.xLocation/SQUARE_WIDTH +3), (int) Math.round(this.yLocation/SQUARE_HEIGHT +3));
                 }
                 else{
                     this.setStyle("-fx-border-color: " + borderColour +";" +
@@ -148,13 +188,10 @@ public class Game extends Application {
                     rugPane.getChildren().removeIf(node
                             -> node instanceof Button && node != this && node != rugPane.getChildren().get(0) );
 
-
-                    //Create rug string
-                    String gameString = theGame.generateGameString();
-                    String rugString = theGame.generateRugString(colourLetters[playerCounter-1]);
-                    System.out.println(rugString);
-
-
+                    //Check requirements to make rug placement.
+                    TileButton firstButton = (TileButton) rugPane.getChildren().get(0);
+                    TileButton secondButton = this;
+                    checkPlacement(firstButton, secondButton);
                 }
 
             });
@@ -550,7 +587,7 @@ public class Game extends Application {
         String initialGameString = ""; //Game string starts wiht a P to denote player strings.
         for(int i=0; i<numberPlayers;i++){
             //Each player starts with 30 dirhams and 15 rugs. Initially all players are in the game.
-            String individualString = "P" + colourLetters[i] + "030" + "15" + "i";
+            String individualString = "P" + colourLetters.get(i) + "030" + "15" + "i";
             initialGameString += individualString;
         }
 
@@ -740,18 +777,13 @@ public class Game extends Application {
 
         return coordinateBool;
     }
-    public void rugPlacementOne(int xRef, int yRef){
+    public void rugPlacement(int xRef, int yRef){
         //Must set width of stackpane otherwise not able to click other buttons
         //Set width to the width of the board.
         rugPane.setPrefWidth(SQUARE_WIDTH*7);
         rugPane.setMinWidth(SQUARE_WIDTH*7);
         rugPane.setMaxWidth(SQUARE_WIDTH*7);
 
-        /*
-        rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
-        root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
-
-         */
 
         //Array of booleans - LEFT, RIGHT, TOP BOTTOM
         boolean[] coordinateBool = new boolean[4];
@@ -764,6 +796,7 @@ public class Game extends Application {
             coordinateBool = additionalConditions(coordinateBool, xRef,yRef);
         }
         else{
+            root.getChildren().add(rugPane);
             coordinateBool = firstConditions(coordinateBool, xRef, yRef);
         }
 
@@ -806,6 +839,14 @@ public class Game extends Application {
     }
 
     /**
+     * Process the payments between players.
+     */
+    public void processPayment(){
+        String gameString = theGame.generateGameString();
+        int paymentAmount = Marrakech.getPaymentAmount(gameString);
+        System.out.println(paymentAmount);
+    }
+    /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
      */
     public void diceRoll(){
@@ -835,6 +876,7 @@ public class Game extends Application {
 
         //Setting up event handler for when button is clicked:
         diceButton.setOnAction(event -> {
+            root.getChildren().remove(diceBox); //Immediately remove dice button from screen
             int rolledNumber = Marrakech.rollDie(); //Roll the dice.
 
             //Record Asam's previous direction
@@ -861,15 +903,17 @@ public class Game extends Application {
             }
             setMessage(textInstructions);
 
+            processPayment();
+
             //Once dice has been rolled and Asam has been moved, rug placement is next.
             //Wait one second then introduce rug placement
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
+                //Remove roll button from root
                 firstBool = true;
                 //Call rug placement function with asam's coordinates as reference
-                rugPlacementOne(theGame.asam.getX(), theGame.asam.getY());
-                root.getChildren().add(rugPane);
-                setMessage("Select first square for rug placement.");
+                rugPlacement(theGame.asam.getX(), theGame.asam.getY());
+                setMessage("Select 1st square for rug.");
             });
             pause.play();
         });
@@ -909,10 +953,71 @@ public class Game extends Application {
         //asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
 
     }
+
+    public void checkPlacement(TileButton oneBut, TileButton twoBut){
+        //Create game string
+        String gameString = theGame.generateGameString();
+
+        int xFirst = (int) oneBut.xLocation/SQUARE_WIDTH +3;
+        int yFirst = (int) oneBut.yLocation/SQUARE_HEIGHT +3;
+        IntPair firstCoord = new IntPair(xFirst,yFirst);
+
+        //x and y coordinate of second rug square selected
+        int xSec = (int) twoBut.xLocation/SQUARE_WIDTH +3;
+        int ySec = (int) twoBut.yLocation/SQUARE_HEIGHT +3;
+        IntPair secondCoord = new IntPair(xSec,ySec);
+
+        String rugString = theGame.generateRugString(colourLetters.get(playerCounter-1), firstCoord, secondCoord);
+
+        //DOUBLE CHECK THAT PLACEMENT IS VALID
+        if(!Marrakech.isPlacementValid(gameString, rugString)){
+            setMessage("Invalid rug placement, try again");
+            //Clear everything from rugpane:
+            rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
+            root.getChildren().remove(rugPane); //Remove from root.
+            firstBool = true;
+            rugPlacement(theGame.asam.getX(), theGame.asam.getY()); //Give opportunity to try again
+        }
+        else{
+            setMessage("Rug placement valid!");
+            String newString = Marrakech.makePlacement(gameString, rugString);
+            theGame.decodeMarrakech(newString); //Decode string
+            //Clear everything from rugpane
+            rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
+            root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
+
+            setColour(); //Set colour of tiles
+            displayStats(false);//Update player statistics.
+
+            //Go to next player after 1 second pause.
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(e -> {
+                playerCounter += 1;
+                round();
+            });
+            pause.play();
+        }
+
+
+    }
+    /**
+     * Sets colours of tiles based on which rug is occupied.
+     */
+    public void setColour(){
+        for(int i = 0; i<ROW; i++){ //Iterate through the columns
+            for(int j = 0; j<ROW; j++){ //Iterate through the rows.
+                String colourString = theGame.board.tiles[i][j].getColour().substring(0,1).toLowerCase();
+                if(!colourString.equals("n")){
+                    int index = colourLetters.indexOf(colourString);
+                    tileRect[i][j].setFill(Color.web(colourCodes[index]));
+                }
+
+            }
+
+        }
+    }
     public Group gameBoardDisplay(){
         backgroundCity(); //Add city in background of baord.
-
-        TileButton[] tileButton = new TileButton[49];  //49 tiles on the board.
 
         Group group = new Group();
         final int DRAW_START_X =100; //Where to start 'drawing'
@@ -941,7 +1046,6 @@ public class Game extends Application {
         group.getChildren().add(otherCorner);
 
         //CREATING THE BOARD
-        int counter = 0; //counter which counts iteration of double for loop
         for(int i = 0; i<ROW; i++){ //Iterate through the columns.
             double x = SQUARE_WIDTH * i + DRAW_START_X; //Specifying the x location of the tile.
 
@@ -966,9 +1070,8 @@ public class Game extends Application {
                 }
 
                 double y = SQUARE_HEIGHT * j + 100; //Specifying the y location of the tile
-                tileButton[counter] = new TileButton(x, y); //Creating the tile.
-                group.getChildren().add(tileButton[counter]);
-                counter +=1; //Increase counter by 1.
+                tileRect[i][j] = new TileRect(x, y); //Creating the tile.
+                group.getChildren().add(tileRect[i][j]);
 
             }
 
@@ -985,32 +1088,31 @@ public class Game extends Application {
         //Similar to the player names, the dirham and rug display is organised using Hboxes and Stackpanes.
         HBox statStore = new HBox(100);
         StackPane[] statPane = new StackPane[numberPlayers];
-        Text[] statText = new Text[numberPlayers];
 
         if(initial) { //If displaying for the first time, the visual aspects need to be set as well.
             for (int i = 1; i <= numberPlayers; i++) {
                 //Text that displays player the statistics - dirhams and rugs.
-                statText[i - 1] = new Text();
+                statText.add(new Text());
 
                 //Getting the number of dirhams and rugs from the Marrakech class.
                 int numberDirhams = theGame.getPlayers()[i-1].coins;
                 int numberRugs = theGame.getPlayers()[i-1].rugs;
 
-                statText[i - 1].setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
+                statText.get(i-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
 
                 //Setting the visual aspect of the display
                 Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 20);
-                statText[i - 1].setFont(moroccanFont);
+                statText.get(i-1).setFont(moroccanFont);
                 String colour = colourCodes[i - 1]; //Display player colour
-                statText[i - 1].setFill(Color.web(colour));
+                statText.get(i-1).setFill(Color.web(colour));
 
                 //Stackpane to organise alignment of text
                 statPane[i-1] = new StackPane();
-                statPane[i-1].getChildren().add(statText[i-1]);
-                StackPane.setAlignment(statText[i-1], Pos.TOP_CENTER);
-                statText[i-1].setTextAlignment(TextAlignment.CENTER);
-                statPane[i-1].setMargin(statText[i-1], new Insets(70, 0, 0, 0));
-                statText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
+                statPane[i-1].getChildren().add(statText.get(i-1));
+                StackPane.setAlignment(statText.get(i-1), Pos.TOP_CENTER);
+                statText.get(i-1).setTextAlignment(TextAlignment.CENTER);
+                statPane[i-1].setMargin(statText.get(i-1), new Insets(70, 0, 0, 0));
+                statText.get(i-1).setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
                 statPane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
                 statPane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
                 statStore.setAlignment(Pos.CENTER);
@@ -1024,7 +1126,7 @@ public class Game extends Application {
                 //Getting the number of dirhams and rugs from Marrakech class.
                 int numberDirhams = theGame.getPlayers()[j - 1].coins;
                 int numberRugs = theGame.getPlayers()[j - 1].rugs;
-                statText[j - 1].setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the
+                statText.get(j-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the
             }
         }
     }
@@ -1105,20 +1207,22 @@ public class Game extends Application {
      * Go through one round of play
      */
     public void round(){
-        roundDisplay(false, playerCounter); //Display the round and the player whose turn it is.
+        if(playerCounter == numberPlayers+1){ //Back to first player
+            roundCounter += 1;
+            playerCounter = 1;
+        }
+
+        //Display the round and the player whose turn it is.
+        if(roundCounter == 1){
+            roundDisplay(true, playerCounter); //Start of game so visuals need to be set.
+        }
+        else{
+            roundDisplay(false, playerCounter);
+        }
+
         setMessage("Set the direction of Asam");
         //display Asam direction buttons
         asamRotateButton();
-
-
-        roundCounter += 1;
-        if(roundCounter == 1){
-            roundDisplay(true, 1); //Start of game so visuals need to be set.
-        }
-        else{
-            roundDisplay(false, 1);
-        }
-
 
     }
 

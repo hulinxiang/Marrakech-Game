@@ -16,13 +16,14 @@ public class Marrakech {
     //How many players in the game.
 
     //Record of the rugs that have been placed (according to their id).
-    ArrayList<Rug> placedRugs = new ArrayList<>();
+    ArrayList<String> placedRugs = new ArrayList<>();
     public final int PLAYER_STRING_LENGTH = 8;
     String boardString;
     String assamString;
 
     ArrayList<Direction> arrayDirections = new ArrayList<Direction>((Arrays.asList(Direction.NORTH,Direction.EAST,Direction.SOUTH,Direction.WEST)));
 
+    Tile[][] tiles = new Tile[Board.BOARD_HEIGHT][Board.BOARD_WIDTH];
     /**
      * Getter method of players
      *
@@ -119,6 +120,19 @@ public class Marrakech {
 
     }
 
+    public void decodeMarrakech(String gameString){
+        for (int i = 0; i < numberPlayers; i++) {;
+            this.players[i] = Player.decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
+        }
+
+        String asamString = decodeAssamString(gameString);
+        this.asam.decodeAsamString(asamString);
+
+        String boardString = decodeBoardString(gameString);
+        this.board.tiles = makeTiles(boardString);
+
+    }
+
     /**
      * Method for decode assam string from game string
      *
@@ -185,7 +199,6 @@ public class Marrakech {
      * Assigns the state of each tile on the board based on their ID and colour.
      */
     public Tile[][] makeTiles(String boardString) {
-        Tile[][] tiles = new Tile[Board.BOARD_HEIGHT][Board.BOARD_WIDTH];
 
         int counter = 0;
         //Double for loop, looping through each column and row
@@ -218,30 +231,29 @@ public class Marrakech {
                 if (boardString.substring(counter, counter + 3).equals("n00")) { //EMPTY TILE
                     tiles[j][k].state = 0; //empty
                     tiles[j][k].owner = null; //empty therefore no owner
+                    tiles[j][k].id = "00";
                 } else {
                     tiles[j][k].state = 1; //not empty
                     tiles[j][k].owner = decodeOwner(boardString.substring(counter, counter + 1));
 
                     //SETTING ID
                     //Check if rug already recorded in array (since can cover two tiles).
-                    int idFromStr = Integer.parseInt(boardString.substring(counter + 1, counter + 3));
+                    String rugID = boardString.substring(counter + 1, counter + 3);
+                    tiles[j][k].id = rugID;
+
                     if (placedRugs.size() == 0) {
-                        Rug newRug = new Rug();
-                        newRug.rugID = idFromStr;
-                        placedRugs.add(newRug);
+                        placedRugs.add(rugID);
                     } else {
                         boolean booNew = true; //Whether rug has already been added to placedRugs.
-                        for (Rug placedRug : placedRugs) {
-                            if (placedRug.rugID == idFromStr) {
+                        for (String placedRug : placedRugs) {
+                            if (placedRug == rugID) {
                                 booNew = false;
                                 break;
                             }
                         }
 
                         if (booNew) { //Rug has not been added to placedRugs
-                            Rug newRug = new Rug();
-                            newRug.rugID = idFromStr;
-                            placedRugs.add(newRug);
+                            placedRugs.add(rugID);
                         }
                     }
 
@@ -1040,7 +1052,6 @@ public class Marrakech {
 
     public String generateGameString(){
         String gameString = "";
-
         //Create the player string
         for(int i=0; i<numberPlayers; i++){
             String zeroes = "0"; //Number of 0s depend on number of digits.
@@ -1067,14 +1078,31 @@ public class Marrakech {
 
         }
 
+        //Creating board string
+        String boardString = "";
+        for (int j = 0; j < Board.BOARD_WIDTH; j++) { //LOOPING THROUGH EACH COLUMN
+            for (int k = 0; k < Board.BOARD_HEIGHT; k++) { //LOOPING THROUGH EACH ROW
+                String tileColour;
+                if(this.board.tiles[j][k].colour == null){
+                    tileColour = "n";
+                }
+                else{
+                    tileColour = this.board.tiles[j][k].getColour().substring(0,1).toLowerCase();
+
+                }
+                String tileOwner = this.board.tiles[j][k].id;
+                boardString += tileColour + tileOwner;
+
+            }
+        }
         //Add asam string and board string
-        gameString += this.asam.getString() + this.getBoardString();
+        gameString += this.asam.getString() + "B" + boardString;
 
         //Add board string
         return gameString;
     }
 
-    public String generateRugString(String colour){
+    public String generateRugString(String colour, IntPair firstCord, IntPair secCord){
         String rugString = "";
 
         //Add colour code
@@ -1083,7 +1111,7 @@ public class Marrakech {
         //Generate potential id
         int recentID;
         if(placedRugs.size()>0){
-            recentID = placedRugs.get(placedRugs.size()-1).rugID; //Get id of most recent added rug
+            recentID = Integer.parseInt(placedRugs.get(placedRugs.size()-1)); //Get id of most recent added rug
         }
         else{
             recentID = 0; //Get id of most recent added rug
@@ -1091,8 +1119,7 @@ public class Marrakech {
         String potentialID = Integer.toString(recentID + 1);
         potentialID = "0".repeat(2-potentialID.length()) + potentialID;
 
-
-        rugString += potentialID;
+        rugString += potentialID + firstCord.x + firstCord.y + secCord.x + secCord.y;
 
 
         return rugString;

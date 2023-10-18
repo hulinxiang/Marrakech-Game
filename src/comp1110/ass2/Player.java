@@ -210,15 +210,7 @@ public class Player {
         return true;
     }
 
-    /**
-     * Counts how many rugs of the player are connected.
-     *
-     * @param rug is the rug we want to check the connections
-     * @return int is the number of connected tile of this rug
-     */
-    public int Connected(Rug rug) {
-        return 0;
-    }
+
 
     /**
      * Calculates the player's score

@@ -12,7 +12,7 @@ public class Tile {
     Player owner;
     //Denote the state of the tile. 0 means empty and 1 means occupied
 
-    Rug id;
+    String id;
     int state;
 
     String colour;
