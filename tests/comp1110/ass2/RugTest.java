@@ -5,19 +5,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class RugTest {
     @Test
-    public void checkSharedBoard(){
+    public void testCheckShareBorder() {
         Rug rug = new Rug();
-        assertTrue(rug.checkShareBoarder(),"the rug should share a board with merchant");
+        // assuming you have set up your rug and merchant position
+        assertTrue(rug.checkShareBoarder(), "The rug should share a border with the merchant");
+        // You can also add more scenarios to test when the rug doesn't share a border with the merchant
+        // assertFalse statements go here
     }
+
     @Test
-    public void ifPlaceCorrectly(){
+    public void testIfPlaceCorrectly() {
         Rug rug = new Rug();
-        assertTrue(rug.ifPlaceCorrectly(), "the rug should place correctly");
+        // assuming you have set up your rug within the bounds
+        assertTrue(rug.ifPlaceCorrectly(), "The rug should be placed correctly within the bounds of the board");
+        // You can also add more scenarios to test when the rug is placed out of bounds
+        // assertFalse statements go here
     }
+
     @Test
-    public void ifOverlap(){
+    public void testIfOverlap() {
         Rug rug1 = new Rug();
         Rug rug2 = new Rug();
-        assertTrue(rug1.ifOverlap(), "rug should not overlap on player's rug");
+        // assuming you have set up your rugs
+        assertTrue(rug1.ifOverlap(), "The rug should not fully overlap another player's rug");
+        // You can also add more scenarios to test when the rug does fully overlap another player's rug
+        // assertTrue statements go here
     }
 }
