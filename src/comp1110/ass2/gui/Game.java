@@ -968,7 +968,6 @@ public class Game extends Application {
         IntPair secondCoord = new IntPair(xSec,ySec);
 
         String rugString = theGame.generateRugString(colourLetters.get(playerCounter-1), firstCoord, secondCoord);
-        System.out.println(rugString); //THE ISSUE IS WITH GENERATING THE IDS IN THE RUG STRING.
         //DOUBLE CHECK THAT PLACEMENT IS VALID
         if(!Marrakech.isPlacementValid(gameString, rugString)){
             setMessage("Invalid rug placement, try again");

@@ -16,7 +16,7 @@ public class Marrakech {
     //How many players in the game.
 
     //Record of the rugs that have been placed (according to their id).
-    ArrayList<String> placedRugs = new ArrayList<>();
+    HashSet<Integer> placedRugs = new HashSet<>(); //Use hash set since only add once.
     public final int PLAYER_STRING_LENGTH = 8;
     String boardString;
     String assamString;
@@ -231,7 +231,7 @@ public class Marrakech {
                 if (boardString.substring(counter, counter + 3).equals("n00")) { //EMPTY TILE
                     tiles[j][k].state = 0; //empty
                     tiles[j][k].owner = null; //empty therefore no owner
-                    tiles[j][k].id = "00";
+                    tiles[j][k].id = 0;
                 } else {
                     tiles[j][k].state = 1; //not empty
                     tiles[j][k].owner = decodeOwner(boardString.substring(counter, counter + 1));
@@ -239,8 +239,11 @@ public class Marrakech {
                     //SETTING ID
                     //Check if rug already recorded in array (since can cover two tiles).
                     String rugID = boardString.substring(counter + 1, counter + 3);
-                    tiles[j][k].id = rugID;
+                    tiles[j][k].id = Integer.parseInt(rugID);
 
+                    placedRugs.add(tiles[j][k].id); //Since hash set will only be added once.
+
+                    /*
                     if (placedRugs.size() == 0) {
                         placedRugs.add(rugID);
                     } else {
@@ -255,7 +258,7 @@ public class Marrakech {
                         if (booNew) { //Rug has not been added to placedRugs
                             placedRugs.add(rugID);
                         }
-                    }
+                    }*/
 
                 }
                 counter += 3;
@@ -1090,8 +1093,9 @@ public class Marrakech {
                     tileColour = this.board.tiles[j][k].getColour().substring(0,1).toLowerCase();
 
                 }
-                String tileOwner = this.board.tiles[j][k].id;
-                boardString += tileColour + tileOwner;
+                int size = Integer.toString(this.board.tiles[j][k].id).length();
+                String tileID = "0".repeat(2-size) + Integer.toString(this.board.tiles[j][k].id);
+                boardString += tileColour + tileID;
 
             }
         }
@@ -1109,9 +1113,18 @@ public class Marrakech {
         rugString += colour;
 
         //Generate potential id
+        ArrayList<Integer> tempRugs = new ArrayList<>(placedRugs); //Create temporary array list from hash set
+        Collections.sort(tempRugs); //Sort hash set in array list.
+
+        System.out.println("NEW");
+        for(int i =0; i<tempRugs.size(); i++){
+            System.out.println(tempRugs.get(i));
+        }
+
         int recentID;
         if(placedRugs.size()>0){
-            recentID = Integer.parseInt(placedRugs.get(placedRugs.size()-1)); //Get id of most recent added rug
+            System.out.println("NEW");
+            recentID = tempRugs.get(tempRugs.size()-1); //Get id of most recent added rug
         }
         else{
             recentID = 0; //Get id of most recent added rug
