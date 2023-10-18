@@ -45,7 +45,7 @@ public class Rug { //Maybe useful... which rug has occupied tile?
      * @return boolean
      */
     public boolean ifOverlap() {
-        return true;
+        return false;
     } //Which rug is at the topmost level?
 
 

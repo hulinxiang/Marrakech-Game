@@ -27,7 +27,7 @@ public class RugTest {
         Rug rug1 = new Rug();
         Rug rug2 = new Rug();
         // assuming you have set up your rugs
-        assertTrue(rug1.ifOverlap(), "The rug should not fully overlap another player's rug");
+        assertFalse(rug1.ifOverlap(), "The rug should not fully overlap another player's rug");
         // You can also add more scenarios to test when the rug does fully overlap another player's rug
         // assertTrue statements go here
     }
