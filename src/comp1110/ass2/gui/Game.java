@@ -844,7 +844,7 @@ public class Game extends Application {
     public void processPayment(){
         String gameString = theGame.generateGameString();
         int paymentAmount = Marrakech.getPaymentAmount(gameString);
-        System.out.println(paymentAmount);
+        //System.out.println(paymentAmount);
     }
     /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
@@ -968,7 +968,7 @@ public class Game extends Application {
         IntPair secondCoord = new IntPair(xSec,ySec);
 
         String rugString = theGame.generateRugString(colourLetters.get(playerCounter-1), firstCoord, secondCoord);
-
+        System.out.println(rugString); //THE ISSUE IS WITH GENERATING THE IDS IN THE RUG STRING.
         //DOUBLE CHECK THAT PLACEMENT IS VALID
         if(!Marrakech.isPlacementValid(gameString, rugString)){
             setMessage("Invalid rug placement, try again");
