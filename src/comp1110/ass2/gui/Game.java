@@ -1,7 +1,7 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.IntPair;
-import comp1110.ass2.Tile;
+import comp1110.ass2.ai.AI;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -77,6 +77,8 @@ public class Game extends Application {
     boolean opponentBoo; //Record if single player playing against computer.
 
     boolean intBoo; //Records if opponent is intelligent (True) or random (False).
+
+    AI opponent; //Only used if one player in the game.
 
     /**
     Calculates the winner
@@ -663,10 +665,18 @@ public class Game extends Application {
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
 
+        System.out.println(numberPlayers);
         for(int i = 1; i<=numberPlayers; i++){
             //Text that displays player name
             nameText[i-1] = new Text();
-            nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+
+            if(opponentBoo && i==2){ //AI will always go second.
+                nameText[i-1].setText(i + ". COMPUTER"); //Display the names of players
+            }
+            else{
+                nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+            }
+
             Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
             nameText[i-1].setFont(moroccanFont);
             String colour = colourCodes[i-1]; //Display player colour
@@ -1312,6 +1322,22 @@ public class Game extends Application {
     }
 
     /**
+     * Computer goes thorugh its round of play, rotating asa etc.
+     */
+    public void computerRound(){
+        if(roundCounter==1){
+            opponent = new AI(); //Initialise the opponent
+        }
+
+        /*
+        String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
+        System.out.println(theGame.asam.getString());
+        theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
+        asamRotateDisplay(); //Display rotation*/
+
+    }
+
+    /**
      * Go through one round of play
      */
     public void round(){
@@ -1333,6 +1359,7 @@ public class Game extends Application {
             roundDisplay(false, playerCounter);
         }
 
+        //MOVE THROUGH PHASES OF GAME
         String tempString = theGame.generateGameString();
         if(Marrakech.ifGameOver(tempString)){
             setMessage("Game Over!");
@@ -1345,8 +1372,13 @@ public class Game extends Application {
         }
         else{
             setMessage("Set the direction of Asam");
-            //display Asam direction buttons
-            asamRotateButton();
+
+            if(opponentBoo &&playerCounter==2){ //COMPUTER'S TURN
+                computerRound();
+            }
+            else{
+                asamRotateButton(); //Display Asam direction buttons.
+            }
         }
 
 
@@ -1379,6 +1411,8 @@ public class Game extends Application {
      * Changes screen so that 1 player can choose the type of computer opponent they are playing.
      */
     public void opponentScreen(){
+        numberPlayers =2; //TWO PLAYERS SINCE HUMAN AND AI
+
         root.getChildren().clear();
         backgroundCity();
         backgroundSky();
