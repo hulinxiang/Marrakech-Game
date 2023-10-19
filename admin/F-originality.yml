@@ -31,9 +31,17 @@ collaboration:
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
 code:
-  - comment:
-    url:
-    licence:
+  - comment: Instead of generating a random integer to shuffle the players, we implemented the following line
+        which saved a lot of time. From assignOrder() method in the Game class = Collections.shuffle(nameArray).
+    url: https://www.geeksforgeeks.org/collections-shuffle-method-in-java-with-examples/
+    licence: Public domain
+
+  - comment: I (Lize) had to research how to remove all nodes from a Stackpane except the button that has been clicked. 
+          my research gave me the following line, which is used in the tielButton constructor in the Game class =
+          rugPane.getChildren().removeIf(node -> node instanceof Button && node != this);
+          Note, the code is not duplicate, but was just inspired by the article below.
+    url: https://stackoverflow.com/questions/35284772/how-to-remove-individual-nodes-within-groups-on-a-pane-javafx
+    licence: Public domain
 
 # Use this to list any assets (artwork, sound, etc) that you used.
 # Provide a comment explaining your use of that asset and the URL

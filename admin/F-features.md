@@ -10,3 +10,4 @@ of our project implements the following features:
  - Option to play against an intelligent computer opponent (Task 17)
 
 additional features...
+- Option to add player names, shuffling randomly who is going first. 
