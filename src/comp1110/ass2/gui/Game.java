@@ -1090,7 +1090,8 @@ public class Game extends Application {
         }
         else{
             setMessage("Rug placement valid!");
-            placeRug(gameString, rugString);
+            String newString = Marrakech.makePlacement(gameString, rugString);
+            placeRug(newString);
 
         }
 
@@ -1179,9 +1180,8 @@ public class Game extends Application {
     /**
      * Place the rug onto the board.
      */
-    public void placeRug(String gameString, String rugString){
-        String newString = Marrakech.makePlacement(gameString, rugString);
-        theGame.decodeMarrakech(newString); //Decode string
+    public void placeRug(String gameString){
+        theGame.decodeMarrakech(gameString); //Decode string
 
         //Clear everything from rugpane
         rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
@@ -1324,7 +1324,7 @@ public class Game extends Application {
         //Setting up event handler for when button is clicked:
         for(int j=0; j<3; j++){
             directionButton[j].setOnAction(event -> {
-                directionBox.getChildren().removeAll();
+                directionBox.getChildren().clear();
                 root.getChildren().removeAll(directionBox);
                 //-1 for right, 0 for middle, 1 for left.
                 int rotationFactor = Integer.parseInt(((Button) event.getSource()).getId()); //Setting the message displayed to the id.
@@ -1386,8 +1386,8 @@ public class Game extends Application {
         }
         else{ //Random opponent rug placement
             String rug = opponent.randomPlace(gameString);
-            System.out.println(gameString);
-            //placeRug(gameString, rug);
+            String newString = AI.makePlacementAI(gameString,rug);
+            placeRug(newString);
         }
     }
     /**
