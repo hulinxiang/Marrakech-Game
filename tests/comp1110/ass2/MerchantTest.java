@@ -11,14 +11,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class MerchantTest {
     private final Merchant merchant = new Merchant();
-    String globalDirection = "E:/comp6710/comp1110-ass2/tests/comp1110/ass2/testdata/";
 
     //Test decodeAssamString with invalid string format
     @Test
     public void decodeAsamString() throws IOException {
         BufferedReader fr;
-
-        fr = new BufferedReader(new FileReader(globalDirection + "decode_assam_string.txt"));
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/decode_assam_string.txt")));
         String s;
         while ((s = fr.readLine()) != null) {
             String[] testString = s.split("@");
@@ -39,7 +37,7 @@ public class MerchantTest {
     @Test
     public void decodeAssamStringInvalid() throws IOException {
         BufferedReader fr;
-        fr = new BufferedReader(new FileReader(globalDirection + "decode_assam_string_invalid.txt"));
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/decode_assam_string_invalid.txt")));
         String s;
         while ((s = fr.readLine()) != null) {
             String[] testString = s.split("@");
@@ -58,7 +56,7 @@ public class MerchantTest {
     @Test
     public void rotate() throws IOException {
         BufferedReader fr;
-        fr = new BufferedReader(new FileReader(globalDirection + "rotate_assam_valid.txt"));
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/rotate_assam_valid.txt")));
         String s;
         while ((s = fr.readLine()) != null) {
             String[] testString = s.split("@");
@@ -71,7 +69,7 @@ public class MerchantTest {
     @Test
     public void rotateInvalid() throws IOException {
         BufferedReader fr;
-        fr = new BufferedReader(new FileReader(globalDirection + "rotate_assam_invalid.txt"));
+        fr = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/rotate_assam_invalid.txt")));
         String s;
         while ((s = fr.readLine()) != null) {
             String[] testString = s.split("@");

@@ -6,17 +6,16 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class IntPairTest {
-
-    String globalDirection = "E:/comp6710/comp1110-ass2/tests/comp1110/ass2/testdata/";
 
 
     @Test
     public void testAdd() throws IOException {
         BufferedReader fr;
         //Read data from file
-        fr = new BufferedReader(new FileReader(globalDirection + "intpair_add.txt"));
+        fr =  new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("testdata/intpair_add.txt")));
         String str;
         IntPair first = null;
         IntPair second = null;
