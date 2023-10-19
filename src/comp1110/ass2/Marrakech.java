@@ -232,7 +232,7 @@ public class Marrakech {
                 if (boardString.substring(counter, counter + 3).equals("n00")) { //EMPTY TILE
                     tiles[j][k].state = 0; //empty
                     tiles[j][k].owner = null; //empty therefore no owner
-                    tiles[j][k].id = "00";
+                    tiles[j][k].id = 0;
                 } else {
                     tiles[j][k].state = 1; //not empty
                     tiles[j][k].owner = decodeOwner(boardString.substring(counter, counter + 1));
@@ -240,7 +240,7 @@ public class Marrakech {
                     //SETTING ID
                     //Check if rug already recorded in array (since can cover two tiles).
                     String rugID = boardString.substring(counter + 1, counter + 3);
-                    tiles[j][k].id = rugID;
+                    tiles[j][k].id = Integer.parseInt(rugID);
 
                     if (placedRugs.size() == 0) {
                         placedRugs.add(rugID);
@@ -1135,7 +1135,8 @@ public class Marrakech {
                     tileColour = this.board.tiles[j][k].getColour().substring(0, 1).toLowerCase();
 
                 }
-                String tileOwner = this.board.tiles[j][k].id;
+                String tempOwner = Integer.toString(this.board.tiles[j][k].id);
+                String tileOwner = "0".repeat(2-tempOwner.length()) + tempOwner;
                 boardString += tileColour + tileOwner;
 
             }
