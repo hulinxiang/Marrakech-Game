@@ -838,13 +838,33 @@ public class Game extends Application {
 
     }
 
+    public void checkPayment(String message){
+        //Check if asam landed on another player's rug
+        int xCord = theGame.asam.getX();
+        int yCord = theGame.asam.getY();
+        String colourString = theGame.board.tiles[xCord][yCord].getColour().substring(0,1).toLowerCase();
+
+        //Check wif payment is needed
+        if(colourString.equals("n")){ //Asam landed on empty tile
+            message += "\nNo payment."; //Add to the message text
+        }
+        else if(colourString.equals(colourLetters.get(playerCounter-1))){ //Asam landed on current player's rug
+            message += "\nNo payment."; //Add to the message text
+        }
+        else{
+            message += "\nPayment made."; //Add to the message text
+            //Generate game string
+            String tempString = theGame.generateGameString();
+            int payment = Marrakech.getPaymentAmount(tempString);
+            processPayment(payment);
+        }
+        setMessage(message);
+    }
     /**
      * Process the payments between players.
      */
-    public void processPayment(){
-        String gameString = theGame.generateGameString();
-        int paymentAmount = Marrakech.getPaymentAmount(gameString);
-        //System.out.println(paymentAmount);
+    public void processPayment(int paymentAmt){
+
     }
     /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
@@ -901,13 +921,12 @@ public class Game extends Application {
             else{
                 textInstructions = "Asam has moved " + rolledNumber + " steps";
             }
-            setMessage(textInstructions);
 
-            processPayment();
+            checkPayment(textInstructions); //Check if asam landed on other player's rug and if so process payment.
 
             //Once dice has been rolled and Asam has been moved, rug placement is next.
             //Wait one second then introduce rug placement
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(e -> {
                 //Remove roll button from root
                 firstBool = true;

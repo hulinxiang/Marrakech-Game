@@ -1116,14 +1116,8 @@ public class Marrakech {
         ArrayList<Integer> tempRugs = new ArrayList<>(placedRugs); //Create temporary array list from hash set
         Collections.sort(tempRugs); //Sort hash set in array list.
 
-        System.out.println("NEW");
-        for(int i =0; i<tempRugs.size(); i++){
-            System.out.println(tempRugs.get(i));
-        }
-
         int recentID;
         if(placedRugs.size()>0){
-            System.out.println("NEW");
             recentID = tempRugs.get(tempRugs.size()-1); //Get id of most recent added rug
         }
         else{
