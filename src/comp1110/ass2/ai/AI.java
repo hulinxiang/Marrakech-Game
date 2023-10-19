@@ -64,7 +64,7 @@ public class AI extends Player {
         char assamDirection = assamString.charAt(3);
         int random = (int) (rotateNum.length * Math.random());
         //update assam direction by rotation
-        assamDirection = Merchant.rotate(assamDirection, random);
+        assamDirection = Merchant.rotate(assamDirection, rotateNum[random]);
         // Replace the last character of assamString with assamDirection
         assamString = assamString.substring(0, assamString.length() - 1) + assamDirection;
 
@@ -194,7 +194,6 @@ public class AI extends Player {
         }
         return Integer.toString(num);
     }
-
 
 
 }
