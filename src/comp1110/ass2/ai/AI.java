@@ -36,7 +36,11 @@ public class AI extends Player {
         Random random = new Random();
         Colour[] colours = Colour.values();
         //Randomly pick a colour for computer
-        this.colour = String.valueOf(colours[random.nextInt(colours.length)].getCode());
+        //this.colour = String.valueOf(colours[random.nextInt(colours.length)].getCode());
+
+        //Colour of AI will always be cyan.
+        this.colour = String.valueOf(colours[1]);
+
         //Initialize the id for computer rug. Every round the id+1.
         //For example, first time the computer placed a rug, the rug id is "00".
         //Second time it placed a rug, the id would be "01".

@@ -1,7 +1,7 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.IntPair;
-import comp1110.ass2.Tile;
+import comp1110.ass2.ai.AI;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -74,6 +74,11 @@ public class Game extends Application {
     int playerCounter = 1; //Counts which player's turn it is
 
     boolean firstBool; //Records which button has been selected.
+    boolean opponentBoo; //Record if single player playing against computer.
+
+    boolean intBoo; //Records if opponent is intelligent (True) or random (False).
+
+    AI opponent; //Only used if one player in the game.
 
     /**
     Calculates the winner
@@ -505,7 +510,14 @@ public class Game extends Application {
                     //If enter is pressed game screen will appear.
                     nameField.setOnKeyPressed(event -> {
                         if (event.getCode().getName().equals("Enter")) {
-                            changeSceneBoard(); //Changes scene to board display
+                            if(numberPlayers ==1){
+                                opponentBoo = true;
+                                opponentScreen();
+                            }
+                            else{
+                                opponentBoo = false;
+                                changeSceneBoard(); //Changes scene to board display
+                            }
                         }
                     });
                 }
@@ -653,10 +665,18 @@ public class Game extends Application {
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
 
+        System.out.println(numberPlayers);
         for(int i = 1; i<=numberPlayers; i++){
             //Text that displays player name
             nameText[i-1] = new Text();
-            nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+
+            if(opponentBoo && i==2){ //AI will always go second.
+                nameText[i-1].setText(i + ". COMPUTER"); //Display the names of players
+            }
+            else{
+                nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+            }
+
             Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
             nameText[i-1].setFont(moroccanFont);
             String colour = colourCodes[i-1]; //Display player colour
@@ -1302,6 +1322,22 @@ public class Game extends Application {
     }
 
     /**
+     * Computer goes thorugh its round of play, rotating asa etc.
+     */
+    public void computerRound(){
+        if(roundCounter==1){
+            opponent = new AI(); //Initialise the opponent
+        }
+
+        /*
+        String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
+        System.out.println(theGame.asam.getString());
+        theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
+        asamRotateDisplay(); //Display rotation*/
+
+    }
+
+    /**
      * Go through one round of play
      */
     public void round(){
@@ -1323,6 +1359,7 @@ public class Game extends Application {
             roundDisplay(false, playerCounter);
         }
 
+        //MOVE THROUGH PHASES OF GAME
         String tempString = theGame.generateGameString();
         if(Marrakech.ifGameOver(tempString)){
             setMessage("Game Over!");
@@ -1335,8 +1372,13 @@ public class Game extends Application {
         }
         else{
             setMessage("Set the direction of Asam");
-            //display Asam direction buttons
-            asamRotateButton();
+
+            if(opponentBoo &&playerCounter==2){ //COMPUTER'S TURN
+                computerRound();
+            }
+            else{
+                asamRotateButton(); //Display Asam direction buttons.
+            }
         }
 
 
@@ -1362,6 +1404,60 @@ public class Game extends Application {
         backgroundSky();
         backgroundCity();
         playerScreen();
+
+    }
+
+    /**
+     * Changes screen so that 1 player can choose the type of computer opponent they are playing.
+     */
+    public void opponentScreen(){
+        numberPlayers =2; //TWO PLAYERS SINCE HUMAN AND AI
+
+        root.getChildren().clear();
+        backgroundCity();
+        backgroundSky();
+
+        //Adding text
+        VBox wholeBox = new VBox(10);
+
+        Text chooseText = new Text();
+        chooseText.setText("Choose opponent type.");
+        Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
+        chooseText.setFont(moroccanFont);
+        chooseText.setFill(Color.web("#ffffff"));
+        wholeBox.getChildren().add(chooseText);
+        wholeBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        HBox oppBox = new HBox(10); //Container to display dice button
+        Button randBut = new Button("RANDOM"); //Random opponent
+        Button intBut = new Button("INTELLIGENT"); //Intelligent opponent
+
+        oppBox.getChildren().addAll(randBut,intBut);
+        oppBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        String style =  "-fx-font-size: 15px;" + "-fx-text-fill: white;" + "-fx-background-color: #f8a102;";
+        randBut.setStyle(style);
+        intBut.setStyle(style);
+
+        //SETTING SIZE OF BUTTONS
+        randBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
+        randBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
+        intBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
+        intBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
+
+        wholeBox.getChildren().add(oppBox);
+        root.getChildren().add(wholeBox);
+
+        //SET ON ACTION EVENTS FOR BUTTONS
+        randBut.setOnAction(e -> {
+            intBoo = false; //opponent is not intelligent
+            changeSceneBoard(); //move to stage of playing the game.
+        });
+
+        intBut.setOnAction(e -> {
+            intBoo = true; //opponent is intelligent
+            changeSceneBoard(); //move to stage of playing the game.
+        });
 
     }
 
