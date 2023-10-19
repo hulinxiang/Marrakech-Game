@@ -11,7 +11,7 @@ public class Player {
     // Starting number of rugs;
     static int START_RUGS = 15;
     //Number of coins
-    public int coins;
+    public int dirhams;
     //Number of rugs
     public int rugs;
     //The coordinates of the player's rugs on the board.
@@ -43,15 +43,15 @@ public class Player {
      * @return coins
      */
     public int getCoins() {
-        return coins;
+        return dirhams;
     }
 
     /**
      * Setter method of coins
-     * @param coins
+     * @param dirhams
      */
-    public void setCoins(int coins) {
-        this.coins = coins;
+    public void setDirhams(int dirhams) {
+        this.dirhams = dirhams;
     }
 
     /**
@@ -107,7 +107,7 @@ public class Player {
         Player player =new Player();
         player.colour = decodeColour(playerString.substring(1,2));
 
-        player.coins = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
+        player.dirhams = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
         player.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
 
         //Setting the player state:
