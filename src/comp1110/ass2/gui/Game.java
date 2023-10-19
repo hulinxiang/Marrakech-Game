@@ -79,7 +79,16 @@ public class Game extends Application {
     Calculates the winner
      */
     public void calcWin(){
+        String tempString = theGame.generateGameString();
+        String winnerStr = Character.toString(Marrakech.getWinner(tempString));
 
+        if(winnerStr.equals("t")){
+            setMessage("Game is a tie");
+        }
+        else{
+            Integer indexWinner = colourLetters.indexOf(winnerStr)+1;
+            winnerDisplay(indexWinner);
+        }
 
     }
 
@@ -266,6 +275,40 @@ public class Game extends Application {
 
         double halfSide = SQUARE_WIDTH / 2.0;
         double sqrtSide = Math.sqrt(Math.pow(SQUARE_WIDTH, 2) - Math.pow(halfSide, 2))/2.0;
+
+    }
+
+    /**
+     * Displays the winner of the game by drawing gold border around their name.
+     * @param winIndex Number of the player who won.
+     */
+    public void winnerDisplay(int winIndex){
+        setMessage("Player " + winIndex + " is the winner!");
+
+        HBox backgroundStore = new HBox(100);
+        Rectangle[] backgrounds = new Rectangle[numberPlayers];
+
+        for(int i = 1; i<=numberPlayers; i++){
+            //Add background for each player using rectangle.
+            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/7, WINDOW_HEIGHT/7); // Specify width and height
+            backgrounds[i-1].setFill(Color.TRANSPARENT); // Set the fill color to white
+            double cornerRadius = 20; // Radius for round edges of rectangle.
+            backgrounds[i-1].setArcWidth(cornerRadius);
+            backgrounds[i-1].setArcHeight(cornerRadius);
+            backgroundStore.setAlignment(Pos.TOP_CENTER); //Setting alignment for rectangle.
+            backgroundStore.getChildren().add(backgrounds[i-1]);
+
+            //CREATE GOLD BORDER IF WINNER
+            if(i==winIndex){
+                backgrounds[i-1].setStroke(Color.web("#f8a102")); //Set stroke colour to gold.
+                backgrounds[i-1].setStrokeWidth(5); //Set the stroke width to create a broad border
+            }
+        }
+
+        //Add margin at top of rectangle to improve display.
+        root.getChildren().add(backgroundStore);
+        Insets margin = new Insets(30, 0, 0, 0); // Top, Right, Bottom, Left
+        StackPane.setMargin(backgroundStore, margin);
 
     }
 
@@ -834,6 +877,20 @@ public class Game extends Application {
 
     }
 
+    public void rugPhase(){
+        //Once dice has been rolled and Asam has been moved, rug placement is next.
+        //Wait one second then introduce rug placement
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.setOnFinished(e -> {
+            //Remove roll button from root
+            firstBool = true;
+            //Call rug placement function with asam's coordinates as reference
+            rugPlacement(theGame.asam.getX(), theGame.asam.getY());
+            setMessage("Select 1st square for rug.");
+        });
+        pause.play();
+    }
+
     public void checkPayment(String message){
         //Check if asam landed on another player's rug
         int xCord = theGame.asam.getX();
@@ -843,9 +900,11 @@ public class Game extends Application {
         //Check wif payment is needed
         if(colourString.equals("n")){ //Asam landed on empty tile
             message += "\nNo payment."; //Add to the message text
+            rugPhase();
         }
         else if(colourString.equals(colourLetters.get(playerCounter-1))){ //Asam landed on current player's rug
             message += "\nNo payment."; //Add to the message text
+            rugPhase();
         }
         else{
             message += "\nPayment made."; //Add to the message text
@@ -861,8 +920,18 @@ public class Game extends Application {
      * Process the payments between players.
      */
     public void processPayment(int paymentAmt, int receiver){
-        theGame.players[playerCounter-1].coins -= paymentAmt; //Subtract from player paying
-        theGame.players[receiver-1].coins += paymentAmt; //Add to player receiving
+        if(theGame.players[playerCounter-1].coins - paymentAmt <= 0){ //Check if dirhams left
+            theGame.players[receiver-1].coins += theGame.players[playerCounter-1].coins; //pay what they have
+            theGame.players[playerCounter-1].coins = 0;
+
+            theGame.players[playerCounter-1].playerState = -1;
+
+        }
+        else{
+            theGame.players[playerCounter-1].coins -= paymentAmt; //Subtract from player paying
+            theGame.players[receiver-1].coins += paymentAmt; //Add to player receiving
+            rugPhase();
+        }
         displayStats(false);//Display the payment
 
     }
@@ -924,17 +993,6 @@ public class Game extends Application {
 
             checkPayment(textInstructions); //Check if asam landed on other player's rug and if so process payment.
 
-            //Once dice has been rolled and Asam has been moved, rug placement is next.
-            //Wait one second then introduce rug placement
-            PauseTransition pause = new PauseTransition(Duration.seconds(2));
-            pause.setOnFinished(e -> {
-                //Remove roll button from root
-                firstBool = true;
-                //Call rug placement function with asam's coordinates as reference
-                rugPlacement(theGame.asam.getX(), theGame.asam.getY());
-                setMessage("Select 1st square for rug.");
-            });
-            pause.play();
         });
 
 
@@ -1144,7 +1202,15 @@ public class Game extends Application {
                 //Getting the number of dirhams and rugs from Marrakech class.
                 int numberDirhams = theGame.getPlayers()[j - 1].coins;
                 int numberRugs = theGame.getPlayers()[j - 1].rugs;
-                statText.get(j-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the
+                if(theGame.players[j-1].playerState == -1){ //Player is out of game
+                    statText.get(j-1).setText("OUT");
+                    round(); //Move to next player
+                }
+                else{
+                    //Display the number of coins and rugs
+                    statText.get(j-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    ");
+                }
+
             }
         }
     }
@@ -1167,7 +1233,21 @@ public class Game extends Application {
             //If i is 0 then left button, if 1 then no rotate button, if 2 then right rotate button
             //Find possible directions left and right to get button name.
             Direction buttonDirection = theGame.possibleDirections(currentDirection, i-1);
-            directionButton[i] = new Button(buttonDirection.name());
+
+            //ASSIGN BUTTON NAME
+            directionButton[i] = new Button();
+            switch (i){
+                case 0:
+                    directionButton[i].setText("LEFT");
+                    break;
+                case 1:
+                    directionButton[i].setText("NONE");
+                    break;
+                case 2:
+                    directionButton[i].setText("RIGHT");
+                    break;
+            }
+
 
             //Give the button an id so that it can be identified by the event listener.
             String id = Integer.toString(i-1); //-1 if left, 0 if none, 1 if right
@@ -1230,6 +1310,11 @@ public class Game extends Application {
             playerCounter = 1;
         }
 
+        //Check that player is not out of game
+        if(theGame.players[playerCounter-1].playerState == -1){
+            playerCounter += 1;  //Skip player if they are out of the game.
+        }
+
         //Display the round and the player whose turn it is.
         if(roundCounter == 1){
             roundDisplay(true, playerCounter); //Start of game so visuals need to be set.
@@ -1238,8 +1323,15 @@ public class Game extends Application {
             roundDisplay(false, playerCounter);
         }
 
-        if(theGame.players[playerCounter-1].rugs ==0){
-            System.out.println("Game Over!!");
+        String tempString = theGame.generateGameString();
+        if(Marrakech.ifGameOver(tempString)){
+            setMessage("Game Over!");
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+            pause.setOnFinished(e -> {
+                calcWin();
+            });
+            pause.play();
+
         }
         else{
             setMessage("Set the direction of Asam");
