@@ -74,6 +74,9 @@ public class Game extends Application {
     int playerCounter = 1; //Counts which player's turn it is
 
     boolean firstBool; //Records which button has been selected.
+    boolean opponentBoo; //Record if single player playing against computer.
+
+    boolean intBoo; //Records if opponent is intelligent (True) or random (False).
 
     /**
     Calculates the winner
@@ -505,7 +508,14 @@ public class Game extends Application {
                     //If enter is pressed game screen will appear.
                     nameField.setOnKeyPressed(event -> {
                         if (event.getCode().getName().equals("Enter")) {
-                            changeSceneBoard(); //Changes scene to board display
+                            if(numberPlayers ==1){
+                                opponentBoo = true;
+                                opponentScreen();
+                            }
+                            else{
+                                opponentBoo = false;
+                                changeSceneBoard(); //Changes scene to board display
+                            }
                         }
                     });
                 }
@@ -1362,6 +1372,58 @@ public class Game extends Application {
         backgroundSky();
         backgroundCity();
         playerScreen();
+
+    }
+
+    /**
+     * Changes screen so that 1 player can choose the type of computer opponent they are playing.
+     */
+    public void opponentScreen(){
+        root.getChildren().clear();
+        backgroundCity();
+        backgroundSky();
+
+        //Adding text
+        VBox wholeBox = new VBox(10);
+
+        Text chooseText = new Text();
+        chooseText.setText("Choose opponent type.");
+        Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
+        chooseText.setFont(moroccanFont);
+        chooseText.setFill(Color.web("#ffffff"));
+        wholeBox.getChildren().add(chooseText);
+        wholeBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        HBox oppBox = new HBox(10); //Container to display dice button
+        Button randBut = new Button("RANDOM"); //Random opponent
+        Button intBut = new Button("INTELLIGENT"); //Intelligent opponent
+
+        oppBox.getChildren().addAll(randBut,intBut);
+        oppBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        String style =  "-fx-font-size: 15px;" + "-fx-text-fill: white;" + "-fx-background-color: #f8a102;";
+        randBut.setStyle(style);
+        intBut.setStyle(style);
+
+        //SETTING SIZE OF BUTTONS
+        randBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
+        randBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
+        intBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
+        intBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
+
+        wholeBox.getChildren().add(oppBox);
+        root.getChildren().add(wholeBox);
+
+        //SET ON ACTION EVENTS FOR BUTTONS
+        randBut.setOnAction(e -> {
+            intBoo = false; //opponent is not intelligent
+            changeSceneBoard(); //move to stage of playing the game.
+        });
+
+        intBut.setOnAction(e -> {
+            intBoo = true; //opponent is intelligent
+            changeSceneBoard(); //move to stage of playing the game.
+        });
 
     }
 
