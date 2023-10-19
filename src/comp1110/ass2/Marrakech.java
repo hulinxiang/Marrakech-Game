@@ -116,6 +116,9 @@ public class Marrakech {
      * @return x position
      */
     public static int getAssamPositionX(String assamString) {
+        if (assamString.charAt(0) == 'A') {
+            return Integer.parseInt(assamString.substring(1, 2));
+        }
         return Integer.parseInt(assamString.substring(0, 1));
     }
 
@@ -126,6 +129,9 @@ public class Marrakech {
      * @return y position
      */
     public static int getAssamPositionY(String assamString) {
+        if (assamString.charAt(0) == 'A') {
+            return Integer.parseInt(assamString.substring(2, 3));
+        }
         return Integer.parseInt(assamString.substring(1, 2));
     }
 
@@ -387,8 +393,7 @@ public class Marrakech {
 
         Random random = new Random();
         int randomNum = random.nextInt(6); //Index between 0 and 5 inclusive.
-        int rolledNum = diceValues[randomNum];
-        return rolledNum;
+        return diceValues[randomNum];
     }
 
     /**
@@ -408,14 +413,7 @@ public class Marrakech {
      * @return true if the game is over, or false otherwise.
      */
     public static boolean isGameOver(String currentGame) {
-        for (int player = 0; player < 4; player++) {
-            int startIndex = player * 8;
-            if (currentGame.charAt(startIndex + 7) == 'i' && (currentGame.charAt(startIndex + 5) != '0'
-                    || currentGame.charAt(startIndex + 6) != '0')) {
-                return false;
-            }
-        }
-        return true;
+        return ifGameOver(currentGame);
         // FIXME: Task 8
     }
 
@@ -835,14 +833,27 @@ public class Marrakech {
      */
     public static String moveAssam(String currentAssam, int dieResult) {
         // Assam's current position and direction
-        int x = Character.getNumericValue(currentAssam.charAt(1));
-        int y = Character.getNumericValue(currentAssam.charAt(2));
-        char direction = currentAssam.charAt(3);
+        int x = getAssamPositionX(currentAssam);
+        int y = getAssamPositionY(currentAssam);
+        char direction = getAssamDirection(currentAssam);
+        // FIXME: Task 13
+        return assamStringAfterMovement(x, y, dieResult, direction);
+    }
 
+    /**
+     * A method for getting new assam string
+     *
+     * @param x         current assam x
+     * @param y         current assam y
+     * @param dieResult result of the roll of dice
+     * @param direction direction of current dice
+     * @return a new string of assam state
+     */
+    public static String assamStringAfterMovement(int x, int y, int dieResult, char direction) {
         //move Assam based on the die result and direction
         for (int i = 0; i < dieResult; i++) {
             switch (direction) {
-                case 'N':
+                case 'N' -> {
                     y--;
                     if (y < 0 && x % 2 != 0) {
                         y = 0;
@@ -859,8 +870,8 @@ public class Marrakech {
                         direction = 'W';
 
                     }
-                    break;
-                case 'E':
+                }
+                case 'E' -> {
                     x++;
                     if (x > 6 && y % 2 != 0) {
                         x = 6;
@@ -877,8 +888,8 @@ public class Marrakech {
                         direction = 'S';
 
                     }
-                    break;
-                case 'S':
+                }
+                case 'S' -> {
                     y++;
                     if (y > 6 && x % 2 != 0) {
                         y = 6;
@@ -896,8 +907,8 @@ public class Marrakech {
                         direction = 'E';
 
                     }
-                    break;
-                case 'W':
+                }
+                case 'W' -> {
                     x--;
                     if (x < 0 && y % 2 != 0) {
                         x = 0;
@@ -915,14 +926,15 @@ public class Marrakech {
                         direction = 'N';
 
                     }
-                    break;
-                default:
+                }
+                default -> {
+                }
             }
 
         }
-        // FIXME: Task 13
         return "A" + x + y + direction;
     }
+
 
     /**
      * Place a rug on the board
