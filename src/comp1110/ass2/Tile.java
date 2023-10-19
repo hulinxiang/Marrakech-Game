@@ -16,6 +16,7 @@ public class Tile {
     int state;
 
     String colour;
+    private boolean isOccupied;
 
 
     /**
@@ -72,4 +73,6 @@ public class Tile {
             return Color.WHITE;
         }
     }
+
+
 }

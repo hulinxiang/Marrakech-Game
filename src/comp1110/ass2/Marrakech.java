@@ -738,7 +738,7 @@ public class Marrakech {
         //A hashmap to denote the play's colour and his coins
         HashMap<Character, Integer> dirhams = new HashMap<>();
         for (Player p : marrakech.players) {
-            dirhams.put(p.colour.charAt(0), p.coins);
+            dirhams.put(p.colour.charAt(0), p.dirhams);
         }
         //A hashmap to denote the play's colour and his squares
         HashMap<Character, Integer> squares = calSquares(splitBoardString(gameState));
@@ -1201,7 +1201,7 @@ public class Marrakech {
 
 
         System.out.println("The colour: " + Game.players[0].colour);
-        System.out.println("Number of coins: " + Game.players[0].coins);
+        System.out.println("Number of coins: " + Game.players[0].dirhams);
         System.out.println("Number of rugs: " + Game.players[0].rugs);
         System.out.println("Player state: " + Game.players[0].playerState);
 
