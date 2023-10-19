@@ -920,16 +920,16 @@ public class Game extends Application {
      * Process the payments between players.
      */
     public void processPayment(int paymentAmt, int receiver){
-        if(theGame.players[playerCounter-1].coins - paymentAmt <= 0){ //Check if dirhams left
-            theGame.players[receiver-1].coins += theGame.players[playerCounter-1].coins; //pay what they have
-            theGame.players[playerCounter-1].coins = 0;
+        if(theGame.players[playerCounter-1].dirhams - paymentAmt <= 0){ //Check if dirhams left
+            theGame.players[receiver-1].dirhams += theGame.players[playerCounter-1].dirhams; //pay what they have
+            theGame.players[playerCounter-1].dirhams = 0;
 
             theGame.players[playerCounter-1].playerState = -1;
 
         }
         else{
-            theGame.players[playerCounter-1].coins -= paymentAmt; //Subtract from player paying
-            theGame.players[receiver-1].coins += paymentAmt; //Add to player receiving
+            theGame.players[playerCounter-1].dirhams -= paymentAmt; //Subtract from player paying
+            theGame.players[receiver-1].dirhams += paymentAmt; //Add to player receiving
             rugPhase();
         }
         displayStats(false);//Display the payment
@@ -1171,7 +1171,7 @@ public class Game extends Application {
                 statText.add(new Text());
 
                 //Getting the number of dirhams and rugs from the Marrakech class.
-                int numberDirhams = theGame.getPlayers()[i-1].coins;
+                int numberDirhams = theGame.getPlayers()[i-1].dirhams;
                 int numberRugs = theGame.getPlayers()[i-1].rugs;
 
                 statText.get(i-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
@@ -1200,7 +1200,7 @@ public class Game extends Application {
         else { //Only update the text not the visual aspects.
             for (int j = 1; j <= numberPlayers; j++) {
                 //Getting the number of dirhams and rugs from Marrakech class.
-                int numberDirhams = theGame.getPlayers()[j - 1].coins;
+                int numberDirhams = theGame.getPlayers()[j - 1].dirhams;
                 int numberRugs = theGame.getPlayers()[j - 1].rugs;
                 if(theGame.players[j-1].playerState == -1){ //Player is out of game
                     statText.get(j-1).setText("OUT");
