@@ -195,9 +195,6 @@ public class AI extends Player {
         return Integer.toString(num);
     }
 
-    public static void main(String[] args) {
-        System.out.println(idIncrease("09"));
-    }
 
 
 }
