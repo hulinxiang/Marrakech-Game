@@ -3,24 +3,7 @@ package comp1110.ass2;
 /**
  * Behaviour of the rug on the board
  */
-public class Rug { //Maybe useful... which rug has occupied tile?
-    //If placed, the rug has an id (integer denoting when the rug was placed).
-    int rugID;
-    //Denote the in position of rug
-    /*
-    private final IntPair[] rugPosition;
-
-    /*public Rug(IntPair[] rugPosition) {
-        this.rugPosition = rugPosition;
-    }
-
-    /**
-     * Stores the coordinates of where the rug is placed.
-     */
-    public void rugPlacement() {
-
-    }
-
+public class Rug {
     /**
      * Checks that the rug shares a border with the merchant
      *

@@ -11,10 +11,7 @@ public class Board {
     public final static int BOARD_WIDTH = 7;
     //Array of tiles that the board is made up of.
     public Tile[][] tiles;
-    //Merchant on the board.
-    Merchant merchant;
-    //Denotes the location of the mosaic circles on the board.
-    IntPair[] mosaic;
+
 
     /**
      * Sets up the initial state of the board.
@@ -27,7 +24,7 @@ public class Board {
     /**
      * Check that the board has been set up.
      */
-    public boolean checkBoard(){
+    public boolean checkBoard() {
         return true;
     }
 
@@ -41,6 +38,6 @@ public class Board {
     public boolean withInBoard(IntPair intPair) {
         int x = intPair.getX();
         int y = intPair.getY();
-        return x>=0 && x <=BOARD_WIDTH && y >= 0 && y <= BOARD_HEIGHT;
+        return x >= 0 && x <= BOARD_WIDTH && y >= 0 && y <= BOARD_HEIGHT;
     }
 }

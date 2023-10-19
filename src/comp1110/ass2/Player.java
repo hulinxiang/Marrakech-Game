@@ -24,6 +24,7 @@ public class Player {
 
     /**
      * Getter method of getPlayerState
+     *
      * @return playerState
      */
     public int getPlayerState() {
@@ -32,6 +33,7 @@ public class Player {
 
     /**
      * Setter method of getPlayerState
+     *
      * @param playerState
      */
     public void setPlayerState(int playerState) {
@@ -40,6 +42,7 @@ public class Player {
 
     /**
      * Getter method of coins
+     *
      * @return coins
      */
     public int getCoins() {
@@ -48,6 +51,7 @@ public class Player {
 
     /**
      * Setter method of coins
+     *
      * @param dirhams
      */
     public void setDirhams(int dirhams) {
@@ -56,6 +60,7 @@ public class Player {
 
     /**
      * Getter method of rugs
+     *
      * @return rugs
      */
     public int getRugs() {
@@ -64,6 +69,7 @@ public class Player {
 
     /**
      * Setter method of rugs
+     *
      * @param rugs
      */
     public void setRugs(int rugs) {
@@ -72,6 +78,7 @@ public class Player {
 
     /**
      * Getter method of colour
+     *
      * @return colour
      */
     public String getColour() {
@@ -80,52 +87,37 @@ public class Player {
 
     /**
      * Setter method of colour
+     *
      * @param colour
      */
     public void setColour(String colour) {
         this.colour = colour;
     }
-    /*
-    /**
-     * Constructor of Player
-     * @param coins
-     * @param rugs
-
-    Player(String colour, int coins, int rugs, int playerState) {
-        this.colour = "";
-        this.coins = START_COINS;
-        this.rugs = START_RUGS;
-        this.playerState = 1;
-    }
-    */
 
     /**
      * Decodes player string
      */
-    public static Player decodePlayerString(String playerString){
+    public static Player decodePlayerString(String playerString) {
         //Setting player colour
-        Player player =new Player();
-        player.colour = decodeColour(playerString.substring(1,2));
+        Player player = new Player();
+        player.colour = decodeColour(playerString.substring(1, 2));
 
-        player.dirhams = Integer.parseInt(playerString.substring(2,5)); //3rd, 4th, 5th characters denote coins.
-        player.rugs = Integer.parseInt(playerString.substring(5,7)); //6th and 7th characters denote number of rugs.
+        player.dirhams = Integer.parseInt(playerString.substring(2, 5)); //3rd, 4th, 5th characters denote coins.
+        player.rugs = Integer.parseInt(playerString.substring(5, 7)); //6th and 7th characters denote number of rugs.
 
         //Setting the player state:
-        if(playerString.substring(7).equals("i"))
-        {
+        if (playerString.substring(7).equals("i")) {
             player.playerState = 1; //1 Means player is in the game.
-        }
-        else
-        {
+        } else {
             player.playerState = -1; //1 Means player is out of the game.
         }
         return player;
 
     }
 
-    public static String decodeColour(String colour){
+    public static String decodeColour(String colour) {
         //Setting player colour
-        switch (colour){ //2nd character is colour;
+        switch (colour) { //2nd character is colour;
             case "c":
                 colour = "cyan";
                 break;
@@ -147,6 +139,7 @@ public class Player {
 
     /**
      * Convert a String to a Color class
+     *
      * @param colour
      * @return Color
      */
@@ -164,61 +157,5 @@ public class Player {
         }
     }
 
-    /**
-     * Player pays other player money, updates this.coins field.
-     */
-    public void makePayment() {
-
-    }
-
-    /**
-     * Player receives money from another players.
-     */
-    public void getPayment() {
-
-    }
-
-    /**
-     * Counts how many rugs of the player is on the board.
-     */
-    public int rugCount() {
-        return 0;
-    }
-
-    /**
-     * Places the rug of the player on the board.
-     */
-    public void placeRug() {
-
-    }
-
-    /**
-     * Checks that the player has enough money.
-     *
-     * @return boolean denoting true if the player has enough, false if not.
-     */
-    public boolean moneyCheck() {
-        return true;
-    }
-
-    /**
-     * Checks if the player has rugs left to place on the bord.
-     *
-     * @return boolean denoting true if the player still has rugs to place, false if not.
-     */
-    public boolean rugCheck() {
-        return true;
-    }
-
-
-
-    /**
-     * Calculates the player's score
-     *
-     * @return int is the score of the player
-     */
-    public int Score() {
-        return 0;
-    }
 
 }

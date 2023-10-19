@@ -17,40 +17,24 @@ public class Merchant {
         return merchantPosition;
     }
 
-    public void setMerchantPosition(IntPair merchantPosition) {
-        this.merchantPosition = merchantPosition;
-    }
 
     public Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    /**
-     * Constructor of merchant
-     *
-     * @param center is the center position of the board
-     */
-    /*Merchant(IntPair center) {
-        this.merchantPosition = center;
-    }
-    */
 
     /**
      * Decodes the merchant string
      */
     public void decodeAsamString(String asamString) {
-        if(String.valueOf(asamString.charAt(0)).equals("A")){
+        if (String.valueOf(asamString.charAt(0)).equals("A")) {
             asamString = asamString.substring(1);
         }
-        this.x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
-        this.y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
+        x = Integer.parseInt(String.valueOf(asamString.charAt(0)));
+        y = Integer.parseInt(String.valueOf(asamString.charAt(1)));
         //Check if the Asam is out of game board
         if (x > 6 || y > 6 || x < 0 || y < 0) {
-            throw new RuntimeException("Invalid Asam String");
+            throw new RuntimeException("Out of board");
         }
         this.merchantPosition = new IntPair(x, y);
 
@@ -68,7 +52,7 @@ public class Merchant {
                 direction = Direction.WEST;
                 break;
             default:
-                throw new RuntimeException("Invalid Asam String");
+                throw new RuntimeException("Invalid Asam Direction");
         }
     }
 
@@ -136,38 +120,30 @@ public class Merchant {
         sb.append("A");
         sb.append(getX());
         sb.append(getY());
-        sb.append(direction.name().substring(0,1));
+        sb.append(direction.name().substring(0, 1));
         return sb.toString();
     }
 
     public static char rotate(char assamDirection, int rotation) {
         //turn to left
-        if (rotation == -90||rotation==270) {
-            switch (assamDirection) {
-                case 'N':
-                    return 'W';
-                case 'S':
-                    return 'E';
-                case 'W':
-                    return 'S';
-                case 'E':
-                    return 'N';
-                default:
-            }
+        if (rotation == -90 || rotation == 270) {
+            return switch (assamDirection) {
+                case 'N' -> 'W';
+                case 'S' -> 'E';
+                case 'W' -> 'S';
+                case 'E' -> 'N';
+                default -> throw new RuntimeException("invalid direction");
+            };
         }
         //turn to right
         if (rotation == 90) {
-            switch (assamDirection) {
-                case 'N':
-                    return 'E';
-                case 'S':
-                    return 'W';
-                case 'W':
-                    return 'N';
-                case 'E':
-                    return 'S';
-                default:
-            }
+            return switch (assamDirection) {
+                case 'N' -> 'E';
+                case 'S' -> 'W';
+                case 'W' -> 'N';
+                case 'E' -> 'S';
+                default -> throw new RuntimeException("invalid direction");
+            };
         }
         //Remain same
         if (rotation == 0) {

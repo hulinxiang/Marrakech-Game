@@ -1,25 +1,42 @@
 package comp1110.ass2;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class IntPairTest {
+
+    String globalDirection = "E:/comp6710/comp1110-ass2/tests/comp1110/ass2/testdata/";
+
+
     @Test
-    public void testAdd() {
-        // Test case 1
-        IntPair pair1 = new IntPair(1, 2);
-        IntPair pair2 = new IntPair(3, 4);
-        IntPair result = pair1.add(pair2);
+    public void testAdd() throws IOException {
+        BufferedReader fr;
+        //Read data from file
+        fr = new BufferedReader(new FileReader(globalDirection + "intpair_add.txt"));
+        String str;
+        IntPair first = null;
+        IntPair second = null;
+        while ((str = fr.readLine()) != null) {
+            String[] testString = str.split("@");
+            for (int i = 0; i < testString.length; i++) {
+                int index = testString[i].indexOf(",");
+                if (i == 0) {
+                    first = new IntPair(Integer.parseInt(testString[i].substring(0, index)),
+                            Integer.parseInt(testString[i].substring(index + 1)));
+                } else {
+                    second = new IntPair(Integer.parseInt(testString[i].substring(0, index)),
+                            Integer.parseInt(testString[i].substring(index + 1)));
+                }
+            }
+            assert second != null;
+            Assertions.assertEquals(first.x + second.x, first.add(second).x, "x adding operation is wrong");
+            Assertions.assertEquals(first.y + second.y, first.add(second).y, "y adding operation is wrong");
+        }
 
-        assertEquals(4, result.getX(), "The x value of the resulting pair is incorrect.");
-        assertEquals(6, result.getY(), "The y value of the resulting pair is incorrect.");
-
-        // Test case 2: Testing with negative numbers
-        IntPair pair3 = new IntPair(-1, -2);
-        IntPair pair4 = new IntPair(3, 4);
-        IntPair result2 = pair3.add(pair4);
-
-        assertEquals(2, result2.getX(), "The x value of the resulting pair is incorrect with negative numbers.");
-        assertEquals(2, result2.getY(), "The y value of the resulting pair is incorrect with negative numbers.");
-
-        // Additional test cases can be added here as needed
+        fr.close();
     }
 }

@@ -37,60 +37,6 @@ public class Marrakech {
     }
 
     /**
-     * Setter method of players
-     *
-     * @param players
-     */
-
-    public void setPlayers(Player[] players) {
-        this.players = players;
-    }
-
-    /**
-     * Getter method of boardString
-     *
-     * @return boardString
-     */
-    public String getBoardString() {
-        return boardString;
-    }
-
-    /**
-     * Setter method of boardString
-     *
-     * @param boardString
-     */
-    public void setBoardString(String boardString) {
-        this.boardString = boardString;
-    }
-
-    /**
-     * Getter method of assamString
-     *
-     * @return assamString
-     */
-    public String getAssamString() {
-        return assamString;
-    }
-
-    /**
-     * Setter method of assamString
-     *
-     * @param assamString
-     */
-    public void setAssamString(String assamString) {
-        this.assamString = assamString;
-    }
-
-
-    /**
-     * Returns an integer value representing how method rugs are on the board.
-     */
-    public int placedNumber() {
-        return placedRugs.size();
-    }
-
-    /**
      * Generates new instance of Marrakech as per the string input by decoding the string.
      */
 
@@ -1138,7 +1084,7 @@ public class Marrakech {
 
                 }
                 String tempOwner = Integer.toString(this.board.tiles[j][k].id);
-                String tileOwner = "0".repeat(2-tempOwner.length()) + tempOwner;
+                String tileOwner = "0".repeat(2 - tempOwner.length()) + tempOwner;
                 boardString += tileColour + tileOwner;
 
             }

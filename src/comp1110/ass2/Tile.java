@@ -47,14 +47,6 @@ public class Tile {
 
 
     /**
-     * Checks the current owner of the tile.
-     */
-    public Player checkOccupation() {
-        return null;
-    }
-
-
-    /**
      * A method for converting a string to a Color
      *
      * @param colour, of type String
