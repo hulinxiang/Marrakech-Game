@@ -1352,6 +1352,27 @@ public class Game extends Application {
             opponent = new AI(); //Initialise the opponent
         }
 
+        //ROTATE ASAM
+        String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
+        System.out.println(theGame.asam.getString());
+        theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
+        asamRotateDisplay(); //Display rotation*/
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            computerNextPhase();
+        });
+        pause.play();
+
+
+    }
+
+    /**
+     * Go through next phase of opponent play.
+     */
+
+    public void computerNextPhase(){
+
         //ROLL THE DICE
         int rolledNum = opponent.rolling();
         rolled(rolledNum); //Display movement corresponding to rolling of dice.
@@ -1360,7 +1381,7 @@ public class Game extends Application {
         //Generate rug string and place on board
         if(intBoo){ //Intelligent opponent rug placement
             String rug = opponent.smartPlace(gameString);
-            System.out.println(gameString);
+            System.out.println(rug);
             //placeRug(gameString, rug);
         }
         else{ //Random opponent rug placement
@@ -1368,15 +1389,7 @@ public class Game extends Application {
             System.out.println(gameString);
             //placeRug(gameString, rug);
         }
-
-        /*
-        String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
-        System.out.println(theGame.asam.getString());
-        theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
-        asamRotateDisplay(); //Display rotation*/
-
     }
-
     /**
      * Go through one round of play
      */
