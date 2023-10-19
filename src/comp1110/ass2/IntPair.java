@@ -68,6 +68,17 @@ public class IntPair {
     }
 
     /**
+     * A method for getting an IntPair according to the coordinates
+     * For example, if coordinates=34. Return an IntPair with x=3, y=4
+     *
+     * @param coordinates coordinates of a tile
+     * @return an IntPair with x and y
+     */
+    public static IntPair getIntPair(String coordinates) {
+        return new IntPair(Integer.parseInt(coordinates.substring(0, 1)), Integer.parseInt(coordinates.substring(1, 2)));
+    }
+
+    /**
      * Override the equals method to check if two Intpairs are equal
      *
      * @param o

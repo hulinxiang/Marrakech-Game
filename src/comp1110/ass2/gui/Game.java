@@ -417,7 +417,7 @@ public class Game extends Application {
 
             StackPane.setAlignment(nameText[i-1], Pos.CENTER);
             nameText[i-1].setTextAlignment(TextAlignment.CENTER);
-            namePane[i-1].setMargin(nameText[i-1], new Insets(110, 0, 0, 0));
+            StackPane.setMargin(nameText[i-1], new Insets(110, 0, 0, 0));
 
             namePane[i-1].setPrefWidth(150); // Preferred width
             namePane[i-1].setMaxWidth(150);  // Maximum width
@@ -627,7 +627,7 @@ public class Game extends Application {
             namePane[i-1].getChildren().add(nameText[i-1]);
             StackPane.setAlignment(nameText[i-1], Pos.TOP_CENTER);
             nameText[i-1].setTextAlignment(TextAlignment.CENTER);
-            namePane[i-1].setMargin(nameText[i-1], new Insets(35, 0, 0, 0));
+            StackPane.setMargin(nameText[i-1], new Insets(35, 0, 0, 0));
             nameText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
             namePane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
             namePane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
@@ -827,7 +827,6 @@ public class Game extends Application {
             TileButton buttonTop = new TileButton((xRef-3) *SQUARE_WIDTH,(yRef-4) * SQUARE_HEIGHT);
             buttonTop.setStyle(styleString);
             rugPane.getChildren().add(buttonTop);
-
         }
 
         if(coordinateBool[3]){ //BOTTOM BUTTON
@@ -1111,7 +1110,7 @@ public class Game extends Application {
                 statPane[i-1].getChildren().add(statText.get(i-1));
                 StackPane.setAlignment(statText.get(i-1), Pos.TOP_CENTER);
                 statText.get(i-1).setTextAlignment(TextAlignment.CENTER);
-                statPane[i-1].setMargin(statText.get(i-1), new Insets(70, 0, 0, 0));
+                StackPane.setMargin(statText.get(i-1), new Insets(70, 0, 0, 0));
                 statText.get(i-1).setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
                 statPane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
                 statPane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
@@ -1277,7 +1276,7 @@ public class Game extends Application {
         stage.show();
 
     }
-    public static void main(String args[]){
+    public static void main(String[] args){
         launch();
     }
 }

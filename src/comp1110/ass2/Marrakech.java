@@ -21,9 +21,10 @@ public class Marrakech {
     String boardString;
     String assamString;
 
-    ArrayList<Direction> arrayDirections = new ArrayList<Direction>((Arrays.asList(Direction.NORTH,Direction.EAST,Direction.SOUTH,Direction.WEST)));
+    ArrayList<Direction> arrayDirections = new ArrayList<Direction>((Arrays.asList(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)));
 
     Tile[][] tiles = new Tile[Board.BOARD_HEIGHT][Board.BOARD_WIDTH];
+
     /**
      * Getter method of players
      *
@@ -120,8 +121,8 @@ public class Marrakech {
 
     }
 
-    public void decodeMarrakech(String gameString){
-        for (int i = 0; i < numberPlayers; i++) {;
+    public void decodeMarrakech(String gameString) {
+        for (int i = 0; i < numberPlayers; i++) {
             this.players[i] = Player.decodePlayerString(gameString.substring((i * PLAYER_STRING_LENGTH), (i * PLAYER_STRING_LENGTH) + PLAYER_STRING_LENGTH));
         }
 
@@ -308,10 +309,10 @@ public class Marrakech {
         if (rug.length() != expectedLength) {
             return false;
         }
-        int firstSquareX = Integer.parseInt(rug.substring(3, 4));
-        int firstSquareY = Integer.parseInt(rug.substring(4, 5));
-        int secondSquareX = Integer.parseInt(rug.substring(5, 6));
-        int secondSquareY = Integer.parseInt(rug.substring(6));
+        int firstSquareX = getFirstSquareX(rug);
+        int firstSquareY = getFirstSquareY(rug);
+        int secondSquareX = getSecondSquareX(rug);
+        int secondSquareY = getSecondSquareY(rug);
         //Check if two squares of the rug is connected
         if (firstSquareX != secondSquareX && firstSquareY != secondSquareY) {
             return false;
@@ -336,6 +337,59 @@ public class Marrakech {
         ArrayList<String> splitedRugStrings = splitBoardString(gameString);
         return !splitedRugStrings.contains(str);
     }
+
+    /**
+     * A method for abstract the x coordinate of the first tile in the rug string
+     *
+     * @param rug a rug string
+     * @return the x position of first tile in rug string
+     */
+    public static int getFirstSquareX(String rug) {
+        return Integer.parseInt(rug.substring(3, 4));
+    }
+
+    /**
+     * A method for abstract the y coordinate of the first tile in the rug string
+     *
+     * @param rug a rug string
+     * @return the y position of first tile in rug string
+     */
+    public static int getFirstSquareY(String rug) {
+        return Integer.parseInt(rug.substring(4, 5));
+    }
+
+    /**
+     * A method for abstract the x coordinate of the second tile in the rug string
+     *
+     * @param rug a rug string
+     * @return the x position of second tile in rug string
+     */
+    public static int getSecondSquareX(String rug) {
+        return Integer.parseInt(rug.substring(5, 6));
+    }
+
+    /**
+     * A method for abstract the y coordinate of the second tile in the rug string
+     *
+     * @param rug a rug string
+     * @return the y position of second tile in rug string
+     */
+    public static int getSecondSquareY(String rug) {
+        return Integer.parseInt(rug.substring(6));
+    }
+
+    /**
+     * A method for getting the tile coordinates according to the index in the board string
+     *
+     * @param index index in the boarding string
+     * @return the coordinates on the board
+     */
+    public static String getCoordinateFromIndex(int index) {
+        int x = index % 7;
+        int y = index / 7;
+        return "" + x + y;
+    }
+
 
     /**
      * It is a method that can help to split gameString into Abbreviated Rug Strings
@@ -436,7 +490,7 @@ public class Marrakech {
         char newAssamDirection = Merchant.rotate(assamDirection, rotation);
         // FIXME: Task 9
         //'i' means "invalid". In the rotate method, return 'i' if the requested rotation is illegal
-        if(newAssamDirection=='i'){
+        if (newAssamDirection == 'i') {
             return currentAssam;
         }
         return getNewAssamString(currentAssam, newAssamDirection);
@@ -466,22 +520,21 @@ public class Marrakech {
         return currentAssam.substring(0, 3) + newAssamDirection;
     }
 
-    public Direction possibleDirections(Direction currentDirection, int whichWay){
+    public Direction possibleDirections(Direction currentDirection, int whichWay) {
         Direction possibleDirection;
         int currentIndex = arrayDirections.indexOf(currentDirection);
         //Making sure that index is not out of bounds.
-        if(currentIndex == 0 && whichWay == -1){ //If at start wrap around to end.
+        if (currentIndex == 0 && whichWay == -1) { //If at start wrap around to end.
             possibleDirection = arrayDirections.get(arrayDirections.size() + whichWay);
-        }
-        else if(currentIndex == arrayDirections.size() - 1 && whichWay == 1) { //if at end wrap around to start.
+        } else if (currentIndex == arrayDirections.size() - 1 && whichWay == 1) { //if at end wrap around to start.
             possibleDirection = arrayDirections.get(0);
-        }
-        else{
+        } else {
             possibleDirection = arrayDirections.get(currentIndex + whichWay);
         }
 
         return possibleDirection;
     }
+
     /**
      * Determine whether a potential new placement is valid (i.e that it describes a legal way to place a rug).
      * There are a number of rules which apply to potential new placements, which are detailed in the README but to
@@ -495,7 +548,9 @@ public class Marrakech {
      * @return true if the placement is valid, and false otherwise.
      */
     public static boolean isPlacementValid(String gameState, String rug) {
-        isRugValid(gameState, rug);
+        if (!isRugValid(gameState, rug)) {
+            return false;
+        }
         // FIXME: Task 10
         int assamX = getAssamPositionX(decodeAssamString(gameState));
         int assamY = getAssamPositionY(decodeAssamString(gameState));
@@ -504,7 +559,6 @@ public class Marrakech {
         if (!ifConnectedAssam(rugPosition[0].getX(), rugPosition[0].getY(), rugPosition[1].getX(), rugPosition[1].getY(), assamX, assamY)) {
             return false;
         }
-        ;
         //Check situation 2.  A new rug must not completely cover another rug.
         //Get the position of information about the original rug.
         //If the original rug strings share the same color and id, return false.(Except that they are both "n00")
@@ -512,10 +566,7 @@ public class Marrakech {
         int indexOfFirst = getPositionFromCoordinates(rugPosition[0].getX(), rugPosition[0].getY());
         int indexOfSecond = getPositionFromCoordinates(rugPosition[1].getX(), rugPosition[1].getY());
         if (splitedRugStrings.get(indexOfFirst).equals(splitedRugStrings.get(indexOfSecond))) {
-            if ("n00".equals(splitedRugStrings.get(indexOfFirst))) {
-                return true;
-            }
-            return false;
+            return "n00".equals(splitedRugStrings.get(indexOfFirst));
         }
         return true;
     }
@@ -689,7 +740,7 @@ public class Marrakech {
         }
         //A hashmap to denote the play's colour and his squares
         HashMap<Character, Integer> squares = calSquares(splitBoardString(gameState));
-        //A hashmap to denote the play's colour and his property(coins+dirhams)
+        //A hashmap to denote the play's colour and his property(squares+dirhams)
         HashMap<Character, Integer> scores = new HashMap<>();
         for (Map.Entry<Character, Integer> entry : squares.entrySet()) {
             scores.put(entry.getKey(), dirhams.get(entry.getKey()) + squares.get(entry.getKey()));
@@ -755,22 +806,22 @@ public class Marrakech {
         //var is used to collect all chars that denotes colours
         StringBuilder var = new StringBuilder();
         //Character is the colour of one player
-        //Integer is the number of dirhams the one has
+        //Integer is the number of squares the one has
         HashMap<Character, Integer> ans = new HashMap<>();
         for (String s : splitedBoardString) {
             var.append(s.charAt(0));
         }
         for (int i = 0; i < var.length(); i++) {
-            char dirham = var.charAt(i);
-            if (dirham == 'n') {
+            char colour = var.charAt(i);
+            if (colour == 'n') {
                 continue;
             }
             //If this is a new colour
-            if (!ans.containsKey(dirham)) {
-                ans.put(dirham, 1);
+            if (!ans.containsKey(colour)) {
+                ans.put(colour, 1);
             } else {
                 //Update HashMap
-                ans.replace(dirham, ans.get(dirham) + 1);
+                ans.replace(colour, ans.get(colour) + 1);
             }
         }
         return ans;
@@ -803,9 +854,7 @@ public class Marrakech {
     public static Integer getValueFromHashSet(HashMap<Character, Integer> map, int i) {
         Integer val = 0;
         ArrayList<Integer> values = new ArrayList<>(map.values());
-        for (int j = 0; j <= i; j++) {
-            val = values.get(j);
-        }
+        val = values.get(i);
         return val;
     }
 
@@ -817,12 +866,10 @@ public class Marrakech {
      * @return ith value in the key set of map
      */
     public static Character getKeyFromHashSet(HashMap<Character, Integer> map, int i) {
-        Character val = '0';
+        Character key = '0';
         ArrayList<Character> keys = new ArrayList<>(map.keySet());
-        for (int j = 0; j <= i; j++) {
-            val = keys.get(j);
-        }
-        return val;
+        key = keys.get(i);
+        return key;
     }
 
 
@@ -845,79 +892,79 @@ public class Marrakech {
         char direction = currentAssam.charAt(3);
 
         //move Assam based on the die result and direction
-        for (int i = 0; i < dieResult; i++){
-            switch (direction){
+        for (int i = 0; i < dieResult; i++) {
+            switch (direction) {
                 case 'N':
                     y--;
-                    if (y<0 && x%2 != 0){
+                    if (y < 0 && x % 2 != 0) {
                         y = 0;
                         x--;
-                        direction='S'; //Adjust direction based on the tracks
-                    } else if (y < 0 && x%2==0 && x!=6) {
+                        direction = 'S'; //Adjust direction based on the tracks
+                    } else if (y < 0 && x != 6) {
                         y = 0;
                         x++;
-                        direction='S';
-                    } else if (y<0 && x == 6) {
-                        y=0;
+                        direction = 'S';
+                    } else if (y < 0) {
+                        y = 0;
                         x--;
-                        x+=1;
+                        x += 1;
                         direction = 'W';
 
                     }
                     break;
                 case 'E':
                     x++;
-                    if (x>6 && y%2 != 0){
+                    if (x > 6 && y % 2 != 0) {
                         x = 6;
-                        y ++;
+                        y++;
                         direction = 'W';
-                    } else if (x>6 && y%2==0 && y!=0) {
+                    } else if (x > 6 && y != 0) {
                         x = 6;
                         y--;
                         direction = 'W';
-                    } else if (x >6 && y==0) {
-                        x=6;
+                    } else if (x > 6) {
+                        x = 6;
                         y++;
-                        y-=1;
+                        y -= 1;
                         direction = 'S';
 
                     }
                     break;
                 case 'S':
-                    y ++;
-                    if (y > 6 && x%2 != 0){
-                        y=6;
+                    y++;
+                    if (y > 6 && x % 2 != 0) {
+                        y = 6;
                         x++;
                         direction = 'N';
-                    } else if (y > 6 && x%2 == 0 && x!=0) {
-                        y=6;
+                    } else if (y > 6 && x != 0) {
+                        y = 6;
                         x--;
                         direction = 'N';
 
-                    } else if (y > 6 && x ==0) {
-                        y=6;
+                    } else if (y > 6) {
+                        y = 6;
                         x++;
-                        x-=1;
+                        x -= 1;
                         direction = 'E';
 
                     }
                     break;
                 case 'W':
-                    x --;
-                    if (x <0 && y%2 !=0){
+                    x--;
+                    if (x < 0 && y % 2 != 0) {
                         x = 0;
-                        y --;
+                        y--;
                         direction = 'E';
-                    } else if (x <0 && y%2 ==0 && y !=6) {
+                    } else if (x < 0 && y != 6) {
                         x = 0;
                         y++;
                         direction = 'E';
 
-                    } else if (x < 0 && y ==6) {
+                    } else if (x < 0) {
                         x = 0;
                         y--;
-                        y+=1;
-                        direction ='N';
+                        y += 1;
+                        direction = 'N';
 
                     }
                     break;
@@ -926,7 +973,7 @@ public class Marrakech {
 
         }
         // FIXME: Task 13
-        return "A" + x +y + direction;
+        return "A" + x + y + direction;
     }
 
     /**
@@ -963,8 +1010,8 @@ public class Marrakech {
         splitedBoadString.set(indexOfSecondTile, rugColourId);
         //splitBoardString returns a ArrayList without 'B'. So add it at head
         StringBuilder newBoardString = new StringBuilder("B");
-        for (int i = 0; i < splitedBoadString.size(); i++) {
-            newBoardString.append(splitedBoadString.get(i));
+        for (String s : splitedBoadString) {
+            newBoardString.append(s);
         }
         //Return new gameString. Because Assam String is unmoved, assamString is same as before
         return playerStrng + AssamString + newBoardString;
@@ -994,8 +1041,8 @@ public class Marrakech {
     /**
      * A method returns rug's colour and Id
      *
-     * @param rug
-     * @return
+     * @param rug A string representation of rug state.
+     * @return rug's colour and id
      */
     public static String rugColourId(String rug) {
         return rug.substring(0, 3);
@@ -1004,8 +1051,8 @@ public class Marrakech {
     /**
      * A method returns rug's colour
      *
-     * @param rug
-     * @return
+     * @param rug A string representation of rug state.
+     * @return rug's colour
      */
     public static char rugColour(String rug) {
         return rug.charAt(0);
@@ -1050,26 +1097,25 @@ public class Marrakech {
         return getPositionFromCoordinates(x, y);
     }
 
-    public String generateGameString(){
+    public String generateGameString() {
         String gameString = "";
         //Create the player string
-        for(int i=0; i<numberPlayers; i++){
+        for (int i = 0; i < numberPlayers; i++) {
             String zeroes = "0"; //Number of 0s depend on number of digits.
 
-            String colour = players[i].getColour().substring(0,1).toLowerCase(Locale.ROOT);
+            String colour = players[i].getColour().substring(0, 1).toLowerCase(Locale.ROOT);
 
             String dirhams = Integer.toString(players[i].getCoins());
-            dirhams = zeroes.repeat(3-dirhams.length()) + dirhams; //Update through concatenation
+            dirhams = zeroes.repeat(3 - dirhams.length()) + dirhams; //Update through concatenation
 
             String rugs = Integer.toString(players[i].getRugs());
-            rugs = zeroes.repeat(2-rugs.length()) + rugs;
+            rugs = zeroes.repeat(2 - rugs.length()) + rugs;
 
             String state;
             int stateInt = players[i].getPlayerState();
-            if(stateInt == 1){
+            if (stateInt == 1) {
                 state = "i";
-            }
-            else{
+            } else {
                 state = "o";
             }
 
@@ -1083,11 +1129,10 @@ public class Marrakech {
         for (int j = 0; j < Board.BOARD_WIDTH; j++) { //LOOPING THROUGH EACH COLUMN
             for (int k = 0; k < Board.BOARD_HEIGHT; k++) { //LOOPING THROUGH EACH ROW
                 String tileColour;
-                if(this.board.tiles[j][k].colour == null){
+                if (this.board.tiles[j][k].colour == null) {
                     tileColour = "n";
-                }
-                else{
-                    tileColour = this.board.tiles[j][k].getColour().substring(0,1).toLowerCase();
+                } else {
+                    tileColour = this.board.tiles[j][k].getColour().substring(0, 1).toLowerCase();
 
                 }
                 String tileOwner = this.board.tiles[j][k].id;
@@ -1102,7 +1147,7 @@ public class Marrakech {
         return gameString;
     }
 
-    public String generateRugString(String colour, IntPair firstCord, IntPair secCord){
+    public String generateRugString(String colour, IntPair firstCord, IntPair secCord) {
         String rugString = "";
 
         //Add colour code
@@ -1110,14 +1155,13 @@ public class Marrakech {
 
         //Generate potential id
         int recentID;
-        if(placedRugs.size()>0){
-            recentID = Integer.parseInt(placedRugs.get(placedRugs.size()-1)); //Get id of most recent added rug
-        }
-        else{
+        if (placedRugs.size() > 0) {
+            recentID = Integer.parseInt(placedRugs.get(placedRugs.size() - 1)); //Get id of most recent added rug
+        } else {
             recentID = 0; //Get id of most recent added rug
         }
         String potentialID = Integer.toString(recentID + 1);
-        potentialID = "0".repeat(2-potentialID.length()) + potentialID;
+        potentialID = "0".repeat(2 - potentialID.length()) + potentialID;
 
         rugString += potentialID + firstCord.x + firstCord.y + secCord.x + secCord.y;
 
@@ -1125,6 +1169,7 @@ public class Marrakech {
         return rugString;
 
     }
+
     public static void main(String[] args) {
         // Test the isRugValid method
         System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
