@@ -1238,9 +1238,15 @@ public class Game extends Application {
             roundDisplay(false, playerCounter);
         }
 
-        setMessage("Set the direction of Asam");
-        //display Asam direction buttons
-        asamRotateButton();
+        if(theGame.players[playerCounter-1].rugs ==0){
+            System.out.println("Game Over!!");
+        }
+        else{
+            setMessage("Set the direction of Asam");
+            //display Asam direction buttons
+            asamRotateButton();
+        }
+
 
     }
 

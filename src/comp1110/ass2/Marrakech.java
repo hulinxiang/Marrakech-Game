@@ -2,7 +2,9 @@ package comp1110.ass2;
 
 import com.sun.source.tree.IfTree;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Marrakech {
 
@@ -16,7 +18,7 @@ public class Marrakech {
     //How many players in the game.
 
     //Record of the rugs that have been placed (according to their id).
-    ArrayList<String> placedRugs = new ArrayList<>();
+    HashSet<Integer> placedRugs = new HashSet<>();
     public final int PLAYER_STRING_LENGTH = 8;
     String boardString;
     String assamString;
@@ -243,18 +245,18 @@ public class Marrakech {
                     tiles[j][k].id = Integer.parseInt(rugID);
 
                     if (placedRugs.size() == 0) {
-                        placedRugs.add(rugID);
+                        placedRugs.add(Integer.parseInt(rugID));
                     } else {
                         boolean booNew = true; //Whether rug has already been added to placedRugs.
-                        for (String placedRug : placedRugs) {
-                            if (placedRug == rugID) {
+                        for (Integer placedRug : placedRugs) {
+                            if (placedRug == Integer.parseInt(rugID)) {
                                 booNew = false;
                                 break;
                             }
                         }
 
                         if (booNew) { //Rug has not been added to placedRugs
-                            placedRugs.add(rugID);
+                            placedRugs.add(Integer.parseInt(rugID));
                         }
                     }
 
@@ -1157,7 +1159,9 @@ public class Marrakech {
         //Generate potential id
         int recentID;
         if (placedRugs.size() > 0) {
-            recentID = Integer.parseInt(placedRugs.get(placedRugs.size() - 1)); //Get id of most recent added rug
+            ArrayList<Integer> tempRugs = new ArrayList<>(placedRugs);
+            Collections.sort(tempRugs);
+            recentID = tempRugs.get(placedRugs.size() - 1); //Get id of most recent added rug
         } else {
             recentID = 0; //Get id of most recent added rug
         }
