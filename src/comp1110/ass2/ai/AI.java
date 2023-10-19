@@ -14,33 +14,14 @@ public class AI extends Player {
 
     public static int[] rotateNum = {90, -90, 270};
 
-    public enum Colour {
-        //4 kinds of colours
-        YELLOW('y'), CYAN('c'), Purple('p'), Red('r');
-
-        private final char code;
-
-        Colour(char code) {
-            this.code = code;
-        }
-
-        public char getCode() {
-            return code;
-        }
-    }
 
     public String id;
 
 
     public AI() {
         Random random = new Random();
-        Colour[] colours = Colour.values();
-        //Randomly pick a colour for computer
-        //this.colour = String.valueOf(colours[random.nextInt(colours.length)].getCode());
-
         //Colour of AI will always be cyan.
-        this.colour = String.valueOf(colours[1]);
-
+        this.colour = "c";
         //Initialize the id for computer rug. Every round the id+1.
         //For example, first time the computer placed a rug, the rug id is "00".
         //Second time it placed a rug, the id would be "01".
