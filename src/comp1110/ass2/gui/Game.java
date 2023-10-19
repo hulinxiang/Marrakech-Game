@@ -902,11 +902,17 @@ public class Game extends Application {
         //Wait one second then introduce rug placement
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
         pause.setOnFinished(e -> {
-            //Remove roll button from root
-            firstBool = true;
-            //Call rug placement function with asam's coordinates as reference
-            rugPlacement(theGame.asam.getX(), theGame.asam.getY());
-            setMessage("Select 1st square for rug.");
+            //CHECK IF COMPUTER OR PLAYER
+            if(opponentBoo && playerCounter==2){
+
+            }
+            else{
+                firstBool = true;
+                //Call rug placement function with asam's coordinates as reference
+                rugPlacement(theGame.asam.getX(), theGame.asam.getY());
+                setMessage("Select 1st square for rug.");
+            }
+
         });
         pause.play();
     }
@@ -955,6 +961,38 @@ public class Game extends Application {
         displayStats(false);//Display the payment
 
     }
+
+    /**
+     * Method called once dice has been rolled.
+     * @param number The result of the dice.
+     */
+    public void rolled(int number){
+        //Record Asam's previous direction
+        Direction previousDirection = theGame.asam.getDirection();
+
+        //MOVE ASAM IN THE DIRECTION SPECIFIED BY THE DICE
+        String currentAsamString = theGame.asam.getString(); //Generate asam string
+        String movedString = Marrakech.moveAssam(currentAsamString, number); //Move asam.
+        theGame.asam.decodeAsamString(movedString);
+
+        if(theGame.asam.getDirection().equals(previousDirection)){
+            movementDisplay(false); //Display does not need to account for change in direction
+        }
+        else{
+            movementDisplay(true);
+        }
+
+        String textInstructions= "";
+        if(number==1){
+            textInstructions = "Asam has moved " + number + " step.";
+        }
+        else{
+            textInstructions = "Asam has moved " + number + " steps";
+        }
+
+        checkPayment(textInstructions); //Check if asam landed on other player's rug and if so process payment.
+
+    }
     /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
      */
@@ -988,31 +1026,7 @@ public class Game extends Application {
             root.getChildren().remove(diceBox); //Immediately remove dice button from screen
             int rolledNumber = Marrakech.rollDie(); //Roll the dice.
 
-            //Record Asam's previous direction
-            Direction previousDirection = theGame.asam.getDirection();
-
-            //MOVE ASAM IN THE DIRECTION SPECIFIED BY THE DICE
-            String currentAsamString = theGame.asam.getString(); //Generate asam string
-            String movedString = Marrakech.moveAssam(currentAsamString, rolledNumber); //Move asam.
-            theGame.asam.decodeAsamString(movedString);
-
-            if(theGame.asam.getDirection().equals(previousDirection)){
-                movementDisplay(false); //Display does not need to account for change in direction
-            }
-            else{
-                movementDisplay(true);
-            }
-
-            String textInstructions= "";
-            if(rolledNumber==1){
-                textInstructions = "Asam has moved " + rolledNumber + " step.";
-            }
-            else{
-                textInstructions = "Asam has moved " + rolledNumber + " steps";
-            }
-
-            checkPayment(textInstructions); //Check if asam landed on other player's rug and if so process payment.
-
+            rolled(rolledNumber);
         });
 
 
@@ -1076,22 +1090,8 @@ public class Game extends Application {
         }
         else{
             setMessage("Rug placement valid!");
-            String newString = Marrakech.makePlacement(gameString, rugString);
-            theGame.decodeMarrakech(newString); //Decode string
-            //Clear everything from rugpane
-            rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
-            root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
+            placeRug(gameString, rugString);
 
-            setColour(); //Set colour of tiles
-            displayStats(false);//Update player statistics.
-
-            //Go to next player after 1 second pause.
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(e -> {
-                playerCounter += 1;
-                round();
-            });
-            pause.play();
         }
 
 
@@ -1174,6 +1174,29 @@ public class Game extends Application {
         }
         return group;
 
+    }
+
+    /**
+     * Place the rug onto the board.
+     */
+    public void placeRug(String gameString, String rugString){
+        String newString = Marrakech.makePlacement(gameString, rugString);
+        theGame.decodeMarrakech(newString); //Decode string
+
+        //Clear everything from rugpane
+        rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
+        root.getChildren().remove(rugPane); //To ensure that buttons at top, remove from root.
+
+        setColour(); //Set colour of tiles
+        displayStats(false);//Update player statistics.
+
+        //Go to next player after 1 second pause.
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            playerCounter += 1;
+            round();
+        });
+        pause.play();
     }
 
     /**
@@ -1327,6 +1350,23 @@ public class Game extends Application {
     public void computerRound(){
         if(roundCounter==1){
             opponent = new AI(); //Initialise the opponent
+        }
+
+        //ROLL THE DICE
+        int rolledNum = opponent.rolling();
+        rolled(rolledNum); //Display movement corresponding to rolling of dice.
+        String gameString = theGame.generateGameString();
+
+        //Generate rug string and place on board
+        if(intBoo){ //Intelligent opponent rug placement
+            String rug = opponent.smartPlace(gameString);
+            System.out.println(gameString);
+            //placeRug(gameString, rug);
+        }
+        else{ //Random opponent rug placement
+            String rug = opponent.randomPlace(gameString);
+            System.out.println(gameString);
+            //placeRug(gameString, rug);
         }
 
         /*
