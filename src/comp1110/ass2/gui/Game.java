@@ -35,10 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Collections;
-import java.util.Stack;
 
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 
 public class Game extends Application {
 
@@ -856,14 +853,18 @@ public class Game extends Application {
             //Generate game string
             String tempString = theGame.generateGameString();
             int payment = Marrakech.getPaymentAmount(tempString);
-            processPayment(payment);
+            int receiver = colourLetters.indexOf(colourString) +1; //Get index of player whose rug landed on
+            processPayment(payment, receiver);
         }
         setMessage(message);
     }
     /**
      * Process the payments between players.
      */
-    public void processPayment(int paymentAmt){
+    public void processPayment(int paymentAmt, int receiver){
+        theGame.players[playerCounter-1].coins -= paymentAmt; //Subtract from player paying
+        theGame.players[receiver-1].coins += paymentAmt; //Add to player receiving
+        displayStats(false);//Display the payment
 
     }
     /**
