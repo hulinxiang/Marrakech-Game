@@ -665,7 +665,6 @@ public class Game extends Application {
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
 
-        System.out.println(numberPlayers);
         for(int i = 1; i<=numberPlayers; i++){
             //Text that displays player name
             nameText[i-1] = new Text();
@@ -926,11 +925,22 @@ public class Game extends Application {
         //Check wif payment is needed
         if(colourString.equals("n")){ //Asam landed on empty tile
             message += "\nNo payment."; //Add to the message text
-            rugPhase();
+            if(opponentBoo && playerCounter==2){
+
+            }
+            else{
+                rugPhase();
+            }
+
         }
         else if(colourString.equals(colourLetters.get(playerCounter-1))){ //Asam landed on current player's rug
             message += "\nNo payment."; //Add to the message text
-            rugPhase();
+            if(opponentBoo && playerCounter==2){
+
+            }
+            else{
+                rugPhase();
+            }
         }
         else{
             message += "\nPayment made."; //Add to the message text
@@ -956,7 +966,12 @@ public class Game extends Application {
         else{
             theGame.players[playerCounter-1].dirhams -= paymentAmt; //Subtract from player paying
             theGame.players[receiver-1].dirhams += paymentAmt; //Add to player receiving
-            rugPhase();
+            if(opponentBoo && playerCounter==2){
+
+            }
+            else{
+                rugPhase();
+            }
         }
         displayStats(false);//Display the payment
 
@@ -1354,7 +1369,6 @@ public class Game extends Application {
 
         //ROTATE ASAM
         String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
-        System.out.println(theGame.asam.getString());
         theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
         asamRotateDisplay(); //Display rotation*/
 
@@ -1378,17 +1392,23 @@ public class Game extends Application {
         rolled(rolledNum); //Display movement corresponding to rolling of dice.
         String gameString = theGame.generateGameString();
 
-        //Generate rug string and place on board
-        if(intBoo){ //Intelligent opponent rug placement
-            String rug = opponent.smartPlace(gameString);
-            System.out.println(rug);
-            //placeRug(gameString, rug);
-        }
-        else{ //Random opponent rug placement
-            String rug = opponent.randomPlace(gameString);
-            String newString = AI.makePlacementAI(gameString,rug);
-            placeRug(newString);
-        }
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            //Generate rug string and place on board
+            if(intBoo){ //Intelligent opponent rug placement
+                String rug = opponent.smartPlace(gameString);
+                String newString = AI.makePlacementAI(gameString,rug);
+                placeRug(newString);
+            }
+            else{ //Random opponent rug placement
+                String rug = opponent.randomPlace(gameString);
+                String newString = AI.makePlacementAI(gameString,rug);
+                placeRug(newString);
+            }
+        });
+        pause.play();
+
     }
     /**
      * Go through one round of play
