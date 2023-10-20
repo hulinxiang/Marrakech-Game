@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 /**
+ * @author groupwork
  * Behaviour of the rug on the board
  */
 public class Rug {

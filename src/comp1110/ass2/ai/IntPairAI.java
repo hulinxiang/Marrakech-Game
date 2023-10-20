@@ -2,6 +2,9 @@ package comp1110.ass2.ai;
 
 import comp1110.ass2.IntPair;
 
+/**
+ * @author Linxiang
+ */
 public class IntPairAI {
 
     public double x;

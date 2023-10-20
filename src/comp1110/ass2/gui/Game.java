@@ -37,6 +37,9 @@ import java.util.HashSet;
 import java.util.Collections;
 
 
+/**
+ * @author Lize
+ */
 public class Game extends Application {
 
     private final StackPane root = new StackPane();
@@ -58,7 +61,7 @@ public class Game extends Application {
     private ArrayList<String> colourLetters = new ArrayList<String>(Arrays.asList("p", "c", "y", "r"));
 
     // String of colour codes for players... Purple, Cyan-Green, Yellow, Red-Pink
-    private String[] colourCodes = new String[] {"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
+    private String[] colourCodes = new String[]{"#AA05CB", "#069822", "#EC792B", "#D03B7F"};
     Text messageText = new Text(); //Global since displayed throughout the game.
 
     Text roundText = new Text(); //Global since displayed throughout the game.
@@ -85,6 +88,20 @@ public class Game extends Application {
      * Class specifying the stylistic and location features of the rectangles
      * that make the tiles when the board is displayed.
      */
+    public void calcWin(){
+        String tempString = theGame.generateGameString();
+        String winnerStr = Character.toString(Marrakech.getWinner(tempString));
+
+        if(winnerStr.equals("t")){
+            setMessage("Game is a tie");
+        }
+        else{
+            Integer indexWinner = colourLetters.indexOf(winnerStr)+1;
+            winnerDisplay(indexWinner);
+        }
+
+    }
+
     public class TileRect extends Rectangle {
         double xLocation;
         double yLocation;
@@ -130,10 +147,11 @@ public class Game extends Application {
 
         /**
          * Constructor for each tile
+         *
          * @param xLocation Specifies the x location of the tile-button in the window.
          * @param yLocation Specifies the y location of the tile-button in the window.
          */
-        TileButton(double xLocation, double yLocation){
+        TileButton(double xLocation, double yLocation) {
             super();
             this.xLocation = xLocation;
             this.yLocation = yLocation;
@@ -155,20 +173,20 @@ public class Game extends Application {
             // Set the border color, width, and style using CSS
             this.setStyle(
                     "-fx-border-color: #603300;" +            // Border
-                    "-fx-border-width: 2px;" +              // Border width
-                    "-fx-border-style: solid;"+             // Border style (solid line)
-                    "-fx-background-color: #FFBB6E;"          // Fill colour
+                            "-fx-border-width: 2px;" +              // Border width
+                            "-fx-border-style: solid;" +             // Border style (solid line)
+                            "-fx-background-color: #FFBB6E;"          // Fill colour
             );
 
             //SET EVENT LISTENER FOR EACH TILE BUTTON
             this.setOnAction(event -> {
 
-                String borderColour = colourCodes[playerCounter-1]; //Player who selected the square
+                String borderColour = colourCodes[playerCounter - 1]; //Player who selected the square
 
                 //CHECK IF THIS IS FIRST OR SECOND RUG SQUARE SELECTED
-                if(firstBool){
+                if (firstBool) {
                     //Set style
-                    this.setStyle("-fx-border-color: " + borderColour +";" +
+                    this.setStyle("-fx-border-color: " + borderColour + ";" +
                             "-fx-border-width: 4px;" +
                             "-fx-background-color: transparent;");
                     //Remove all except current button from rugpane.
@@ -178,15 +196,14 @@ public class Game extends Application {
                     this.setDisable(true);
                     firstBool = false;
                     setMessage("Select 2nd square for rug.");
-                    rugPlacement((int) Math.round(this.xLocation/SQUARE_WIDTH +3), (int) Math.round(this.yLocation/SQUARE_HEIGHT +3));
-                }
-                else{
-                    this.setStyle("-fx-border-color: " + borderColour +";" +
+                    rugPlacement((int) Math.round(this.xLocation / SQUARE_WIDTH + 3), (int) Math.round(this.yLocation / SQUARE_HEIGHT + 3));
+                } else {
+                    this.setStyle("-fx-border-color: " + borderColour + ";" +
                             "-fx-border-width: 2px;" +
                             "-fx-background-color: transparent;");
                     //Remove all buttons except first and the selected button
                     rugPane.getChildren().removeIf(node
-                            -> node instanceof Button && node != this && node != rugPane.getChildren().get(0) );
+                            -> node instanceof Button && node != this && node != rugPane.getChildren().get(0));
 
                     //Check requirements to make rug placement.
                     TileButton firstButton = (TileButton) rugPane.getChildren().get(0);
@@ -205,7 +222,7 @@ public class Game extends Application {
      * Contains a contructor that specifies its stylistic features and dimensions.
      */
 
-    public class MosaicTile extends Arc{
+    public class MosaicTile extends Arc {
         double centerX;
         double centerY;
         double start;
@@ -213,12 +230,13 @@ public class Game extends Application {
 
         /**
          * Constructor for the mosaic tile graphics.
+         *
          * @param centerX Specifies the center x location of the arc in the window.
          * @param centerY Specifies the center y location of the arc in the window.
-         * @param start Specifies where the 'tracing' of the arc starts (in terms of angle).
-         * @param end Specifies how big to trace the arc (e.g. 180 --> half circle).
+         * @param start   Specifies where the 'tracing' of the arc starts (in terms of angle).
+         * @param end     Specifies how big to trace the arc (e.g. 180 --> half circle).
          */
-        MosaicTile(double centerX, double centerY, double start, double end){
+        MosaicTile(double centerX, double centerY, double start, double end) {
             super();
             this.centerX = centerX;
             this.centerY = centerY;
@@ -229,8 +247,8 @@ public class Game extends Application {
             //SETTING DIMENSIONS
             this.setCenterX(centerX);
             this.setCenterY(centerY);
-            this.setRadiusX(SQUARE_WIDTH/2);
-            this.setRadiusY(SQUARE_HEIGHT/2);
+            this.setRadiusX(SQUARE_WIDTH / 2);
+            this.setRadiusY(SQUARE_HEIGHT / 2);
             this.setStartAngle(start);
             this.setLength(end);
 
@@ -253,13 +271,14 @@ public class Game extends Application {
         double x;
         double y;
         double side = SQUARE_WIDTH;
-        AsamSymbol(double x, double y){
+
+        AsamSymbol(double x, double y) {
             super();
             this.x = x;
             this.y = y;
 
             this.getPoints().addAll(
-                    0.0,-sqrtSide,
+                    0.0, -sqrtSide,
                     halfSide, sqrtSide,
                     -halfSide, sqrtSide
             );
@@ -274,7 +293,7 @@ public class Game extends Application {
 
         //SET DIMENSIONS
         double halfSide = SQUARE_WIDTH / 2.0;
-        double sqrtSide = Math.sqrt(Math.pow(SQUARE_WIDTH, 2) - Math.pow(halfSide, 2))/2.0;
+        double sqrtSide = Math.sqrt(Math.pow(SQUARE_WIDTH, 2) - Math.pow(halfSide, 2)) / 2.0;
 
     }
 
@@ -297,6 +316,7 @@ public class Game extends Application {
 
     /**
      * Displays the winner of the game by drawing gold border around their name.
+     *
      * @param winIndex Number of the player who won.
      */
     public void winnerDisplay(int winIndex){
@@ -306,20 +326,20 @@ public class Game extends Application {
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
 
-        for(int i = 1; i<=numberPlayers; i++){
+        for (int i = 1; i <= numberPlayers; i++) {
             //Add background for each player using rectangle.
-            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/7, WINDOW_HEIGHT/7); // Specify width and height
-            backgrounds[i-1].setFill(Color.TRANSPARENT); // Set the fill color to white
+            backgrounds[i - 1] = new Rectangle(WINDOW_WIDTH / 7, WINDOW_HEIGHT / 7); // Specify width and height
+            backgrounds[i - 1].setFill(Color.TRANSPARENT); // Set the fill color to white
             double cornerRadius = 20; // Radius for round edges of rectangle.
-            backgrounds[i-1].setArcWidth(cornerRadius);
-            backgrounds[i-1].setArcHeight(cornerRadius);
+            backgrounds[i - 1].setArcWidth(cornerRadius);
+            backgrounds[i - 1].setArcHeight(cornerRadius);
             backgroundStore.setAlignment(Pos.TOP_CENTER); //Setting alignment for rectangle.
-            backgroundStore.getChildren().add(backgrounds[i-1]);
+            backgroundStore.getChildren().add(backgrounds[i - 1]);
 
             //CREATE GOLD BORDER IF WINNER
-            if(i==winIndex){
-                backgrounds[i-1].setStroke(Color.web("#f8a102")); //Set stroke colour to gold.
-                backgrounds[i-1].setStrokeWidth(5); //Set the stroke width to create a broad border
+            if (i == winIndex) {
+                backgrounds[i - 1].setStroke(Color.web("#f8a102")); //Set stroke colour to gold.
+                backgrounds[i - 1].setStrokeWidth(5); //Set the stroke width to create a broad border
             }
         }
 
@@ -333,7 +353,7 @@ public class Game extends Application {
     /**
      * Adds city image that is used in some scenes. See reference for image in originality file.
      */
-    public void backgroundCity(){
+    public void backgroundCity() {
         ImageView viewCity = new ImageView();
         Image imageCity = new Image("file:./assets/city.png");
         viewCity.setImage(imageCity);
@@ -344,7 +364,7 @@ public class Game extends Application {
     /**
      * Adds sky image that is used in some scenes. See reference for image in originality file.
      */
-    public void backgroundSky(){
+    public void backgroundSky() {
         //ADDING IMAGE
         ImageView viewSky = new ImageView();
         Image imageSky = new Image("file:./assets/moon.png");
@@ -358,7 +378,7 @@ public class Game extends Application {
      * This method specifies the graphics of the first screen and allows users to specify the number of players.
      * Method is mostly javaFX, with an emphasis on colour, style, and object alignment.
      */
-    public void startScreen(){
+    public void startScreen() {
         //ADDING WELCOME TEXT
         Text welcomeText = new Text();
         welcomeText.setText("\n Welcome to Marrakech!");
@@ -435,8 +455,7 @@ public class Game extends Application {
                 RadioButton selectedRadioButton = (RadioButton) radioGroup.getSelectedToggle();
                 numberPlayers = Integer.parseInt(selectedRadioButton.getId()); //Record the number of players selected.
                 changeScenePlayer();
-            }
-            else {
+            } else {
                 //Making text visible
                 testText.setFill(Color.WHITE);
             }
@@ -450,12 +469,107 @@ public class Game extends Application {
 
     }
 
+
+    /**
+     * Stores the randomised order of the players in an ArrayList and displays accordingly.
+     */
+    public void assignOrder() {
+        //Use shuffle to randomise order
+        Collections.shuffle(nameArray);
+
+        Text[] nameText = new Text[numberPlayers]; //Display text with names of players.
+        StackPane[] namePane = new StackPane[numberPlayers]; //Stackpane to ensure proper display of text.
+        HBox nameStore = new HBox(WINDOW_WIDTH / 10); //HBox to store stackpanes of names.
+
+        //Iterate through number of players, displaying the name of each
+        for (int i = 1; i <= numberPlayers; i++) {
+            nameText[i - 1] = new Text();
+            nameText[i - 1].setText(nameArray.get(i - 1));
+            //Setting stylistic features of nameText:
+            Font basicFont = new Font("Arial", 20);
+            nameText[i - 1].setFont(basicFont);
+            nameText[i - 1].setFill(Color.web("#000000"));
+
+            namePane[i - 1] = new StackPane();
+            namePane[i - 1].getChildren().add(nameText[i - 1]);
+
+            StackPane.setAlignment(nameText[i - 1], Pos.CENTER);
+            nameText[i - 1].setTextAlignment(TextAlignment.CENTER);
+            StackPane.setMargin(nameText[i - 1], new Insets(110, 0, 0, 0));
+
+            namePane[i - 1].setPrefWidth(150); // Preferred width
+            namePane[i - 1].setMaxWidth(150);  // Maximum width
+            StackPane.setAlignment(namePane[i - 1], Pos.CENTER);
+
+            nameStore.getChildren().add(namePane[i - 1]);
+            nameText[i - 1].setWrappingWidth(WINDOW_WIDTH / 10); // Set the wrapping width
+
+
+        }
+        nameStore.setAlignment(Pos.CENTER);
+        root.getChildren().add(nameStore);
+
+    }
+
+    /**
+     * Checks that names entered on the player screen is correct.
+     *
+     * @param nameField       textField that takes name input, parsed so that it may be disabled.
+     * @param instructionText instruction text that changes depending on whether input correct or not.
+     */
+    public void checkNameRequirements(TextField nameField, Text instructionText) {
+        //Checking that names are not repeated, and that number of names match number of players...
+        if (nameArray.size() == numberPlayers) {
+            //Checking that no repeats in set by putting into set and comparing sizes:
+            HashSet<String> nameSet = new HashSet<>(nameArray);
+
+            if (nameSet.size() != nameArray.size()) { //Less elements in the set means there are duplicates in the array
+                //System.out.println("Duplicates");
+                instructionText.setText("No duplicate names allowed...");
+            } else {
+                //System.out.println("Correct");
+                boolean proceed = true;
+                for (int i = 0; i < numberPlayers; i++) {
+                    if (nameArray.get(i) == "") { //Check that each name at least 1 character long
+                        proceed = false;
+                    }
+                }
+
+                if (proceed) { //If proceed is true then can go to next stage of game.
+                    nameField.setEditable(false); //Disable the textfield if correct input received
+                    instructionText.setText("Press ENTER to start the game!");
+                    assignOrder(); //Assign order of play.
+
+                    //If enter is pressed game screen will appear.
+                    nameField.setOnKeyPressed(event -> {
+                        if (event.getCode().getName().equals("Enter")) {
+                            if (numberPlayers == 1) {
+                                opponentBoo = true;
+                                opponentScreen();
+                            } else {
+                                opponentBoo = false;
+                                changeSceneBoard(); //Changes scene to board display
+                            }
+                        }
+                    });
+                } else {
+                    instructionText.setText("Names must be minimum one character.");
+                }
+            }
+
+        } else {
+            //System.out.println("Not same size.");
+            instructionText.setText("Number of names must match number of players");
+        }
+
+    }
+
     /**
      * PLAYER SCREEN GRAPHICS.
      * This method creates the graphics for the screen following the welcome screen.
      * Allows users to specify the names of the players.
      */
-    public void playerScreen(){
+    public void playerScreen() {
 
         //Setting up player section.
         HBox textStore = new HBox(170);
@@ -463,29 +577,29 @@ public class Game extends Application {
 
         HBox backgroundStore = new HBox(70);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
-        for(int i = 1; i<=numberPlayers; i++){
-            playerText[i-1] = new Text();
-            playerText[i-1].setText("Player " +i);
-            StackPane.setAlignment(playerText[i-1], Pos.TOP_CENTER);
+        for (int i = 1; i <= numberPlayers; i++) {
+            playerText[i - 1] = new Text();
+            playerText[i - 1].setText("Player " + i);
+            StackPane.setAlignment(playerText[i - 1], Pos.TOP_CENTER);
             Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
-            playerText[i-1].setFont(moroccanFont);
+            playerText[i - 1].setFont(moroccanFont);
 
             //Set player colour:
-            String colour = colourCodes[i-1];
-            playerText[i-1].setFill(Color.web(colour));
+            String colour = colourCodes[i - 1];
+            playerText[i - 1].setFill(Color.web(colour));
 
             //Add background for each player using rectangle.
-            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/6, WINDOW_HEIGHT/5); // Specify width and height
-            backgrounds[i-1].setFill(Color.WHITE); // Set the fill color to white
+            backgrounds[i - 1] = new Rectangle(WINDOW_WIDTH / 6, WINDOW_HEIGHT / 5); // Specify width and height
+            backgrounds[i - 1].setFill(Color.WHITE); // Set the fill color to white
             double cornerRadius = 20; // Radius for round edges of rectangle.
-            backgrounds[i-1].setArcWidth(cornerRadius);
-            backgrounds[i-1].setArcHeight(cornerRadius);
+            backgrounds[i - 1].setArcWidth(cornerRadius);
+            backgrounds[i - 1].setArcHeight(cornerRadius);
 
             backgroundStore.setAlignment(Pos.CENTER);
-            backgroundStore.getChildren().add(backgrounds[i-1]);
+            backgroundStore.getChildren().add(backgrounds[i - 1]);
 
             textStore.setAlignment(Pos.CENTER);
-            textStore.getChildren().add(playerText[i-1]);
+            textStore.getChildren().add(playerText[i - 1]);
         }
 
         //Add margin at top of rectangle to improve display.
@@ -511,8 +625,8 @@ public class Game extends Application {
         nameField.setFocusTraversable(false);
 
         //Setting dimensions and font
-        nameField.setPrefWidth(WINDOW_WIDTH/2.6);
-        nameField.setMaxWidth(WINDOW_WIDTH/2.6);
+        nameField.setPrefWidth(WINDOW_WIDTH / 2.6);
+        nameField.setMaxWidth(WINDOW_WIDTH / 2.6);
         Font fieldFont = new Font("Arial", 16);
         nameField.setFont(fieldFont);
 
@@ -536,7 +650,7 @@ public class Game extends Application {
                 if (!nameInput.isEmpty()) {
                     // Add the input text to the ArrayList - delineated at comma.
                     String[] names = nameInput.split(",");
-                    for (String name: names) {
+                    for (String name : names) {
                         nameArray.add(name.toUpperCase());
                     }
                     checkNameRequirements(nameField, instructionText); //Checking that valid names entered.
@@ -650,9 +764,9 @@ public class Game extends Application {
      * Start of game, game string generated to be translated in the Marrakech class.
      * @return Game string to be translated into Marrakech class.
      */
-    public String initialStringGenerate(){
-        String initialGameString = ""; //Game string starts with a P to denote player strings.
-        for(int i=0; i<numberPlayers;i++){
+    public String initialStringGenerate() {
+        String initialGameString = ""; //Game string starts wiht a P to denote player strings.
+        for (int i = 0; i < numberPlayers; i++) {
             //Each player starts with 30 dirhams and 15 rugs. Initially all players are in the game.
             String individualString = "P" + colourLetters.get(i) + "030" + "15" + "i";
             initialGameString += individualString;
@@ -662,7 +776,7 @@ public class Game extends Application {
         initialGameString += "A33NB";
 
         //Intially all the tiles are empty hence add 49 empty squares:
-        for(int j = 0; j<49; j++){
+        for (int j = 0; j < 49; j++) {
             initialGameString += "n00";
         }
         return initialGameString;
@@ -671,7 +785,7 @@ public class Game extends Application {
     /**
      * Displays the names of the players at the top of the main screen.
      */
-    public void namesDisplay(){
+    public void namesDisplay() {
         //Setting up player section.
         HBox namesStore = new HBox(100);
         Text[] nameText = new Text[numberPlayers];
@@ -680,42 +794,41 @@ public class Game extends Application {
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
 
-        for(int i = 1; i<=numberPlayers; i++){
+        for (int i = 1; i <= numberPlayers; i++) {
             //Text that displays player name
-            nameText[i-1] = new Text();
+            nameText[i - 1] = new Text();
 
-            if(opponentBoo && i==2){ //AI will always go second.
-                nameText[i-1].setText(i + ". COMPUTER"); //Display the names of players
-            }
-            else{
-                nameText[i-1].setText(i + ". " + nameArray.get(i-1)); //Display the names of players
+            if (opponentBoo && i == 2) { //AI will always go second.
+                nameText[i - 1].setText(i + ". COMPUTER"); //Display the names of players
+            } else {
+                nameText[i - 1].setText(i + ". " + nameArray.get(i - 1)); //Display the names of players
             }
 
             Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
-            nameText[i-1].setFont(moroccanFont);
-            String colour = colourCodes[i-1]; //Display player colour
-            nameText[i-1].setFill(Color.web(colour));
+            nameText[i - 1].setFont(moroccanFont);
+            String colour = colourCodes[i - 1]; //Display player colour
+            nameText[i - 1].setFill(Color.web(colour));
 
             //Stackpane to organise alignment of text
-            namePane[i-1] = new StackPane();
-            namePane[i-1].getChildren().add(nameText[i-1]);
-            StackPane.setAlignment(nameText[i-1], Pos.TOP_CENTER);
-            nameText[i-1].setTextAlignment(TextAlignment.CENTER);
-            StackPane.setMargin(nameText[i-1], new Insets(35, 0, 0, 0));
-            nameText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
-            namePane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
-            namePane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
+            namePane[i - 1] = new StackPane();
+            namePane[i - 1].getChildren().add(nameText[i - 1]);
+            StackPane.setAlignment(nameText[i - 1], Pos.TOP_CENTER);
+            nameText[i - 1].setTextAlignment(TextAlignment.CENTER);
+            StackPane.setMargin(nameText[i - 1], new Insets(35, 0, 0, 0));
+            nameText[i - 1].setWrappingWidth(WINDOW_WIDTH / 10); // Set the wrapping width
+            namePane[i - 1].setPrefWidth(WINDOW_WIDTH / 7); // Preferred width
+            namePane[i - 1].setMaxWidth(WINDOW_WIDTH / 7);  // Maximum width
             namesStore.setAlignment(Pos.CENTER);
-            namesStore.getChildren().add(namePane[i-1]);
+            namesStore.getChildren().add(namePane[i - 1]);
 
             //Add background for each player using rectangle.
-            backgrounds[i-1] = new Rectangle(WINDOW_WIDTH/7, WINDOW_HEIGHT/7); // Specify width and height
-            backgrounds[i-1].setFill(Color.WHITE); // Set the fill color to white
+            backgrounds[i - 1] = new Rectangle(WINDOW_WIDTH / 7, WINDOW_HEIGHT / 7); // Specify width and height
+            backgrounds[i - 1].setFill(Color.WHITE); // Set the fill color to white
             double cornerRadius = 20; // Radius for round edges of rectangle.
-            backgrounds[i-1].setArcWidth(cornerRadius);
-            backgrounds[i-1].setArcHeight(cornerRadius);
+            backgrounds[i - 1].setArcWidth(cornerRadius);
+            backgrounds[i - 1].setArcHeight(cornerRadius);
             backgroundStore.setAlignment(Pos.TOP_CENTER); //Setting alignment for rectangle.
-            backgroundStore.getChildren().add(backgrounds[i-1]);
+            backgroundStore.getChildren().add(backgrounds[i - 1]);
         }
 
         //Add margin at top of rectangle to improve display.
@@ -733,9 +846,9 @@ public class Game extends Application {
      * @param start Boolean which specifies whether it is the start of the game (true) or not (false).
      * @param currentPlayer Integer specifying who the current player string.
      */
-    public void roundDisplay(boolean start, int currentPlayer){
+    public void roundDisplay(boolean start, int currentPlayer) {
         //If at the start display the text, if not just update the text.
-        if(start) {
+        if (start) {
             roundText.setText(" Round " + roundCounter + "\n Player " + currentPlayer);
             Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 25);
             roundText.setFont(moroccanFont);
@@ -761,8 +874,7 @@ public class Game extends Application {
             //Adding the messageBox to the root.
             StackPane.setAlignment(roundBox, Pos.TOP_LEFT);
             root.getChildren().add(roundBox);
-        }
-        else{
+        } else {
             roundText.setText(" Round " + roundCounter + "\n Player " + currentPlayer);
         }
     }
@@ -772,7 +884,7 @@ public class Game extends Application {
      * the game.
      * @param instructionString String to be displayed.
      */
-    public void setMessage(String instructionString){
+    public void setMessage(String instructionString) {
         messageText.setText(instructionString);
     }
 
@@ -780,17 +892,17 @@ public class Game extends Application {
      * Initially display the instruction message.
      * This text is altered in the setMessage method throughout the game depending on game state.
      */
-    public void messageDisplay(){
+    public void messageDisplay() {
         //Display the messageText (global variable)
         messageText.setText("Let us begin!");
         Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 40);
         messageText.setFont(moroccanFont);
         messageText.setFill(Color.web("#ffffff"));
-        messageText.setWrappingWidth(WINDOW_WIDTH/6); // Set the wrapping width
+        messageText.setWrappingWidth(WINDOW_WIDTH / 6); // Set the wrapping width
         //Create vBox to ensure proper alignment
         VBox messageBox = new VBox(); //Container to display the text
-        messageBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
-        messageBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        messageBox.setPrefWidth(WINDOW_WIDTH / 5); // Preferred width
+        messageBox.setMaxWidth(WINDOW_WIDTH / 5);  // Maximum width
         messageBox.getChildren().add(messageText);
         messageBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -801,24 +913,25 @@ public class Game extends Application {
 
     /**
      * Displays asam's movement on the screen.
+     *
      * @param directionChange Boolean value that indicates whether asam's direction has changed
      *                        during the movement.
      */
-    public void movementDisplay(boolean directionChange){
+    public void movementDisplay(boolean directionChange) {
         //-3 since 3,3 on board is considered 0,0 on display.
-        double newX = (theGame.asam.getX() -3) * SQUARE_WIDTH;
-        double newY = (theGame.asam.getY() -3) *SQUARE_HEIGHT;
+        double newX = (theGame.asam.getX() - 3) * SQUARE_WIDTH;
+        double newY = (theGame.asam.getY() - 3) * SQUARE_HEIGHT;
 
         asam.setTranslateX(newX);
         asam.setTranslateY(newY);
 
         //DETECT DIRECTION CHANGE
-        if(directionChange) {
+        if (directionChange) {
             asamRotateDisplay();
         }
 
     }
-
+    
     /**
      *Method called by rugPlacement when it is a player's turn to choose the first square of their rug,
      * checks edge cases of rug placement.
@@ -832,17 +945,15 @@ public class Game extends Application {
         if(xRef==0){
             //Don't create left button
             coordinateBool[0] = false;
-        }
-        else if(xRef==6){
+        } else if (xRef == 6) {
             //Don't create right button
             coordinateBool[1] = false;
         }
 
-        if(yRef==0){
+        if (yRef == 0) {
             //Don't create top button
             coordinateBool[2] = false;
-        }
-        else if(yRef==6){
+        } else if (yRef == 6) {
             //Don't create bottom button
             coordinateBool[3] = false;
         }
@@ -860,19 +971,17 @@ public class Game extends Application {
      * @param yRef The y location of the first square selected
      * @return Updated boolean array specifying which buttons should be created.
      */
-    public boolean[] additionalConditions(boolean[] coordinateBool, int xRef, int yRef){
-        coordinateBool = firstConditions(coordinateBool, xRef,yRef);
-        if(xRef-1 == theGame.asam.getX()){ //Asam is to left
+    public boolean[] additionalConditions(boolean[] coordinateBool, int xRef, int yRef) {
+        coordinateBool = firstConditions(coordinateBool, xRef, yRef);
+        if (xRef - 1 == theGame.asam.getX()) { //Asam is to left
             coordinateBool[0] = false;
-        }
-        else if(xRef+1 == theGame.asam.getX()){ //Asam is to right
+        } else if (xRef + 1 == theGame.asam.getX()) { //Asam is to right
             coordinateBool[1] = false;
         }
 
-        if(yRef-1 == theGame.asam.getY()){ //Asam is to the top
+        if (yRef - 1 == theGame.asam.getY()) { //Asam is to the top
             coordinateBool[2] = false;
-        }
-        else if(yRef+1 == theGame.asam.getY()){ //Asam is to the bottom
+        } else if (yRef + 1 == theGame.asam.getY()) { //Asam is to the bottom
             coordinateBool[3] = false;
         }
 
@@ -885,30 +994,29 @@ public class Game extends Application {
      * @param xRef X location of object relative to which button must be created.
      * @param yRef Y location of object relative to which button must be created.
      */
-    public void rugPlacement(int xRef, int yRef){
+    public void rugPlacement(int xRef, int yRef) {
         //Must set width of stackpane otherwise not able to click other buttons
         //Set width to the width of the board.
-        rugPane.setPrefWidth(SQUARE_WIDTH*7);
-        rugPane.setMinWidth(SQUARE_WIDTH*7);
-        rugPane.setMaxWidth(SQUARE_WIDTH*7);
+        rugPane.setPrefWidth(SQUARE_WIDTH * 7);
+        rugPane.setMinWidth(SQUARE_WIDTH * 7);
+        rugPane.setMaxWidth(SQUARE_WIDTH * 7);
 
 
         //Array of booleans - LEFT, RIGHT, TOP BOTTOM
         boolean[] coordinateBool = new boolean[4];
 
-        for(int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             coordinateBool[i] = true;
         }
 
-        if(!firstBool) {//Additional conditions to be checked if second button
-            coordinateBool = additionalConditions(coordinateBool, xRef,yRef);
-        }
-        else{
+        if (!firstBool) {//Additional conditions to be checked if second button
+            coordinateBool = additionalConditions(coordinateBool, xRef, yRef);
+        } else {
             root.getChildren().add(rugPane);
             coordinateBool = firstConditions(coordinateBool, xRef, yRef);
         }
 
-        makeRugButtons(coordinateBool, xRef,yRef);
+        makeRugButtons(coordinateBool, xRef, yRef);
 
     }
 
@@ -918,7 +1026,7 @@ public class Game extends Application {
      * @param xRef X location of object relative to which button created.
      * @param yRef Y location of object relative to which button created.
      */
-    public void makeRugButtons(boolean[] coordinateBool, int xRef, int yRef){
+    public void makeRugButtons(boolean[] coordinateBool, int xRef, int yRef) {
         //Make buttons and customise display
         String styleString = "-fx-border-width: 4px;" +
                 "-fx-border-style: solid;" +
@@ -926,26 +1034,26 @@ public class Game extends Application {
                 "-fx-background-color: transparent"; //Transparent since need to be able to see what is behind.
 
         //CREATING THE BUTTONS
-        if(coordinateBool[0]){ //LEFT BUTTON
-            TileButton buttonLeft = new TileButton((xRef-4) * SQUARE_WIDTH,(yRef-3)*SQUARE_HEIGHT);
+        if (coordinateBool[0]) { //LEFT BUTTON
+            TileButton buttonLeft = new TileButton((xRef - 4) * SQUARE_WIDTH, (yRef - 3) * SQUARE_HEIGHT);
             buttonLeft.setStyle(styleString);
             rugPane.getChildren().add(buttonLeft);
         }
 
-        if(coordinateBool[1]){ //RIGHT BUTTON
-            TileButton buttonRight = new TileButton((xRef-2) * SQUARE_WIDTH,(yRef-3)*SQUARE_HEIGHT);
+        if (coordinateBool[1]) { //RIGHT BUTTON
+            TileButton buttonRight = new TileButton((xRef - 2) * SQUARE_WIDTH, (yRef - 3) * SQUARE_HEIGHT);
             buttonRight.setStyle(styleString);
             rugPane.getChildren().add(buttonRight);
         }
 
-        if(coordinateBool[2]){ //TOP BUTTON
-            TileButton buttonTop = new TileButton((xRef-3) *SQUARE_WIDTH,(yRef-4) * SQUARE_HEIGHT);
+        if (coordinateBool[2]) { //TOP BUTTON
+            TileButton buttonTop = new TileButton((xRef - 3) * SQUARE_WIDTH, (yRef - 4) * SQUARE_HEIGHT);
             buttonTop.setStyle(styleString);
             rugPane.getChildren().add(buttonTop);
         }
 
-        if(coordinateBool[3]){ //BOTTOM BUTTON
-            TileButton buttonBot = new TileButton((xRef-3) * SQUARE_WIDTH, (yRef -2)* SQUARE_HEIGHT);
+        if (coordinateBool[3]) { //BOTTOM BUTTON
+            TileButton buttonBot = new TileButton((xRef - 3) * SQUARE_WIDTH, (yRef - 2) * SQUARE_HEIGHT);
             buttonBot.setStyle(styleString);
             rugPane.getChildren().add(buttonBot);
         }
@@ -956,16 +1064,15 @@ public class Game extends Application {
      * Method triggering the start of the rugphase of ech player's round.
      * Calls the rug button methods above.
      */
-    public void rugPhase(){
+    public void rugPhase() {
         //Once dice has been rolled and Asam has been moved, rug placement is next.
         //Wait one second then introduce rug placement
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
         pause.setOnFinished(e -> {
             //CHECK IF COMPUTER OR PLAYER
-            if(opponentBoo && playerCounter==2){
+            if (opponentBoo && playerCounter == 2) {
 
-            }
-            else{
+            } else {
                 firstBool = true;
                 //Call rug placement function with asam's coordinates as reference
                 rugPlacement(theGame.asam.getX(), theGame.asam.getY());
@@ -992,27 +1099,23 @@ public class Game extends Application {
             message += "\nNo payment."; //Add to the message text
             if(opponentBoo && playerCounter==2){ //Check that player is not the computer.
 
-            }
-            else{
+            } else{
                 rugPhase();
             }
 
-        }
-        else if(colourString.equals(colourLetters.get(playerCounter-1))){ //Asam landed on current player's rug
+        } else if (colourString.equals(colourLetters.get(playerCounter - 1))) { //Asam landed on current player's rug
             message += "\nNo payment."; //Add to the message text
-            if(opponentBoo && playerCounter==2){ //Check that player is not the computer.
+            if (opponentBoo && playerCounter == 2) { //Check that player is not the computer.
 
-            }
-            else{
+            } else {
                 rugPhase();
             }
-        }
-        else{
+        } else {
             message += "\nPayment made."; //Add to the message text
             //Generate game string
             String tempString = theGame.generateGameString();
             int payment = Marrakech.getPaymentAmount(tempString);
-            int receiver = colourLetters.indexOf(colourString) +1; //Get index of player whose rug landed on
+            int receiver = colourLetters.indexOf(colourString) + 1; //Get index of player whose rug landed on
             processPayment(payment, receiver);
         }
         setMessage(message);
@@ -1023,20 +1126,18 @@ public class Game extends Application {
      */
     public void processPayment(int paymentAmt, int receiver){
         //CHECK IF THE PLAYER HAS COINS LEFT
-        if(theGame.players[playerCounter-1].dirhams - paymentAmt <= 0){ //Not enough coins
-            theGame.players[receiver-1].dirhams += theGame.players[playerCounter-1].dirhams;
-            theGame.players[playerCounter-1].dirhams = 0; //Pay what they have and then set number of coins to 0.
+        if (theGame.players[playerCounter - 1].dirhams - paymentAmt <= 0){ //Not enough coins
+            theGame.players[receiver - 1].dirhams += theGame.players[playerCounter-1].dirhams;
+            theGame.players[playerCounter - 1].dirhams = 0; //Pay what they have and then set number of coins to 0.
 
-            theGame.players[playerCounter-1].playerState = -1; //Player out of coins so out of game.
+            theGame.players[playerCounter - 1].playerState = -1; //Player out of coins so out of game.
 
-        }
-        else{ //Enough coins
-            theGame.players[playerCounter-1].dirhams -= paymentAmt; //Subtract from player paying
-            theGame.players[receiver-1].dirhams += paymentAmt; //Add to player receiving
-            if(opponentBoo && playerCounter==2){
+        } else { //Enough coins
+            theGame.players[playerCounter - 1].dirhams -= paymentAmt; //Subtract from player paying
+            theGame.players[receiver - 1].dirhams += paymentAmt; //Add to player receiving
+            if (opponentBoo && playerCounter == 2) {
 
-            }
-            else{
+            } else {
                 rugPhase();
             }
         }
@@ -1046,9 +1147,10 @@ public class Game extends Application {
 
     /**
      * Method called once dice has been rolled.
+     *
      * @param number The result of the dice.
      */
-    public void rolled(int number){
+    public void rolled(int number) {
         //Record Asam's previous direction
         Direction previousDirection = theGame.asam.getDirection();
 
@@ -1057,19 +1159,17 @@ public class Game extends Application {
         String movedString = Marrakech.moveAssam(currentAsamString, number); //Move asam.
         theGame.asam.decodeAsamString(movedString);
 
-        if(theGame.asam.getDirection().equals(previousDirection)){
+        if (theGame.asam.getDirection().equals(previousDirection)) {
             movementDisplay(false); //Display does not need to account for change in direction
-        }
-        else{
+        } else {
             movementDisplay(true); //Display needs to account for change in direction.
         }
 
         //SPECIFY WHAT MESSAGE SHOULD SAY.
-        String textInstructions= "";
-        if(number==1){
+        String textInstructions = "";
+        if (number == 1) {
             textInstructions = "Asam has moved " + number + " step.";
-        }
-        else{
+        } else {
             textInstructions = "Asam has moved " + number + " steps";
         }
 
@@ -1080,7 +1180,7 @@ public class Game extends Application {
     /**
      * Displays the dice button and calls the rollDie() method from the Marrakech class when button is pressed.
      */
-    public void diceRoll(){
+    public void diceRoll() {
         setMessage("Roll the die!");
         //CREATING DICE BUTTON
         VBox diceBox = new VBox(); //Container to display dice button
@@ -1088,8 +1188,8 @@ public class Game extends Application {
         //Setting the style of the start button.
         diceButton.setStyle(
                 "-fx-font-size: 15px;" +                    //Font size
-                "-fx-text-fill: white;" +                   //Text color
-                "-fx-background-color: #f8a102;"            //Yellow background color
+                        "-fx-text-fill: white;" +                   //Text color
+                        "-fx-background-color: #f8a102;"            //Yellow background color
         );
 
         //SETTING SIZE OF BUTTON
@@ -1097,8 +1197,8 @@ public class Game extends Application {
         diceButton.setPrefWidth(buttonSize);
         diceButton.setPrefHeight(buttonSize);
 
-        diceBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
-        diceBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        diceBox.setPrefWidth(WINDOW_WIDTH / 5); // Preferred width
+        diceBox.setMaxWidth(WINDOW_WIDTH / 5);  // Maximum width
         diceBox.getChildren().add(diceButton);
         diceBox.setAlignment(Pos.CENTER_RIGHT);
 
@@ -1119,15 +1219,15 @@ public class Game extends Application {
     /**
      * Initialises a new asam symbol and adds to the root.
      */
-    public void asamDisplay(){
+    public void asamDisplay() {
         asam = new AsamSymbol(0, 0); //Creating a new Asam symbol, initial rotation is 0, and position is in middle
         root.getChildren().add(asam);
     }
 
     /**
-     *Rotates asam 90 degrees left or right from its current rotation
+     * Rotates asam 90 degrees left or right from its current rotation
      */
-    public void asamRotateDisplay(){
+    public void asamRotateDisplay() {
 
         //Switch case to check and display asam's rotation
         switch(theGame.asam.getDirection()){
@@ -1145,6 +1245,7 @@ public class Game extends Application {
                 break;
 
         }
+        //asam.setRotate(asam.getRotate() +(factor*90)); //Rotate 90 degrees each time from current rotation
 
     }
 
@@ -1153,30 +1254,29 @@ public class Game extends Application {
      * @param oneBut First button clicked.
      * @param twoBut Second button clicked.
      */
-    public void checkPlacement(TileButton oneBut, TileButton twoBut){
+    public void checkPlacement(TileButton oneBut, TileButton twoBut) {
         //Create game string
         String gameString = theGame.generateGameString();
 
-        int xFirst = (int) oneBut.xLocation/SQUARE_WIDTH +3;
-        int yFirst = (int) oneBut.yLocation/SQUARE_HEIGHT +3;
-        IntPair firstCoord = new IntPair(xFirst,yFirst);
+        int xFirst = (int) oneBut.xLocation / SQUARE_WIDTH + 3;
+        int yFirst = (int) oneBut.yLocation / SQUARE_HEIGHT + 3;
+        IntPair firstCoord = new IntPair(xFirst, yFirst);
 
         //x and y coordinate of second rug square selected
-        int xSec = (int) twoBut.xLocation/SQUARE_WIDTH +3;
-        int ySec = (int) twoBut.yLocation/SQUARE_HEIGHT +3;
-        IntPair secondCoord = new IntPair(xSec,ySec);
+        int xSec = (int) twoBut.xLocation / SQUARE_WIDTH + 3;
+        int ySec = (int) twoBut.yLocation / SQUARE_HEIGHT + 3;
+        IntPair secondCoord = new IntPair(xSec, ySec);
 
-        String rugString = theGame.generateRugString(colourLetters.get(playerCounter-1), firstCoord, secondCoord);
+        String rugString = theGame.generateRugString(colourLetters.get(playerCounter - 1), firstCoord, secondCoord);
         //DOUBLE CHECK THAT PLACEMENT IS VALID
-        if(!Marrakech.isPlacementValid(gameString, rugString)){
+        if (!Marrakech.isPlacementValid(gameString, rugString)) {
             setMessage("Invalid rug placement, try again");
             //Clear everything from rugpane:
             rugPane.getChildren().clear(); //Before displaying new buttons clear all previous
             root.getChildren().remove(rugPane); //Remove from root.
             firstBool = true;
             rugPlacement(theGame.asam.getX(), theGame.asam.getY()); //Give opportunity to try again
-        }
-        else{
+        } else {
             setMessage("Rug placement valid!");
             String newString = Marrakech.makePlacement(gameString, rugString);
             placeRug(newString);
@@ -1189,11 +1289,11 @@ public class Game extends Application {
     /**
      * Sets colours of tiles based on which rug is occupied.
      */
-    public void setColour(){
-        for(int i = 0; i<ROW; i++){ //Iterate through the columns
-            for(int j = 0; j<ROW; j++){ //Iterate through the rows.
-                String colourString = theGame.board.tiles[i][j].getColour().substring(0,1).toLowerCase();
-                if(!colourString.equals("n")){ //Checks that colour is not null and sets accordingly.
+    public void setColour() {
+        for (int i = 0; i < ROW; i++) { //Iterate through the columns
+            for (int j = 0; j < ROW; j++) { //Iterate through the rows.
+                String colourString = theGame.board.tiles[i][j].getColour().substring(0, 1).toLowerCase();
+                if (!colourString.equals("n")) { //Checks that colour is not null and sets accordingly.
                     int index = colourLetters.indexOf(colourString);
                     tileRect[i][j].setFill(Color.web(colourCodes[index]));
                 }
@@ -1208,19 +1308,19 @@ public class Game extends Application {
      * Through iteration calculates the location of each tile and mosaic piece.
      * @return Group to add to the root and thus be displayed.
      */
-    public Group gameBoardDisplay(){
+    public Group gameBoardDisplay() {
         backgroundCity(); //Add city in background of baord.
 
         Group group = new Group();
-        final int DRAW_START_X =100; //Where to start 'drawing'
-        final int DRAW_START_Y=100;
+        final int DRAW_START_X = 100; //Where to start 'drawing'
+        final int DRAW_START_Y = 100;
 
         //DRAW RECTANGLE TO SERVE AS BORDER:
         double margin = 10;
-        Rectangle rectBorder = new Rectangle(SQUARE_WIDTH*COLUMN+margin, SQUARE_HEIGHT*ROW+margin); // Width and height of the rectangle
+        Rectangle rectBorder = new Rectangle(SQUARE_WIDTH * COLUMN + margin, SQUARE_HEIGHT * ROW + margin); // Width and height of the rectangle
         // Set the position (X, Y) of the top-left corner of the rectangle
-        rectBorder.setX(DRAW_START_X-margin/2);
-        rectBorder.setY(DRAW_START_Y-margin/2);
+        rectBorder.setX(DRAW_START_X - margin / 2);
+        rectBorder.setY(DRAW_START_Y - margin / 2);
         // Set the fill color of the rectangle
         rectBorder.setFill(Color.MOCCASIN);
         // Set the stroke color (border color) of the rectangle
@@ -1230,34 +1330,32 @@ public class Game extends Application {
 
 
         //BOTTOM LEFT MOSAIC TILE
-        MosaicTile mosaicCorner = new MosaicTile(SQUARE_WIDTH+DRAW_START_X/2, SQUARE_HEIGHT*COLUMN+DRAW_START_Y, 90, 270);
+        MosaicTile mosaicCorner = new MosaicTile(SQUARE_WIDTH + DRAW_START_X / 2, SQUARE_HEIGHT * COLUMN + DRAW_START_Y, 90, 270);
         group.getChildren().add(mosaicCorner);
 
         //TOP RIGHT MOSAIC TILE
-        MosaicTile otherCorner = new MosaicTile(SQUARE_WIDTH*ROW+DRAW_START_X, SQUARE_HEIGHT+DRAW_START_Y/2, 180, -270);
+        MosaicTile otherCorner = new MosaicTile(SQUARE_WIDTH * ROW + DRAW_START_X, SQUARE_HEIGHT + DRAW_START_Y / 2, 180, -270);
         group.getChildren().add(otherCorner);
 
         //CREATING THE BOARD
-        for(int i = 0; i<ROW; i++){ //Iterate through the columns.
+        for (int i = 0; i < ROW; i++) { //Iterate through the columns.
             double x = SQUARE_WIDTH * i + DRAW_START_X; //Specifying the x location of the tile.
 
-            if(i%2==0 && i!=0){ //BOTTOM ROW MOSAIC TILES
-                MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*i+DRAW_START_X, SQUARE_HEIGHT*ROW+DRAW_START_Y, 0, -180);
+            if (i % 2 == 0 && i != 0) { //BOTTOM ROW MOSAIC TILES
+                MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH * i + DRAW_START_X, SQUARE_HEIGHT * ROW + DRAW_START_Y, 0, -180);
                 group.getChildren().add(mosaic);
-            }
-            else if(i%2==1) { //TOP ROW MOSAIC TILES
-                MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*i+DRAW_START_X, SQUARE_HEIGHT+DRAW_START_Y/2, 0, 180);
+            } else if (i % 2 == 1) { //TOP ROW MOSAIC TILES
+                MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH * i + DRAW_START_X, SQUARE_HEIGHT + DRAW_START_Y / 2, 0, 180);
                 group.getChildren().add(mosaic);
             }
 
 
-            for(int j = 0; j<ROW; j++){ //Iterate through the rows.
-                if(j%2==0 && j!=0){ //RIGHT MOSAIC TILES
-                    MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH*COLUMN+DRAW_START_X, SQUARE_HEIGHT*j+DRAW_START_Y, 90, -180);
+            for (int j = 0; j < ROW; j++) { //Iterate through the rows.
+                if (j % 2 == 0 && j != 0) { //RIGHT MOSAIC TILES
+                    MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH * COLUMN + DRAW_START_X, SQUARE_HEIGHT * j + DRAW_START_Y, 90, -180);
                     group.getChildren().add(mosaic);
-                }
-                else if(j%2==1) { //LEFT MOSAIC TILES
-                    MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH+DRAW_START_X/2, SQUARE_HEIGHT*j+DRAW_START_Y, 90, 180);
+                } else if (j % 2 == 1) { //LEFT MOSAIC TILES
+                    MosaicTile mosaic = new MosaicTile(SQUARE_WIDTH + DRAW_START_X / 2, SQUARE_HEIGHT * j + DRAW_START_Y, 90, 180);
                     group.getChildren().add(mosaic);
                 }
 
@@ -1275,7 +1373,7 @@ public class Game extends Application {
     /**
      * Place the rug onto the board and move to next round of he game.
      */
-    public void placeRug(String gameString){
+    public void placeRug(String gameString) {
         theGame.decodeMarrakech(gameString); //Decode string
 
         //Clear everything from rugpane
@@ -1296,57 +1394,56 @@ public class Game extends Application {
 
     /**
      * Displays the player statistics such as the nummber of Dirhams and Rugs.
+     *
      * @param initial If displaying for the first time then true, otherwise if just displaying updated sats then false.
      */
-    public void displayStats(boolean initial){
+    public void displayStats(boolean initial) {
         //Similar to the player names, the dirham and rug display is organised using Hboxes and Stackpanes.
         HBox statStore = new HBox(100);
         StackPane[] statPane = new StackPane[numberPlayers];
 
-        if(initial) { //If displaying for the first time, the visual aspects need to be set as well.
+        if (initial) { //If displaying for the first time, the visual aspects need to be set as well.
             for (int i = 1; i <= numberPlayers; i++) {
                 //Text that displays player the statistics - dirhams and rugs.
                 statText.add(new Text());
 
                 //Getting the number of dirhams and rugs from the Marrakech class.
-                int numberDirhams = theGame.getPlayers()[i-1].dirhams;
-                int numberRugs = theGame.getPlayers()[i-1].rugs;
+                int numberDirhams = theGame.getPlayers()[i - 1].dirhams;
+                int numberRugs = theGame.getPlayers()[i - 1].rugs;
 
-                statText.get(i-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
+                statText.get(i - 1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    "); //Display the names of players
 
                 //Setting the visual aspect of the display
                 Font moroccanFont = Font.loadFont("file:./assets/King Malik Free Trial.ttf", 20);
-                statText.get(i-1).setFont(moroccanFont);
+                statText.get(i - 1).setFont(moroccanFont);
                 String colour = colourCodes[i - 1]; //Display player colour
-                statText.get(i-1).setFill(Color.web(colour));
+                statText.get(i - 1).setFill(Color.web(colour));
 
                 //Stackpane to organise alignment of text
-                statPane[i-1] = new StackPane();
-                statPane[i-1].getChildren().add(statText.get(i-1));
-                StackPane.setAlignment(statText.get(i-1), Pos.TOP_CENTER);
-                statText.get(i-1).setTextAlignment(TextAlignment.CENTER);
-                StackPane.setMargin(statText.get(i-1), new Insets(70, 0, 0, 0));
-                statText.get(i-1).setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
-                statPane[i-1].setPrefWidth(WINDOW_WIDTH/7); // Preferred width
-                statPane[i-1].setMaxWidth(WINDOW_WIDTH/7);  // Maximum width
+                statPane[i - 1] = new StackPane();
+                statPane[i - 1].getChildren().add(statText.get(i - 1));
+                StackPane.setAlignment(statText.get(i - 1), Pos.TOP_CENTER);
+                statText.get(i - 1).setTextAlignment(TextAlignment.CENTER);
+                StackPane.setMargin(statText.get(i - 1), new Insets(70, 0, 0, 0));
+                statText.get(i - 1).setWrappingWidth(WINDOW_WIDTH / 10); // Set the wrapping width
+                statPane[i - 1].setPrefWidth(WINDOW_WIDTH / 7); // Preferred width
+                statPane[i - 1].setMaxWidth(WINDOW_WIDTH / 7);  // Maximum width
                 statStore.setAlignment(Pos.CENTER);
-                statStore.getChildren().add(statPane[i-1]);
+                statStore.getChildren().add(statPane[i - 1]);
             }
 
             root.getChildren().add(statStore);
-        }
-        else { //Only update the text not the visual aspects.
+        } else { //Only update the text not the visual aspects.
             for (int j = 1; j <= numberPlayers; j++) {
                 //Getting the number of dirhams and rugs from Marrakech class.
                 int numberDirhams = theGame.getPlayers()[j - 1].dirhams;
                 int numberRugs = theGame.getPlayers()[j - 1].rugs;
-                if(theGame.players[j-1].playerState == -1){ //Player is out of game
-                    statText.get(j-1).setText("OUT");
+                if (theGame.players[j - 1].playerState == -1) { //Player is out of game
+                    statText.get(j - 1).setText("OUT");
                     round(); //Move to next player
-                }
-                else{
+                } else {
                     //Display the number of coins and rugs
-                    statText.get(j-1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    ");
+                    statText.get(j - 1).setText(numberDirhams + " dirhams \n " + numberRugs + " rugs    ");
                 }
 
             }
@@ -1357,7 +1454,7 @@ public class Game extends Application {
      * Method which displays and specifies names of rotation buttons based on asam's current direction.
      * Add event listener to the button, and specifies the methods to be called when button clicked.
      */
-    public void asamRotateButton(){
+    public void asamRotateButton() {
         //CREATING DICE BUTTON
         VBox directionBox = new VBox(); //Container to display dice button
         HBox horizontalBox = new HBox(10); //10 in between.
@@ -1367,14 +1464,14 @@ public class Game extends Application {
         //Getting Asam's current direction
         Direction currentDirection = theGame.asam.getDirection();
 
-        for(int i=0; i<directionButton.length; i++){
+        for (int i = 0; i < directionButton.length; i++) {
             //If i is 0 then left button, if 1 then no rotate button, if 2 then right rotate button
             //Find possible directions left and right to get button name.
-            Direction buttonDirection = theGame.possibleDirections(currentDirection, i-1);
+            Direction buttonDirection = theGame.possibleDirections(currentDirection, i - 1);
 
             //ASSIGN BUTTON NAME
             directionButton[i] = new Button();
-            switch (i){
+            switch (i) {
                 case 0: //Left from Asam's current direction
                     directionButton[i].setText("LEFT");
                     break;
@@ -1388,7 +1485,7 @@ public class Game extends Application {
 
 
             //Give the button an id so that it can be identified by the event listener.
-            String id = Integer.toString(i-1); //-1 if left, 0 if none, 1 if right
+            String id = Integer.toString(i - 1); //-1 if left, 0 if none, 1 if right
             directionButton[i].setId(id);
 
             //SETTING THE STYLE OF THE BUTTON
@@ -1410,14 +1507,14 @@ public class Game extends Application {
         horizontalBox.setAlignment(Pos.CENTER_RIGHT);
         directionBox.getChildren().add(horizontalBox);
         //Setting up alginment
-        directionBox.setPrefWidth(WINDOW_WIDTH/5); // Preferred width
-        directionBox.setMaxWidth(WINDOW_WIDTH/5);  // Maximum width
+        directionBox.setPrefWidth(WINDOW_WIDTH / 5); // Preferred width
+        directionBox.setMaxWidth(WINDOW_WIDTH / 5);  // Maximum width
         directionBox.setAlignment(Pos.CENTER_RIGHT);
         StackPane.setAlignment(directionBox, Pos.CENTER_LEFT);
         root.getChildren().add(directionBox);
 
         //Setting up event handler for when button is clicked:
-        for(int j=0; j<3; j++){
+        for (int j = 0; j < 3; j++) {
             directionButton[j].setOnAction(event -> {
                 //REMOVE ALL BUTTONS ONCE CLICKED.
                 horizontalBox.getChildren().clear();
@@ -1430,7 +1527,7 @@ public class Game extends Application {
                 String currentAsamString = theGame.asam.getString();
 
                 //Rotate and decode the new string.
-                String newAsamString = Marrakech.rotateAssam(currentAsamString, rotationFactor*90);
+                String newAsamString = Marrakech.rotateAssam(currentAsamString, rotationFactor * 90);
                 theGame.asam.decodeAsamString(newAsamString);
                 //Display this rotation
                 asamRotateDisplay();
@@ -1445,8 +1542,8 @@ public class Game extends Application {
      *If the player is playing against the computer, this method is called.
      * The computer goes thorugh its round of play, rotating asam, and placing the rug etc.
      */
-    public void computerRound(){
-        if(roundCounter==1){
+    public void computerRound() {
+        if (roundCounter == 1) {
             opponent = new AI(); //Initialise the opponent
         }
 
@@ -1468,7 +1565,8 @@ public class Game extends Application {
     /**
      * Go through next phase of opponent play ie. rolling the dice and then placing the rug.
      */
-    public void computerNextPhase(){
+
+    public void computerNextPhase() {
 
         //ROLL THE DICE
         int rolledNum = opponent.rolling();
@@ -1477,12 +1575,11 @@ public class Game extends Application {
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(e -> {
             //Generate rug string and place on board
-            if(intBoo){ //Intelligent opponent rug placement
+            if (intBoo) { //Intelligent opponent rug placement
                 String rug = opponent.smartPlace(gameString);
-                String newString = AI.makePlacementAI(gameString,rug);
+                String newString = AI.makePlacementAI(gameString, rug);
                 placeRug(newString);
-            }
-            else{ //Random opponent rug placement
+            } else { //Random opponent rug placement
                 String rug = opponent.randomPlace(gameString);
                 String newString = AI.makePlacementAI(gameString,rug);
                 placeRug(newString);
@@ -1496,29 +1593,28 @@ public class Game extends Application {
      * Go through one player's turn (including rotation, movement, and placement phases.
      * Checks essential conditions that enable game to proceed.
      */
-    public void round(){
+    public void round() {
         //CHECKS IF IT IS THE NEXT ROUND
-        if(playerCounter == numberPlayers+1){ //Back to first player
+        if (playerCounter == numberPlayers + 1) { //Back to first player
             roundCounter += 1;
             playerCounter = 1;
         }
 
         //CHECK THAT PLAYER IS NOT OUT OF GAME.
-        if(theGame.players[playerCounter-1].playerState == -1){
+        if (theGame.players[playerCounter - 1].playerState == -1) {
             playerCounter += 1;  //Skip player if they are out of the game.
         }
 
         //DISPLAY ROUND AND WHICH PLAYER'S TURN IT IS.
-        if(roundCounter == 1){
+        if (roundCounter == 1) {
             roundDisplay(true, playerCounter); //Start of game so visuals need to be set.
-        }
-        else{
+        } else {
             roundDisplay(false, playerCounter);
         }
 
         //MOVE THROUGH PHASES OF GAME
         String tempString = theGame.generateGameString();
-        if(Marrakech.ifGameOver(tempString)){ //Game is over.
+        if (Marrakech.ifGameOver(tempString)) { //Game is over.
             setMessage("Game Over!");
             PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
             pause.setOnFinished(e -> {
@@ -1526,14 +1622,12 @@ public class Game extends Application {
             });
             pause.play();
 
-        }
-        else{ //Game is not over.
+        } else { //Game is not over.
             setMessage("Set the direction of Asam");
 
-            if(opponentBoo &&playerCounter==2){ //COMPUTER'S TURN
+            if (opponentBoo && playerCounter == 2) { //COMPUTER'S TURN
                 computerRound();
-            }
-            else{
+            } else {
                 asamRotateButton(); //Display Asam direction buttons.
             }
         }
@@ -1545,7 +1639,7 @@ public class Game extends Application {
      * Decode the initial string to set the object values and the player 'stats',
      * the colours of the squares, and asam's position.
      */
-    public void getInitial(){
+    public void getInitial() {
         String initialString = initialStringGenerate();
         theGame = new Marrakech(initialString); //Initialise new game.
         displayStats(true);
@@ -1555,7 +1649,7 @@ public class Game extends Application {
     }
 
     /**
-     *  Changes scene from start screen to player selection screen.
+     * Changes scene from start screen to player selection screen.
      */
     private void changeScenePlayer() {
         // Clear the screen by removing all child nodes from the root layout container
@@ -1569,8 +1663,8 @@ public class Game extends Application {
     /**
      * Changes screen so that the one player can choose the type of computer opponent they are playing.
      */
-    public void opponentScreen(){
-        numberPlayers =2; //TWO PLAYERS SINCE HUMAN AND AI
+    public void opponentScreen() {
+        numberPlayers = 2; //TWO PLAYERS SINCE HUMAN AND AI
 
         root.getChildren().clear();
         backgroundCity();
@@ -1591,18 +1685,18 @@ public class Game extends Application {
         Button randBut = new Button("RANDOM"); //Random opponent
         Button intBut = new Button("INTELLIGENT"); //Intelligent opponent
 
-        oppBox.getChildren().addAll(randBut,intBut);
+        oppBox.getChildren().addAll(randBut, intBut);
         oppBox.setAlignment(javafx.geometry.Pos.CENTER);
 
-        String style =  "-fx-font-size: 15px;" + "-fx-text-fill: white;" + "-fx-background-color: #f8a102;";
+        String style = "-fx-font-size: 15px;" + "-fx-text-fill: white;" + "-fx-background-color: #f8a102;";
         randBut.setStyle(style);
         intBut.setStyle(style);
 
         //SETTING SIZE OF BUTTONS
-        randBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
-        randBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
-        intBut.setPrefWidth(WINDOW_WIDTH/6); // Preferred width
-        intBut.setMaxWidth(WINDOW_WIDTH/6);  // Maximum width
+        randBut.setPrefWidth(WINDOW_WIDTH / 6); // Preferred width
+        randBut.setMaxWidth(WINDOW_WIDTH / 6);  // Maximum width
+        intBut.setPrefWidth(WINDOW_WIDTH / 6); // Preferred width
+        intBut.setMaxWidth(WINDOW_WIDTH / 6);  // Maximum width
 
         wholeBox.getChildren().add(oppBox);
         root.getChildren().add(wholeBox);

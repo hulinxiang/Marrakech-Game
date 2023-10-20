@@ -1,11 +1,14 @@
 package comp1110.ass2;
 
-import com.sun.source.tree.IfTree;
 
-import java.awt.*;
+
+
 import java.util.*;
 import java.util.List;
 
+/**
+ * @author groupwork
+ */
 public class Marrakech {
 
     //Players in game
@@ -279,11 +282,13 @@ public class Marrakech {
         if (count1 != 0 && count2 != 0) {
             return false;
         }
+        //If x coordinates of two tiles are different, the difference between them must be 1.
         if (count1 == 1) {
             if (Math.abs(firstSquareX - secondSquareX) != 1) {
                 return false;
             }
         }
+        //If y coordinates of two tiles are different, the difference between them must be 1.
         if (count2 == 1) {
             if (Math.abs(firstSquareY - secondSquareY) != 1) {
                 return false;
@@ -438,7 +443,6 @@ public class Marrakech {
      */
     public static boolean isGameOver(String currentGame) {
         return ifGameOver(currentGame);
-        // FIXME: Task 8
     }
 
     /**
@@ -458,7 +462,6 @@ public class Marrakech {
     public static String rotateAssam(String currentAssam, int rotation) {
         char assamDirection = getAssamDirection(currentAssam);
         char newAssamDirection = Merchant.rotate(assamDirection, rotation);
-        // FIXME: Task 9
         //'i' means "invalid". In the rotate method, return 'i' if the requested rotation is illegal
         if (newAssamDirection == 'i') {
             return currentAssam;
@@ -521,7 +524,6 @@ public class Marrakech {
         if (!isRugValid(gameState, rug)) {
             return false;
         }
-        // FIXME: Task 10
         int assamX = getAssamPositionX(decodeAssamString(gameState));
         int assamY = getAssamPositionY(decodeAssamString(gameState));
         IntPair[] rugPosition = decodeRugString(rug);
@@ -640,7 +642,6 @@ public class Marrakech {
         count += dfs(x, y - 1, tiles, visited, color); // Up
 
         return count;
-        // FIXME: Task 11
 
     }
 
@@ -660,7 +661,6 @@ public class Marrakech {
      * @return A char representing the winner of the game as described above.
      */
     public static char getWinner(String gameState) {
-        // FIXME: Task 12
         //If the game is not over
         if (!ifGameOver(gameState)) {
             return 'n';
@@ -874,7 +874,6 @@ public class Marrakech {
         int x = getAssamPositionX(currentAssam);
         int y = getAssamPositionY(currentAssam);
         char direction = getAssamDirection(currentAssam);
-        // FIXME: Task 13
         return assamStringAfterMovement(x, y, dieResult, direction);
     }
 
@@ -987,7 +986,6 @@ public class Marrakech {
      * or the input currentGame unchanged otherwise.
      */
     public static String makePlacement(String currentGame, String rug) {
-        // FIXME: Task 14
         if (!isRugValid(currentGame, rug)) {
             return currentGame;
         }

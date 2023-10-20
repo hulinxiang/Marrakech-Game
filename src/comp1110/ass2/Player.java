@@ -3,6 +3,7 @@ package comp1110.ass2;
 import javafx.scene.paint.Color;
 
 /**
+ * @author groupwork
  * All aspects of the player including its coins, and rugs, and current state.
  */
 public class Player {

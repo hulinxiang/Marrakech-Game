@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 
 /**
+ * @author groupwork
  * Defines the behaviour of the dice. REDUNDANT CLASS.
  */
 public class Dice {
@@ -10,10 +11,11 @@ public class Dice {
 
     /**
      * Rolls a value according to the dice set up to decide who plays first and the movement of the merchant.
+     *
      * @return rolledInt is the result of the rotation
      */
     public static int Roll() {
-        int randomNum = (int) Math.floor(Math.random() *6); //Index between 0 and 5.
+        int randomNum = (int) Math.floor(Math.random() * 6); //Index between 0 and 5.
         int rolledNum = diceValues[randomNum];
         return rolledNum;
     }

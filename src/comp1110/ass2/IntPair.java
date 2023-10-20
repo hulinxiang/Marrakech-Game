@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 /**
+ * @author groupwork
  * A pair of ints that is used in many places in the ass2
  */
 public class IntPair {
