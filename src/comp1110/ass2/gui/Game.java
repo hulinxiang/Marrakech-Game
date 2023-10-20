@@ -88,20 +88,6 @@ public class Game extends Application {
      * Class specifying the stylistic and location features of the rectangles
      * that make the tiles when the board is displayed.
      */
-    public void calcWin(){
-        String tempString = theGame.generateGameString();
-        String winnerStr = Character.toString(Marrakech.getWinner(tempString));
-
-        if(winnerStr.equals("t")){
-            setMessage("Game is a tie");
-        }
-        else{
-            Integer indexWinner = colourLetters.indexOf(winnerStr)+1;
-            winnerDisplay(indexWinner);
-        }
-
-    }
-
     public class TileRect extends Rectangle {
         double xLocation;
         double yLocation;
@@ -659,103 +645,6 @@ public class Game extends Application {
         });
 
 
-
-    }
-
-    /**
-     * Stores the randomised order of the players in an ArrayList and displays accordingly.
-     */
-    public void assignOrder(){
-        //Use shuffle to randomise order
-        Collections.shuffle(nameArray);
-
-        Text[] nameText = new Text[numberPlayers]; //Display text with names of players.
-        StackPane[] namePane = new StackPane[numberPlayers]; //Stackpane to ensure proper display of text.
-        HBox nameStore = new HBox(WINDOW_WIDTH/10); //HBox to store stackpanes of names.
-
-        //Iterate through number of players, displaying the name of each
-        for(int i = 1; i<=numberPlayers; i++) {
-            nameText[i-1] = new Text();
-            nameText[i-1].setText(nameArray.get(i-1));
-            //Setting stylistic features of nameText:
-            Font basicFont = new Font("Arial", 20);
-            nameText[i-1].setFont(basicFont);
-            nameText[i-1].setFill(Color.web("#000000"));
-
-            namePane[i-1] = new StackPane();
-            namePane[i-1].getChildren().add(nameText[i-1]);
-
-            StackPane.setAlignment(nameText[i-1], Pos.CENTER);
-            nameText[i-1].setTextAlignment(TextAlignment.CENTER);
-            StackPane.setMargin(nameText[i-1], new Insets(110, 0, 0, 0));
-
-            namePane[i-1].setPrefWidth(150); // Preferred width
-            namePane[i-1].setMaxWidth(150);  // Maximum width
-            StackPane.setAlignment(namePane[i-1], Pos.CENTER);
-
-            nameStore.getChildren().add(namePane[i-1]);
-            nameText[i-1].setWrappingWidth(WINDOW_WIDTH/10); // Set the wrapping width
-
-
-        }
-        nameStore.setAlignment(Pos.CENTER);
-        root.getChildren().add(nameStore);
-
-    }
-
-    /**
-     * Checks that names entered on the player screen is correct.
-     * @param nameField textField that takes name input, parsed so that it may be disabled.
-     * @param instructionText instruction text that changes depending on whether input correct or not.
-     */
-    public void checkNameRequirements(TextField nameField, Text instructionText){
-        //Checking that names are not repeated, and that number of names match number of players...
-        if(nameArray.size() == numberPlayers){
-            //Checking that no repeats in set by putting into set and comparing sizes:
-            HashSet<String> nameSet = new HashSet<>(nameArray);
-
-            if(nameSet.size() != nameArray.size()){ //Less elements in the set means there are duplicates in the array
-                //System.out.println("Duplicates");
-                instructionText.setText("No duplicate names allowed...");
-            }
-            else{
-                //System.out.println("Correct");
-                boolean proceed = true;
-                for(int i=0; i<numberPlayers;i++){
-                    if(nameArray.get(i)==""){ //Check that each name at least 1 character long
-                        proceed = false;
-                    }
-                }
-
-                if(proceed){ //If proceed is true then can go to next stage of game.
-                    nameField.setEditable(false); //Disable the textfield if correct input received
-                    instructionText.setText("Press ENTER to start the game!");
-                    assignOrder(); //Assign order of play.
-
-                    //If enter is pressed game screen will appear.
-                    nameField.setOnKeyPressed(event -> {
-                        if (event.getCode().getName().equals("Enter")) {
-                            if(numberPlayers ==1){
-                                opponentBoo = true;
-                                opponentScreen();
-                            }
-                            else{
-                                opponentBoo = false;
-                                changeSceneBoard(); //Changes scene to board display
-                            }
-                        }
-                    });
-                }
-                else{
-                    instructionText.setText("Names must be minimum one character.");
-                }
-            }
-
-        }
-        else{
-            //System.out.println("Not same size.");
-            instructionText.setText("Number of names must match number of players");
-        }
 
     }
 
