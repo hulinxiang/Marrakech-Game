@@ -1514,6 +1514,11 @@ public class Game extends Application {
         } else { //Game is not over.
             setMessage("Set the direction of Asam");
 
+            if(opponentBoo && theGame.players[1].playerState == -1) {//check if computer is out of game.
+                numberPlayers = 1;
+                opponentBoo = false;
+            }
+
             if (opponentBoo && playerCounter == 2) { //COMPUTER'S TURN
                 computerRound();
             } else {
