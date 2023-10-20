@@ -3,6 +3,7 @@ package comp1110.ass2;
 import javafx.scene.paint.Color;
 
 /**
+ * @author groupwork
  * Tile coordinates and their state on the board.
  */
 public class Tile {

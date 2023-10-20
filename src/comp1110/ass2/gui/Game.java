@@ -37,6 +37,9 @@ import java.util.HashSet;
 import java.util.Collections;
 
 
+/**
+ * @author Lize
+ */
 public class Game extends Application {
 
     private final StackPane root = new StackPane();
@@ -1386,7 +1389,6 @@ public class Game extends Application {
                 placeRug(newString);
             } else { //Random opponent rug placement
                 String rug = opponent.randomPlace(gameString);
-                System.out.println(rug);
                 String newString = AI.makePlacementAI(gameString, rug);
                 placeRug(newString);
             }

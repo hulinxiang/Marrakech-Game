@@ -4,9 +4,11 @@ import comp1110.ass2.*;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
+/**
+ * @author Linxiang
+ */
 public class AI extends Player {
 
     public int diceResult;

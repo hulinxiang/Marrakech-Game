@@ -19,6 +19,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+/**
+ * @author Linxiang
+ */
 public class Viewer extends Application {
 
     private static final int VIEWER_WIDTH = 1200;

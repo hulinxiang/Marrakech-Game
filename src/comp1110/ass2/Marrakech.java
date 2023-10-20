@@ -1,11 +1,14 @@
 package comp1110.ass2;
 
-import com.sun.source.tree.IfTree;
 
-import java.awt.*;
+
+
 import java.util.*;
 import java.util.List;
 
+/**
+ * @author groupwork
+ */
 public class Marrakech {
 
     //Players in game

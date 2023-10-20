@@ -1,6 +1,9 @@
 package comp1110.ass2;
 
 
+/**
+ * @author groupwork
+ */
 public class Merchant {
     public static int x = 0;
     public static int y = 0;
@@ -57,7 +60,6 @@ public class Merchant {
     }
 
 
-
     /**
      * Moves the required number of steps as indicated by the die, in the specific direction.
      */
@@ -77,7 +79,7 @@ public class Merchant {
     }
 
     /**
-     Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
+     * Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
      */
 
 

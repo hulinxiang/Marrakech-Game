@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 /**
+ * @author groupwork
  * This class defines the shape (width and height) of the game board.
  */
 public class Board {
