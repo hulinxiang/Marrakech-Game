@@ -31,14 +31,6 @@ public class Player {
         return playerState;
     }
 
-    /**
-     * Setter method of getPlayerState
-     *
-     * @param playerState
-     */
-    public void setPlayerState(int playerState) {
-        this.playerState = playerState;
-    }
 
     /**
      * Getter method of coins
@@ -49,14 +41,6 @@ public class Player {
         return dirhams;
     }
 
-    /**
-     * Setter method of coins
-     *
-     * @param dirhams
-     */
-    public void setDirhams(int dirhams) {
-        this.dirhams = dirhams;
-    }
 
     /**
      * Getter method of rugs
@@ -67,14 +51,6 @@ public class Player {
         return rugs;
     }
 
-    /**
-     * Setter method of rugs
-     *
-     * @param rugs
-     */
-    public void setRugs(int rugs) {
-        this.rugs = rugs;
-    }
 
     /**
      * Getter method of colour

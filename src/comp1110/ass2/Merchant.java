@@ -56,13 +56,6 @@ public class Merchant {
         }
     }
 
-    /**
-     * Sets the initial direction of the merchant at the start of the game.
-     */
-    public void firstDirection(Direction d) {
-        this.direction = d;
-
-    }
 
 
     /**
@@ -74,24 +67,6 @@ public class Merchant {
 
     }
 
-    public void Move(Direction d, int steps) {
-        switch (d) {
-            case NORTH:
-                y -= steps;
-                break;
-            case SOUTH:
-                y += steps;
-                break;
-            case EAST:
-                x -= steps;
-                break;
-            case WEST:
-                x += steps;
-                break;
-            default:
-        }
-
-    }
 
     public int getX() {
         return x;
@@ -105,15 +80,6 @@ public class Merchant {
      Checks that the rotation is no more than 90 degrees. Returns false if illegal rotation, returns true if legal.
      */
 
-    /**
-     * @param currentDirection
-     * @param intendedDirection
-     * @return
-     */
-    public static boolean checkRotation(Direction currentDirection, Direction intendedDirection) {
-        int differences = Math.abs(currentDirection.ordinal() - intendedDirection.ordinal());
-        return differences == 1 || differences == 3;
-    }
 
     public String getString() {
         StringBuilder sb = new StringBuilder();

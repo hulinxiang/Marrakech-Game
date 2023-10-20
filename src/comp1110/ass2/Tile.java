@@ -16,7 +16,6 @@ public class Tile {
     int state;
 
     String colour;
-    private boolean isOccupied;
 
 
     /**

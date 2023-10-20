@@ -19,7 +19,6 @@ public class AI extends Player {
 
 
     public AI() {
-        Random random = new Random();
         //Colour of AI will always be cyan.
         this.colour = "c";
         //Initialize the id for computer rug. Every round the id+1.
@@ -56,19 +55,6 @@ public class AI extends Player {
         return assamString;
     }
 
-
-    /**
-     * Move the assam
-     *
-     * @param gameString A string representation of game state.
-     * @param dieResult  The result of the die, which determines the number of squares Assam will move.
-     * @return A String representing Assam's state after the movement.
-     */
-    public String moveAssamAI(String gameString, int dieResult) {
-        //Because the result of currentAssam has no "A" at head, add "A" at head position
-        String currentAssam = "A" + Marrakech.decodeAssamString(gameString);
-        return Marrakech.moveAssam(currentAssam, dieResult);
-    }
 
     /**
      * A method for randomly pick a possible rug string
