@@ -83,22 +83,11 @@ public class Game extends Application {
 
     AI opponent; //Only used if one player in the game.
 
+
     /**
-     * Calculates the winner
+     * Class specifying the stylistic and location features of the rectangles
+     * that make the tiles when the board is displayed.
      */
-    public void calcWin() {
-        String tempString = theGame.generateGameString();
-        String winnerStr = Character.toString(Marrakech.getWinner(tempString));
-
-        if (winnerStr.equals("t")) {
-            setMessage("Game is a tie");
-        } else {
-            Integer indexWinner = colourLetters.indexOf(winnerStr) + 1;
-            winnerDisplay(indexWinner);
-        }
-
-    }
-
     public class TileRect extends Rectangle {
         double xLocation;
         double yLocation;
@@ -122,13 +111,14 @@ public class Game extends Application {
             this.setWidth(SQUARE_WIDTH);
             this.setHeight(SQUARE_HEIGHT);
 
+            //Set stylistic features.
             this.setFill(Color.web("#FFBB6E")); //Set fill colour
             this.setStrokeWidth(2.0); //Set stroke width
             this.setStroke(Color.web("#603300"));
 
         }
 
-        public void setColour(String colour) {
+        public void setColour(String colour){
             this.setFill(Color.web(colour)); //Set fill colour
         }
     }
@@ -137,7 +127,7 @@ public class Game extends Application {
      * Class for button tiles.
      * Contains constructor that specifies stylistic features, dimensions, and functions.
      */
-    public class TileButton extends Button {
+    public class TileButton extends Button{
         double xLocation;
         double yLocation;
 
@@ -258,6 +248,10 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Class for triangle that serves as the symbol for asam.
+     * Contains a constructor that specifies stylistic features and dimensions.
+     */
     public class AsamSymbol extends Polygon {
         //Polygon triangle = new Polygon();
         double x;
@@ -275,6 +269,7 @@ public class Game extends Application {
                     -halfSide, sqrtSide
             );
 
+            //SET STYLISTIC FEATURES
             this.setStroke(Color.web("#603300"));
             this.setFill(Color.web("#0099ff"));
 
@@ -282,8 +277,26 @@ public class Game extends Application {
             this.setLayoutY(this.y);
         }
 
+        //SET DIMENSIONS
         double halfSide = SQUARE_WIDTH / 2.0;
         double sqrtSide = Math.sqrt(Math.pow(SQUARE_WIDTH, 2) - Math.pow(halfSide, 2)) / 2.0;
+
+    }
+
+    /**
+     Calculates the winner of the game and calls the method to display the winner.
+     */
+    public void calcWin(){
+        String tempString = theGame.generateGameString();
+        String winnerStr = Character.toString(Marrakech.getWinner(tempString));
+
+        if(winnerStr.equals("t")){ //Game is a tie
+            setMessage("Game is a tie");
+        }
+        else{ //If not a tie display the winner.
+            Integer indexWinner = colourLetters.indexOf(winnerStr)+1;
+            winnerDisplay(indexWinner);
+        }
 
     }
 
@@ -292,8 +305,9 @@ public class Game extends Application {
      *
      * @param winIndex Number of the player who won.
      */
-    public void winnerDisplay(int winIndex) {
-        setMessage("Player " + winIndex + " is the winner!");
+    public void winnerDisplay(int winIndex){
+        String winnerName = nameArray.get(winIndex-1); //Fetch the name of the winner.
+        setMessage(winnerName + " is the winner!");
 
         HBox backgroundStore = new HBox(100);
         Rectangle[] backgrounds = new Rectangle[numberPlayers];
@@ -323,7 +337,7 @@ public class Game extends Application {
     }
 
     /**
-     * Adds city image that is used in some scenes.
+     * Adds city image that is used in some scenes. See reference for image in originality file.
      */
     public void backgroundCity() {
         ImageView viewCity = new ImageView();
@@ -334,7 +348,7 @@ public class Game extends Application {
     }
 
     /**
-     * Adds sky image that is used in some scenes.
+     * Adds sky image that is used in some scenes. See reference for image in originality file.
      */
     public void backgroundSky() {
         //ADDING IMAGE
@@ -348,6 +362,7 @@ public class Game extends Application {
 
     /**
      * This method specifies the graphics of the first screen and allows users to specify the number of players.
+     * Method is mostly javaFX, with an emphasis on colour, style, and object alignment.
      */
     public void startScreen() {
         //ADDING WELCOME TEXT
@@ -435,6 +450,7 @@ public class Game extends Application {
 
         root.getChildren().add(buttonBox);         // Add the box to the StackPane
         root.setStyle("-fx-background-color: #0099ff;");
+
 
 
     }
@@ -629,10 +645,13 @@ public class Game extends Application {
         });
 
 
+
     }
+
 
     /**
      * Start of game, game string generated to be translated in the Marrakech class.
+     * @return Game string to be translated into Marrakech class.
      */
     public String initialStringGenerate() {
         String initialGameString = ""; //Game string starts wiht a P to denote player strings.
@@ -711,6 +730,11 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Displays what round it is and which player's turn it is.
+     * @param start Boolean which specifies whether it is the start of the game (true) or not (false).
+     * @param currentPlayer Integer specifying who the current player string.
+     */
     public void roundDisplay(boolean start, int currentPlayer) {
         //If at the start display the text, if not just update the text.
         if (start) {
@@ -745,8 +769,8 @@ public class Game extends Application {
     }
 
     /**
-     * Sets the instruction for the messageText to display.
-     *
+     * Sets the instruction for the messageText to display.This method called at different times throughout
+     * the game.
      * @param instructionString String to be displayed.
      */
     public void setMessage(String instructionString) {
@@ -754,7 +778,8 @@ public class Game extends Application {
     }
 
     /**
-     * Displays the instruction message which is altered throughout the game depending on game state.
+     * Initially display the instruction message.
+     * This text is altered in the setMessage method throughout the game depending on game state.
      */
     public void messageDisplay() {
         //Display the messageText (global variable)
@@ -795,9 +820,18 @@ public class Game extends Application {
         }
 
     }
-
-    public boolean[] firstConditions(boolean[] coordinateBool, int xRef, int yRef) {
-        if (xRef == 0) {
+    
+    /**
+     *Method called by rugPlacement when it is a player's turn to choose the first square of their rug,
+     * checks edge cases of rug placement.
+     * @param coordinateBool Specifying whether buttons giving options to place the rug
+     *                       LEFT, RIGHT, TOP, BOTTOM of asam should be created.
+     * @param xRef The x location of asam relative to which the buttons are created.
+     * @param yRef The y location of asam relative to which the buttons are created.
+     * @return Upated boolean array specifying if buttons should be created (true) or not (False).
+     */
+    public boolean[] firstConditions(boolean[] coordinateBool, int xRef, int yRef){
+        if(xRef==0){
             //Don't create left button
             coordinateBool[0] = false;
         } else if (xRef == 6) {
@@ -817,6 +851,15 @@ public class Game extends Application {
         return coordinateBool;
     }
 
+    /**
+     * Method called by rugPlacement specifying additional conditions that check where asam is relative
+     * to the potential rug when the second round of buttons are created.
+     * @param coordinateBool Specifying whether buttons giving options to place the rug
+     *      *                       LEFT, RIGHT, TOP, BOTTOM of the first square seleted should be created.
+     * @param xRef The x location of the first square selected.
+     * @param yRef The y location of the first square selected
+     * @return Updated boolean array specifying which buttons should be created.
+     */
     public boolean[] additionalConditions(boolean[] coordinateBool, int xRef, int yRef) {
         coordinateBool = firstConditions(coordinateBool, xRef, yRef);
         if (xRef - 1 == theGame.asam.getX()) { //Asam is to left
@@ -834,6 +877,12 @@ public class Game extends Application {
         return coordinateBool;
     }
 
+    /**
+     * Method which initialises the stackpane in which the buttons that give the options of
+     * where to place the rugs will be initialised. Also checks conditions for creating rug buttons.
+     * @param xRef X location of object relative to which button must be created.
+     * @param yRef Y location of object relative to which button must be created.
+     */
     public void rugPlacement(int xRef, int yRef) {
         //Must set width of stackpane otherwise not able to click other buttons
         //Set width to the width of the board.
@@ -860,6 +909,12 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Speifies the graphics, locations and dimensions of the rug buttons.
+     * @param coordinateBool Boolean array specifying which option buttons should be created.
+     * @param xRef X location of object relative to which button created.
+     * @param yRef Y location of object relative to which button created.
+     */
     public void makeRugButtons(boolean[] coordinateBool, int xRef, int yRef) {
         //Make buttons and customise display
         String styleString = "-fx-border-width: 4px;" +
@@ -867,6 +922,7 @@ public class Game extends Application {
                 "-fx-border-color: #ffffff;" +
                 "-fx-background-color: transparent"; //Transparent since need to be able to see what is behind.
 
+        //CREATING THE BUTTONS
         if (coordinateBool[0]) { //LEFT BUTTON
             TileButton buttonLeft = new TileButton((xRef - 4) * SQUARE_WIDTH, (yRef - 3) * SQUARE_HEIGHT);
             buttonLeft.setStyle(styleString);
@@ -893,6 +949,10 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Method triggering the start of the rugphase of ech player's round.
+     * Calls the rug button methods above.
+     */
     public void rugPhase() {
         //Once dice has been rolled and Asam has been moved, rug placement is next.
         //Wait one second then introduce rug placement
@@ -912,24 +972,29 @@ public class Game extends Application {
         pause.play();
     }
 
-    public void checkPayment(String message) {
+    /**
+     * Check if payment needs to be made after asam moves.
+     * If it does call the processPayment method, otherwise proceed to the rug phase.
+     * @param message String to which the payment notice is added and then diaplyed.
+     */
+    public void checkPayment(String message){
         //Check if asam landed on another player's rug
         int xCord = theGame.asam.getX();
         int yCord = theGame.asam.getY();
-        String colourString = theGame.board.tiles[xCord][yCord].getColour().substring(0, 1).toLowerCase();
+        String colourString = theGame.board.tiles[xCord][yCord].getColour().substring(0,1).toLowerCase();
 
-        //Check wif payment is needed
-        if (colourString.equals("n")) { //Asam landed on empty tile
+        //Check if payment is needed
+        if(colourString.equals("n")){ //Asam landed on empty tile
             message += "\nNo payment."; //Add to the message text
-            if (opponentBoo && playerCounter == 2) {
+            if(opponentBoo && playerCounter==2){ //Check that player is not the computer.
 
-            } else {
+            } else{
                 rugPhase();
             }
 
         } else if (colourString.equals(colourLetters.get(playerCounter - 1))) { //Asam landed on current player's rug
             message += "\nNo payment."; //Add to the message text
-            if (opponentBoo && playerCounter == 2) {
+            if (opponentBoo && playerCounter == 2) { //Check that player is not the computer.
 
             } else {
                 rugPhase();
@@ -946,16 +1011,17 @@ public class Game extends Application {
     }
 
     /**
-     * Process the payments between players.
+     * Process the payments between players if the player landed on another player's rug.
      */
-    public void processPayment(int paymentAmt, int receiver) {
-        if (theGame.players[playerCounter - 1].dirhams - paymentAmt <= 0) { //Check if dirhams left
-            theGame.players[receiver - 1].dirhams += theGame.players[playerCounter - 1].dirhams; //pay what they have
-            theGame.players[playerCounter - 1].dirhams = 0;
+    public void processPayment(int paymentAmt, int receiver){
+        //CHECK IF THE PLAYER HAS COINS LEFT
+        if (theGame.players[playerCounter - 1].dirhams - paymentAmt <= 0){ //Not enough coins
+            theGame.players[receiver - 1].dirhams += theGame.players[playerCounter-1].dirhams;
+            theGame.players[playerCounter - 1].dirhams = 0; //Pay what they have and then set number of coins to 0.
 
-            theGame.players[playerCounter - 1].playerState = -1;
+            theGame.players[playerCounter - 1].playerState = -1; //Player out of coins so out of game.
 
-        } else {
+        } else { //Enough coins
             theGame.players[playerCounter - 1].dirhams -= paymentAmt; //Subtract from player paying
             theGame.players[receiver - 1].dirhams += paymentAmt; //Add to player receiving
             if (opponentBoo && playerCounter == 2) {
@@ -985,9 +1051,10 @@ public class Game extends Application {
         if (theGame.asam.getDirection().equals(previousDirection)) {
             movementDisplay(false); //Display does not need to account for change in direction
         } else {
-            movementDisplay(true);
+            movementDisplay(true); //Display needs to account for change in direction.
         }
 
+        //SPECIFY WHAT MESSAGE SHOULD SAY.
         String textInstructions = "";
         if (number == 1) {
             textInstructions = "Asam has moved " + number + " step.";
@@ -1052,7 +1119,7 @@ public class Game extends Application {
     public void asamRotateDisplay() {
 
         //Switch case to check and display asam's rotation
-        switch (theGame.asam.getDirection()) {
+        switch(theGame.asam.getDirection()){
             case NORTH:
                 asam.setRotate(0);
                 break;
@@ -1071,6 +1138,11 @@ public class Game extends Application {
 
     }
 
+    /**
+     * Checks that the rug placement is correct using the locations of the buttons clicked.
+     * @param oneBut First button clicked.
+     * @param twoBut Second button clicked.
+     */
     public void checkPlacement(TileButton oneBut, TileButton twoBut) {
         //Create game string
         String gameString = theGame.generateGameString();
@@ -1110,7 +1182,7 @@ public class Game extends Application {
         for (int i = 0; i < ROW; i++) { //Iterate through the columns
             for (int j = 0; j < ROW; j++) { //Iterate through the rows.
                 String colourString = theGame.board.tiles[i][j].getColour().substring(0, 1).toLowerCase();
-                if (!colourString.equals("n")) {
+                if (!colourString.equals("n")) { //Checks that colour is not null and sets accordingly.
                     int index = colourLetters.indexOf(colourString);
                     tileRect[i][j].setFill(Color.web(colourCodes[index]));
                 }
@@ -1120,6 +1192,11 @@ public class Game extends Application {
         }
     }
 
+    /**
+     * Displays the board on the main screen using the TileRect and MosaicTile classes.
+     * Through iteration calculates the location of each tile and mosaic piece.
+     * @return Group to add to the root and thus be displayed.
+     */
     public Group gameBoardDisplay() {
         backgroundCity(); //Add city in background of baord.
 
@@ -1183,7 +1260,7 @@ public class Game extends Application {
     }
 
     /**
-     * Place the rug onto the board.
+     * Place the rug onto the board and move to next round of he game.
      */
     public void placeRug(String gameString) {
         theGame.decodeMarrakech(gameString); //Decode string
@@ -1263,7 +1340,7 @@ public class Game extends Application {
     }
 
     /**
-     * Displays end specifies names of rotation buttons.
+     * Method which displays and specifies names of rotation buttons based on asam's current direction.
      * Add event listener to the button, and specifies the methods to be called when button clicked.
      */
     public void asamRotateButton() {
@@ -1284,13 +1361,13 @@ public class Game extends Application {
             //ASSIGN BUTTON NAME
             directionButton[i] = new Button();
             switch (i) {
-                case 0:
+                case 0: //Left from Asam's current direction
                     directionButton[i].setText("LEFT");
                     break;
-                case 1:
+                case 1: //No direction change.
                     directionButton[i].setText("NONE");
                     break;
-                case 2:
+                case 2: //Right from Asam's current direction.
                     directionButton[i].setText("RIGHT");
                     break;
             }
@@ -1328,6 +1405,8 @@ public class Game extends Application {
         //Setting up event handler for when button is clicked:
         for (int j = 0; j < 3; j++) {
             directionButton[j].setOnAction(event -> {
+                //REMOVE ALL BUTTONS ONCE CLICKED.
+                horizontalBox.getChildren().clear();
                 directionBox.getChildren().clear();
                 root.getChildren().removeAll(directionBox);
                 //-1 for right, 0 for middle, 1 for left.
@@ -1349,7 +1428,8 @@ public class Game extends Application {
     }
 
     /**
-     * Computer goes thorugh its round of play, rotating asa etc.
+     *If the player is playing against the computer, this method is called.
+     * The computer goes thorugh its round of play, rotating asam, and placing the rug etc.
      */
     public void computerRound() {
         if (roundCounter == 1) {
@@ -1359,11 +1439,12 @@ public class Game extends Application {
         //ROTATE ASAM
         String newAsamString = opponent.rotateAssamAI(theGame.asam.getString()); //First set direction of asam.
         theGame.asam.decodeAsamString(newAsamString);  //Decode Rotation
-        asamRotateDisplay(); //Display rotation*/
+        asamRotateDisplay(); //Display rotation
 
+        //Wait one second and then proceed.
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(e -> {
-            computerNextPhase();
+            computerNextPhase(); //Next phase called roling dice and placing rug.
         });
         pause.play();
 
@@ -1371,7 +1452,7 @@ public class Game extends Application {
     }
 
     /**
-     * Go through next phase of opponent play.
+     * Go through next phase of opponent play ie. rolling the dice and then placing the rug.
      */
 
     public void computerNextPhase() {
@@ -1389,7 +1470,7 @@ public class Game extends Application {
                 placeRug(newString);
             } else { //Random opponent rug placement
                 String rug = opponent.randomPlace(gameString);
-                String newString = AI.makePlacementAI(gameString, rug);
+                String newString = AI.makePlacementAI(gameString,rug);
                 placeRug(newString);
             }
         });
@@ -1398,20 +1479,22 @@ public class Game extends Application {
     }
 
     /**
-     * Go through one round of play
+     * Go through one player's turn (including rotation, movement, and placement phases.
+     * Checks essential conditions that enable game to proceed.
      */
     public void round() {
+        //CHECKS IF IT IS THE NEXT ROUND
         if (playerCounter == numberPlayers + 1) { //Back to first player
             roundCounter += 1;
             playerCounter = 1;
         }
 
-        //Check that player is not out of game
+        //CHECK THAT PLAYER IS NOT OUT OF GAME.
         if (theGame.players[playerCounter - 1].playerState == -1) {
             playerCounter += 1;  //Skip player if they are out of the game.
         }
 
-        //Display the round and the player whose turn it is.
+        //DISPLAY ROUND AND WHICH PLAYER'S TURN IT IS.
         if (roundCounter == 1) {
             roundDisplay(true, playerCounter); //Start of game so visuals need to be set.
         } else {
@@ -1420,7 +1503,7 @@ public class Game extends Application {
 
         //MOVE THROUGH PHASES OF GAME
         String tempString = theGame.generateGameString();
-        if (Marrakech.ifGameOver(tempString)) {
+        if (Marrakech.ifGameOver(tempString)) { //Game is over.
             setMessage("Game Over!");
             PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
             pause.setOnFinished(e -> {
@@ -1428,8 +1511,13 @@ public class Game extends Application {
             });
             pause.play();
 
-        } else {
+        } else { //Game is not over.
             setMessage("Set the direction of Asam");
+
+            if(opponentBoo && theGame.players[1].playerState == -1) {//check if computer is out of game.
+                numberPlayers = 1;
+                opponentBoo = false;
+            }
 
             if (opponentBoo && playerCounter == 2) { //COMPUTER'S TURN
                 computerRound();
@@ -1442,11 +1530,12 @@ public class Game extends Application {
     }
 
     /**
-     * Decode the initial string to set the player 'stats', the colours of the squares, and asam's position.
+     * Decode the initial string to set the object values and the player 'stats',
+     * the colours of the squares, and asam's position.
      */
     public void getInitial() {
         String initialString = initialStringGenerate();
-        theGame = new Marrakech(initialString);
+        theGame = new Marrakech(initialString); //Initialise new game.
         displayStats(true);
         asamDisplay();
         round();
@@ -1466,7 +1555,7 @@ public class Game extends Application {
     }
 
     /**
-     * Changes screen so that 1 player can choose the type of computer opponent they are playing.
+     * Changes screen so that the one player can choose the type of computer opponent they are playing.
      */
     public void opponentScreen() {
         numberPlayers = 2; //TWO PLAYERS SINCE HUMAN AND AI
@@ -1508,7 +1597,7 @@ public class Game extends Application {
 
         //SET ON ACTION EVENTS FOR BUTTONS
         randBut.setOnAction(e -> {
-            intBoo = false; //opponent is not intelligent
+            intBoo = false; //opponent is not intelligent (random).
             changeSceneBoard(); //move to stage of playing the game.
         });
 
@@ -1520,7 +1609,7 @@ public class Game extends Application {
     }
 
     /**
-     * Changes scene to the main game.
+     * Changes scene to the main game after specifying number of players and the names of players.
      */
     private void changeSceneBoard() {
         //Clear the screen by removing all child nodes from the root layout container
@@ -1533,8 +1622,18 @@ public class Game extends Application {
     }
 
 
+    /**
+     * Starts the game by displaying the visuals and the start screen and displaying the scene.
+     * @param stage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
+
+//         FIXME Task 7 and 15
 
         backgroundCity();
         backgroundSky();
@@ -1546,7 +1645,10 @@ public class Game extends Application {
 
     }
 
-    public static void main(String[] args) {
+    /**
+     * Launch the game.
+     */
+    public static void main(String[] args){
         launch();
     }
 }

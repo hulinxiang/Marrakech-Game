@@ -7,21 +7,20 @@ import javafx.scene.paint.Color;
  * All aspects of the player including its coins, and rugs, and current state.
  */
 public class Player {
-    // Starting number of coins
-    static int START_COINS = 30;
-    // Starting number of rugs;
-    static int START_RUGS = 15;
-    //Number of coins
-    public int dirhams;
-    //Number of rugs
-    public int rugs;
-    //The coordinates of the player's rugs on the board.
-    public String colour;
 
-    //String denoting the colour of the player.
-    IntPair[] rugCords;
-    //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
-    public int playerState;
+    static int START_COINS = 30; // Starting number of coins
+
+    static int START_RUGS = 15; // Starting number of rugs;
+
+    public int dirhams; //Number of coins
+
+    public int rugs;  //Number of rugs
+
+    public String colour;  //String denoting the colour of the player.
+
+    IntPair[] rugCords; //The coordinates of the player's rugs on the board.
+
+    public int playerState; //The state of the player. 1 is in the game;-1 is out of game;0 is out of rugs;
 
     /**
      * Getter method of getPlayerState
@@ -32,6 +31,14 @@ public class Player {
         return playerState;
     }
 
+    /**
+     * Setter method of getPlayerState
+     *
+     * @param playerState
+     */
+    public void setPlayerState(int playerState) {
+        this.playerState = playerState;
+    }
 
     /**
      * Getter method of coins
@@ -42,6 +49,14 @@ public class Player {
         return dirhams;
     }
 
+    /**
+     * Setter method of coins
+     *
+     * @param dirhams Integer value specifying the number of coins.
+     */
+    public void setDirhams(int dirhams) {
+        this.dirhams = dirhams;
+    }
 
     /**
      * Getter method of rugs
@@ -52,6 +67,14 @@ public class Player {
         return rugs;
     }
 
+    /**
+     * Setter method of rugs
+     *
+     * @param rugs
+     */
+    public void setRugs(int rugs) {
+        this.rugs = rugs;
+    }
 
     /**
      * Getter method of colour
@@ -92,6 +115,12 @@ public class Player {
 
     }
 
+    /**
+     * Decodes the character seen in the rug and player parts of the game string.
+     * @param colour String of a single character - first letter of colour.
+     * @return Full string with the colour name.
+     */
+
     public static String decodeColour(String colour) {
         //Setting player colour
         switch (colour) { //2nd character is colour;
@@ -117,8 +146,8 @@ public class Player {
     /**
      * Convert a String to a Color class
      *
-     * @param colour
-     * @return Color
+     * @param colour String specifying the colour of the player
+     * @return Color Returns colour class corresponding to the string.
      */
     public static Color getColorFromString(String colour) {
         if ("YELLOW".equalsIgnoreCase(colour)) {
