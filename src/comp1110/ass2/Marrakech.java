@@ -268,13 +268,37 @@ public class Marrakech {
         int secondSquareX = getSecondSquareX(rug);
         int secondSquareY = getSecondSquareY(rug);
         //Check if two squares of the rug is connected
-        if (firstSquareX != secondSquareX && firstSquareY != secondSquareY) {
+        int count1 = 0;
+        int count2 = 0;
+        if (firstSquareX != secondSquareX) {
+            count1++;
+        }
+        if (firstSquareY != secondSquareY) {
+            count2++;
+        }
+        if (count1 != 0 && count2 != 0) {
             return false;
         }
+        if (count1 == 1) {
+            if (Math.abs(firstSquareX - secondSquareX) != 1) {
+                return false;
+            }
+        }
+        if (count2 == 1) {
+            if (Math.abs(firstSquareY - secondSquareY) != 1) {
+                return false;
+            }
+        }
+        if (count1 == 0 && count2 == 0) {
+            return false;
+        }
+
         //Check if it is out of bound
         if (firstSquareX > 6 || firstSquareY > 6 || secondSquareX > 6 || secondSquareY > 6) {
             return false;
         }
+
+
         //possibleColour is an ArrayList that contains possible colour
         ArrayList<String> possibleColour = new ArrayList<>();
         possibleColour.add("c");
@@ -339,9 +363,9 @@ public class Marrakech {
      * @return the coordinates on the board
      */
     public static String getCoordinateFromIndex(int index) {
-        int x = index % 7;
-        int y = index / 7;
-        return "" + x + y;
+        int x = index / 7;
+        int y = index % 7;
+        return x + "" + y;
     }
 
 
@@ -549,10 +573,24 @@ public class Marrakech {
             return false;
         }
         //check if connected
-        else if (x1 != assamX && x2 != assamX && y1 != assamY && y2 != assamY) {
-            return false;
+        int count=0;
+        if(x1==assamX&&Math.abs(y1-assamY)==1){
+            count++;
         }
-        return true;
+        if(y1==assamY&&Math.abs(x1-assamX)==1){
+            count++;
+        }
+        if(x2==assamX&&Math.abs(y2-assamY)==1){
+            count++;
+        }
+        if(y2==assamY&&Math.abs(x2-assamX)==1){
+            count++;
+        }
+        if(count==1){
+            return true;
+        }
+        return false;
+
     }
 
 

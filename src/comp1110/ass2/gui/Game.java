@@ -1391,8 +1391,6 @@ public class Game extends Application {
         int rolledNum = opponent.rolling();
         rolled(rolledNum); //Display movement corresponding to rolling of dice.
         String gameString = theGame.generateGameString();
-
-
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(e -> {
             //Generate rug string and place on board
@@ -1403,6 +1401,7 @@ public class Game extends Application {
             }
             else{ //Random opponent rug placement
                 String rug = opponent.randomPlace(gameString);
+                System.out.println(rug);
                 String newString = AI.makePlacementAI(gameString,rug);
                 placeRug(newString);
             }
