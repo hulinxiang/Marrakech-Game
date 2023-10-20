@@ -1169,44 +1169,6 @@ public class Marrakech {
 
     }
 
-    public static void main(String[] args) {
-        // Test the isRugValid method
-        System.out.println(isRugValid("c013343y023343", "c023444"));  // Should return true
-        System.out.println(isRugValid("c013343y023343", "y013343"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "c013444"));  // Should return false (same ID and color)
-        System.out.println(isRugValid("c013343y023343", "y023444"));  // Should return true
-
-        //Test the rollDie method
-        int[] counter = {0, 0, 0, 0};  //1s counter, 2s counter, 3s counter, 4s counter
-        for (int i = 0; i < 1000; i++) {
-            int num = rollDie();
-            counter[num - 1] += 1;
-        }
-        //Print statements showing distribution (need higher percentage of 2s and 3s).
-        System.out.println("% of 1s: " + counter[0] / 10);
-        System.out.println("% of 2s: " + counter[1] / 10);
-        System.out.println("% of 3s: " + counter[2] / 10);
-        System.out.println("% of 4s: " + counter[3] / 10);
-
-        //TEST FOR STRING DECODING
-
-        Marrakech Game = new Marrakech("Pr00803iPy01305iPc01510oA04NBc01c02n00c03c04y05p06c07c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36");
-        //String gameString = "Pr00803iPy01305iPc01510oA04NBc01c02n00c03c04y05p06c07c08y09c10c10y11p12p12c13y14c15c15y16c17c17r18y19c20c20y21c22c22r23r23c25c25y26c26c27c27r28r28c29y30c31c31c32y33c34c34y35c36";
-
-
-        System.out.println("The colour: " + Game.players[0].colour);
-        System.out.println("Number of coins: " + Game.players[0].dirhams);
-        System.out.println("Number of rugs: " + Game.players[0].rugs);
-        System.out.println("Player state: " + Game.players[0].playerState);
-
-        System.out.println("Merchant x: " + Game.asam.merchantPosition.x);
-        System.out.println("Merchant y: " + Game.asam.merchantPosition.y);
-        System.out.println("Merchant direction: " + Game.asam.direction);
-
-        System.out.println(Game.board.tiles[0][0]);
-
-
-    }
 
 
 }

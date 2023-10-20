@@ -35,15 +35,22 @@ code:
     url: https://stackoverflow.com/questions/35284772/how-to-remove-individual-nodes-within-groups-on-a-pane-javafx
     licence: Public domain
 
+images:
+  - comment: Moon and stars image used in some screens of the game.
+    url: https://www.vecteezy.com/vector-art/5182718-background-of-a-night-sky-with-stars-and-crescent-moon-in-paper-style
+    licence: Free download, attribution required.
 
+  - comment: City siloutte used in some screens of the game.
+    url: https://www.cleanpng.com/png-riad-samsara-moroccan-riad-hotel-clip-art-riad-3542576/
+    licence: Free download.
 
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Shuo Tan
+    uid: u7704291
+  - name: Lize van der Walt
+    uid: u7679626
   - name: Linxiang Hu
     uid: u7633783
