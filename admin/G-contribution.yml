@@ -9,11 +9,11 @@ declaration: >-
 # members).  
 contributions:
   - uid: u7704291
-    contribution: 
+    contribution: 25
   - uid: u7679626
-    contribution:
+    contribution: 50
   - uid: u7633783
-    contribution:
+    contribution: 25
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members)
